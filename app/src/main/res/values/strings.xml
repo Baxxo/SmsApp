@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SmsApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title1">SMS</string>
+    <string name="title2">Contatti</string>
+    <string name="title_activity_service">Service</string>
+    <string name="local_service_started">Running</string>
+</resources>
