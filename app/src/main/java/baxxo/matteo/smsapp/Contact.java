@@ -1,5 +1,7 @@
 package baxxo.matteo.smsapp;
 
+import java.util.ArrayList;
+
 /**
  * Created by Matteo on 11/02/2017.
  */

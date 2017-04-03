@@ -25,11 +25,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".Receiver"></receiver>
+        <receiver
+            android:name=".Receiver"
+            android:exported="false" />
         <service
             android:name=".Sender"
-            android:enabled="true" >
-        </service>
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -1,13 +1,16 @@
 package baxxo.matteo.smsapp;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -22,10 +25,11 @@ import java.util.Comparator;
  * Created by Matteo on 11/02/2017.
  */
 
-public class MyFragment extends android.support.v4.app.Fragment {
+public class FragmentContatti extends android.support.v4.app.Fragment {
 
     String numeroTelefono = "";
     Button tv;
+    Button numero;
     Button button;
     LinearLayout layout;
     LinearLayout.LayoutParams lp;
@@ -33,20 +37,28 @@ public class MyFragment extends android.support.v4.app.Fragment {
     public static ArrayList<Contact> contatti = new ArrayList<>();
     ProgressBar progressBar;
     View rootView;
+    Dialog d;
+    WindowManager.LayoutParams layoutParams;
+    TextView tvNumero;
 
-    public MyFragment() {
+    public FragmentContatti() {
 
-    }
-
-    public void svuota(){
-        System.out.println("Svuoto");
-        buttons.clear();
-        contatti.clear();
-        layout.removeAllViews();
     }
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.my_fragment, container, false);
+
+        d = new Dialog(rootView.getContext());
+        d.setTitle("Numeri");
+        d.setCancelable(true);
+        d.setContentView(R.layout.dialog);
+
+        tvNumero = (TextView) d.findViewById(R.id.numero);
+
+        layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(d.getWindow().getAttributes());
+        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
+        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         layout = (LinearLayout) rootView.findViewById(R.id.layout);
 
@@ -86,6 +98,26 @@ public class MyFragment extends android.support.v4.app.Fragment {
             Toast.makeText(rootView.getContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
         }
     };
+    View.OnLongClickListener btnLongClick = new View.OnLongClickListener() {
+        @Override
+        public boolean onLongClick(View v) {
+            // TODO trovare il numero da far vedere
+            int id = v.getId();
+            numeroTelefono = contatti.get(id).number;
+            tvNumero.setText(numeroTelefono);
+
+            d.show();
+            d.getWindow().setAttributes(layoutParams);
+            return true;
+        }
+    };
+
+    public void svuota() {
+        System.out.println("Svuoto");
+        buttons.clear();
+        contatti.clear();
+        layout.removeAllViews();
+    }
 
     public void getContact() {
 
@@ -100,6 +132,8 @@ public class MyFragment extends android.support.v4.app.Fragment {
                     Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
                     while (phones.moveToNext()) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        phoneNumber = phoneNumber.replaceAll("\\s+", "");
+                        phoneNumber = phoneNumber.replaceAll("-", "");
                         contatti.add(new Contact(name, phoneNumber));
                     }
                     phones.close();
@@ -119,10 +153,33 @@ public class MyFragment extends android.support.v4.app.Fragment {
                     }
                 }
         );
+
+        for (int i = 1; i < contatti.size(); i++) {
+            if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
+                contatti.get(i).number = contatti.get(i).number.substring(3);
+            }
+        }
+
+        for (int i = 0; i < contatti.size(); i++) {
+            if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
+                contatti.remove(i);
+            }
+        }
+
         int j = 0;
+        //se j = 0 allora non ci sono contatti uguali altrimenti continuo
         while (j == 0) {
             j = 0;
             for (int i = 1; i < contatti.size(); i++) {
+                Log.i("Ciao", contatti.get(i).name + "  " + contatti.get(i).number + "  " + contatti.get(i - 1).number);
+                if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                    j++;
+                    contatti.remove(i - 1);
+                }
+            }
+            j = 0;
+            for (int i = 1; i < contatti.size(); i++) {
+                Log.i("Ciao", contatti.get(i).name + "  " + contatti.get(i).number + "  " + contatti.get(i - 1).number);
                 if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
                     j++;
                     contatti.remove(i - 1);
@@ -139,8 +196,10 @@ public class MyFragment extends android.support.v4.app.Fragment {
                             tv.setId(i);
                             tv.setBackgroundResource(R.drawable.backbutton);
                             tv.setLayoutParams(lp);
-                            tv.setText(contatti.get(i).name + ": " + contatti.get(i).number);
+                            tv.setText(contatti.get(i).name);
+                            tv.setLongClickable(true);
                             tv.setOnClickListener(btnClick);
+                            tv.setOnLongClickListener(btnLongClick);
                             buttons.add(tv);
                             layout.addView(buttons.get(i));
                         }
