@@ -28,8 +28,8 @@ import java.util.Comparator;
 public class FragmentContatti extends android.support.v4.app.Fragment {
 
     String numeroTelefono = "";
+    String nomeTelefono = "";
     Button tv;
-    Button numero;
     Button button;
     LinearLayout layout;
     LinearLayout.LayoutParams lp;
@@ -39,6 +39,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     View rootView;
     Dialog d;
     WindowManager.LayoutParams layoutParams;
+    TextView tvNome;
     TextView tvNumero;
 
     public FragmentContatti() {
@@ -54,6 +55,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         d.setContentView(R.layout.dialog);
 
         tvNumero = (TextView) d.findViewById(R.id.numero);
+        tvNome = (TextView) d.findViewById(R.id.nome);
 
         layoutParams = new WindowManager.LayoutParams();
         layoutParams.copyFrom(d.getWindow().getAttributes());
@@ -103,7 +105,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         public boolean onLongClick(View v) {
             // TODO trovare il numero da far vedere
             int id = v.getId();
+
+            nomeTelefono = contatti.get(id).name;
             numeroTelefono = contatti.get(id).number;
+            tvNome.setText(nomeTelefono);
             tvNumero.setText(numeroTelefono);
 
             d.show();
@@ -112,15 +117,22 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         }
     };
 
-    public void svuota() {
-        System.out.println("Svuoto");
-        buttons.clear();
-        contatti.clear();
-        layout.removeAllViews();
-    }
 
     public void getContact() {
-
+        if (buttons.isEmpty() == false) {
+            buttons.clear();
+        }
+        if (contatti.isEmpty() == false) {
+            contatti.clear();
+        }
+        ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (layout.getChildCount() > 0) {
+                    layout.removeAllViews();
+                }
+            }
+        });
         ContentResolver cr = getContext().getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
                 null, null, null);
@@ -171,7 +183,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         while (j == 0) {
             j = 0;
             for (int i = 1; i < contatti.size(); i++) {
-                Log.i("Ciao", contatti.get(i).name + "  " + contatti.get(i).number + "  " + contatti.get(i - 1).number);
                 if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
                     j++;
                     contatti.remove(i - 1);
@@ -179,7 +190,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             }
             j = 0;
             for (int i = 1; i < contatti.size(); i++) {
-                Log.i("Ciao", contatti.get(i).name + "  " + contatti.get(i).number + "  " + contatti.get(i - 1).number);
                 if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
                     j++;
                     contatti.remove(i - 1);

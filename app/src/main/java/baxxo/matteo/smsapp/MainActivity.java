@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         System.out.println("destroy");
-        myFragment.svuota();
         // Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         //vibrator.vibrate(1000);
     }
