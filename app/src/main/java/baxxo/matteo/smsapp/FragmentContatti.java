@@ -6,7 +6,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     String nomeTelefono = "";
     Button tv;
     Button button;
+    Button search;
     LinearLayout layout;
     LinearLayout.LayoutParams lp;
     public ArrayList<Button> buttons = new ArrayList<>();
@@ -47,10 +47,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     }
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.my_fragment, container, false);
+        rootView = inflater.inflate(R.layout.fragment_contact, container, false);
 
         d = new Dialog(rootView.getContext());
-        d.setTitle("Numeri");
+        d.setTitle("Numero");
         d.setCancelable(true);
         d.setContentView(R.layout.dialog);
 
@@ -63,6 +63,13 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
         layout = (LinearLayout) rootView.findViewById(R.id.layout);
+        search = (Button) rootView.findViewById(R.id.search);
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO creare dialog per cercare nome
+            }
+        });
 
         lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lp.setMargins(5, 10, 10, 5);

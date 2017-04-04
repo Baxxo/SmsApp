@@ -23,6 +23,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -65,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     ArrayList<Contact> contact;
     private TabsPagerAdapter tabsPagerAdapter;
+    static RelativeLayout relativeLayout;
 
     public void alarm() {
 
@@ -290,6 +292,7 @@ public class MainActivity extends AppCompatActivity {
             puntini = (TextView) rootView.findViewById(R.id.textView7);
             barrette1 = (TextView) rootView.findViewById(R.id.textView8);
             barrette2 = (TextView) rootView.findViewById(R.id.textView9);
+            relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
 
             t.addTextChangedListener(contaCaratteri);
             editOra.setText(calendar.get(Calendar.HOUR_OF_DAY) + "");
@@ -299,33 +302,19 @@ public class MainActivity extends AppCompatActivity {
             editGiorno.setText(calendar.get(Calendar.DAY_OF_MONTH) + "");
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                timepicker.setVisibility(View.VISIBLE);
-                data.setVisibility(View.VISIBLE);
-
-                editOra.setVisibility(View.INVISIBLE);
-                editMin.setVisibility(View.INVISIBLE);
-                editAnno.setVisibility(View.INVISIBLE);
-                editMese.setVisibility(View.INVISIBLE);
-                editGiorno.setVisibility(View.INVISIBLE);
-                hhmm.setVisibility(View.INVISIBLE);
-                dataS.setVisibility(View.INVISIBLE);
-                puntini.setVisibility(View.INVISIBLE);
-                barrette1.setVisibility(View.INVISIBLE);
-                barrette2.setVisibility(View.INVISIBLE);
+                relativeLayout.removeView(editOra);
+                relativeLayout.removeView(editMin);
+                relativeLayout.removeView(editAnno);
+                relativeLayout.removeView(editMese);
+                relativeLayout.removeView(editGiorno);
+                relativeLayout.removeView(hhmm);
+                relativeLayout.removeView(dataS);
+                relativeLayout.removeView(puntini);
+                relativeLayout.removeView(barrette1);
+                relativeLayout.removeView(barrette2);
             } else {
-                timepicker.setVisibility(View.INVISIBLE);
-                data.setVisibility(View.INVISIBLE);
-
-                editOra.setVisibility(View.VISIBLE);
-                editMin.setVisibility(View.VISIBLE);
-                editAnno.setVisibility(View.VISIBLE);
-                editMese.setVisibility(View.VISIBLE);
-                editGiorno.setVisibility(View.VISIBLE);
-                hhmm.setVisibility(View.VISIBLE);
-                dataS.setVisibility(View.VISIBLE);
-                puntini.setVisibility(View.VISIBLE);
-                barrette1.setVisibility(View.VISIBLE);
-                barrette2.setVisibility(View.VISIBLE);
+                relativeLayout.removeView(timepicker);
+                relativeLayout.removeView(data);
             }
             return rootView;
         }

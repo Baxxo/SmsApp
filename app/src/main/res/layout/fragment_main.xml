@@ -11,7 +11,7 @@
     <ScrollView
         android:id="@+id/scrollView"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
@@ -19,6 +19,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
+            android:id="@+id/relative"
             android:layout_height="match_parent">
 
             <TextView
@@ -90,26 +91,25 @@
                 android:id="@+id/textView4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/Testo"
-                android:layout_marginTop="30dp"
                 android:text="Ore e minuti (HH:MM):"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:layout_alignEnd="@+id/Numero" />
+                android:layout_below="@+id/Testo"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="10dp"
+                android:layout_alignParentEnd="true" />
 
 
             <TextView
                 android:id="@+id/textView6"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignEnd="@+id/Numero"
-                android:layout_alignParentStart="true"
-                android:layout_marginTop="30dp"
-                android:text="Data (YYYY/MM/GG):"
+                android:text="Data (GG/MM/AAAA):"
                 android:textAlignment="center"
                 android:textStyle="bold"
-                android:layout_below="@+id/textView4" />
+                android:layout_below="@+id/ora"
+                android:layout_alignParentStart="true"
+                android:layout_alignEnd="@+id/Numero" />
 
             <TextView
                 android:id="@+id/textView5"
@@ -129,7 +129,8 @@
                 android:ems="10"
                 android:id="@+id/ora"
                 android:layout_below="@+id/textView4"
-                android:layout_toStartOf="@+id/textView7" />
+                android:layout_toStartOf="@+id/textView7"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -148,17 +149,19 @@
                 android:id="@+id/min"
                 android:layout_alignTop="@+id/ora"
                 android:layout_alignParentEnd="false"
-                android:layout_toEndOf="@+id/textView7" />
+                android:layout_toEndOf="@+id/textView7"
+                android:gravity="center" />
 
             <EditText
                 android:layout_width="65dp"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/anno"
+                android:id="@+id/giorno"
                 android:layout_below="@+id/textView6"
                 android:layout_alignParentStart="true"
-                android:layout_toStartOf="@+id/textView8" />
+                android:layout_toStartOf="@+id/textView8"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="20dp"
@@ -177,16 +180,18 @@
                 android:id="@+id/mese"
                 android:layout_below="@+id/textView6"
                 android:layout_toEndOf="@+id/textView8"
-                android:layout_toStartOf="@+id/textView9" />
+                android:layout_toStartOf="@+id/textView9"
+                android:gravity="center" />
 
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:inputType="number"
                 android:ems="10"
-                android:id="@+id/giorno"
+                android:id="@+id/anno"
                 android:layout_alignBottom="@+id/mese"
-                android:layout_toEndOf="@+id/min" />
+                android:layout_toEndOf="@+id/min"
+                android:gravity="center" />
 
             <TextView
                 android:layout_width="20dp"
@@ -194,8 +199,8 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text=" / "
                 android:id="@+id/textView9"
-                android:layout_alignBottom="@+id/giorno"
-                android:layout_toStartOf="@+id/giorno" />
+                android:layout_alignBottom="@+id/anno"
+                android:layout_toStartOf="@+id/anno" />
 
         </RelativeLayout>
     </ScrollView>
