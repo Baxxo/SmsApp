@@ -2,69 +2,88 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <!--
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignTop="@+id/button"
+            android:layout_marginTop="70dp"
+            android:fillViewport="false">
 
-    <ScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignTop="@+id/button"
-        android:layout_marginTop="70dp"
-        android:fillViewport="false">
+            <LinearLayout
+                android:id="@+id/layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-        </LinearLayout>
-    </ScrollView>
+            </LinearLayout>
+        </ScrollView>-->
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginEnd="147dp"
+
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="23dp"
         android:background="@drawable/buttonshape"
-
-        android:text="Carica Lista"
-        android:textColor="#FFF"
-        android:textSize="15sp"
-
         android:shadowColor="#A8A8A8"
+
         android:shadowDx="0"
         android:shadowDy="0"
         android:shadowRadius="5"
-
-        android:layout_marginTop="23dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="32dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="147dp" />
+        android:text="Carica Lista"
+        android:textColor="#FFF"
+        android:textSize="15sp" />
 
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:indeterminate="false"
-        android:foregroundTint="#3F51B5"
-        android:layout_gravity="center_horizontal"
         android:layout_alignTop="@+id/button"
-        android:layout_centerHorizontal="true" />
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
+        android:foregroundTint="#3F51B5"
+        android:indeterminate="false" />
 
     <Button
+        android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/search"
-        android:layout_alignTop="@+id/button"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="25dp"
         android:layout_alignBottom="@+id/button"
-        android:layout_toEndOf="@+id/progressBar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@+id/button"
+        android:layout_marginEnd="25dp"
         android:layout_marginStart="70dp"
+        android:layout_toEndOf="@+id/progressBar"
         android:background="@drawable/ic_search" />
+
+    <EditText
+        android:id="@+id/nomeSearch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/button"
+        android:layout_alignStart="@+id/button"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textColor="#ffffff" />
+
+    <ListView
+        android:id="@+id/listView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/button"
+        android:layout_marginTop="20dp"
+        android:choiceMode="singleChoice" />
 
 </RelativeLayout>

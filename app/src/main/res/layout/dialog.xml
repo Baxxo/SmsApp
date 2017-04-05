@@ -2,7 +2,6 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#9eedc6"
     android:weightSum="1">
 
     <TextView
@@ -17,44 +16,43 @@
         android:id="@+id/nome"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
+        android:layout_below="@+id/textView10"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="Nome"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffffff"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/textView10"
-        android:layout_centerHorizontal="true" />
+        android:textColor="#000" />
 
     <View
+        android:id="@+id/view"
         android:layout_width="wrap_content"
         android:layout_height="2dip"
-        android:background="@drawable/line"
-        android:layout_marginRight="50dp"
-        android:layout_marginLeft="50dp"
-        android:layout_gravity="center_horizontal"
         android:layout_alignBottom="@+id/nome"
         android:layout_centerHorizontal="true"
-        android:id="@+id/view" />
+        android:layout_gravity="center_horizontal"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/line" />
 
     <TextView
         android:id="@+id/numero"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
+        android:layout_below="@+id/view"
+        android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="Numero"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#ffffff"
-        android:layout_gravity="center_horizontal"
-        android:layout_below="@+id/view"
-        android:layout_centerHorizontal="true" />
+        android:textColor="#000" />
 
     <TextView
         android:id="@+id/textView11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
         android:layout_below="@+id/numero"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_centerHorizontal="true"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
