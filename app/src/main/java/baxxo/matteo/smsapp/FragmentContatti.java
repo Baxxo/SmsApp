@@ -6,6 +6,8 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +44,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     Button button;
     Button search;
     EditText nomeSearch;
-    LinearLayout layout;
     LinearLayout.LayoutParams lp;
     public static ArrayList<Contact> contatti = new ArrayList<>();
     ProgressBar progressBar;
@@ -64,6 +65,13 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         rootView = inflater.inflate(R.layout.fragment_contact, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.listView);
+        listView.setTextFilterEnabled(true);
+
+        search = (Button) rootView.findViewById(R.id.search);
+        search.setVisibility(View.INVISIBLE);
+
+        nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
+        nomeSearch.setVisibility(View.INVISIBLE);
 
         d = new Dialog(rootView.getContext());
         d.setTitle("Numero");
@@ -85,11 +93,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        search = (Button) rootView.findViewById(R.id.search);
-        search.setVisibility(View.INVISIBLE);
-        nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
-        nomeSearch.setVisibility(View.INVISIBLE);
-
         progressBar.setVisibility(View.INVISIBLE);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -110,7 +113,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         search.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO creare dialog per cercare nome
                 if (button.getVisibility() == View.VISIBLE) {
                     button.setVisibility(View.INVISIBLE);
                     nomeSearch.setVisibility(View.VISIBLE);
@@ -127,12 +129,11 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
 
     public void getContact() {
-        if (contatti.isEmpty() == false) {
+        if (!contatti.isEmpty()) {
             contatti.clear();
         }
         ContentResolver cr = getContext().getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null,
-                null, null, null);
+        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
@@ -172,7 +173,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         }
 
         int j = 0;
-        //se j = 0 allora non ci sono contatti uguali altrimenti continuo
+        //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
         while (j == 0) {
             j = 0;
             for (int i = 1; i < contatti.size(); i++) {
@@ -194,16 +195,16 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 new Runnable() {
                     @Override
                     public void run() {
+                        //hash map con nomi e numeri
                         HashMap<String, String> nomeNumero = new HashMap<>();
 
                         Set set = nomeNumero.entrySet();
-                        Iterator iterator = set.iterator();
-                        while (iterator.hasNext()) {
-                            Map.Entry me = (Map.Entry) iterator.next();
-                            System.out.print(me.getKey() + ": ");
-                            System.out.println(me.getValue());
-                        }
+                       // Iterator iterator = set.iterator();
+                        /*while (iterator.hasNext()) {
+                           // Map.Entry me = (Map.Entry) iterator.next();
+                        }*/
 
+                        //map con valori ordinati
                         Map<String, String> map = sortByValues(nomeNumero);
 
                         //inserisco i contatti
@@ -212,13 +213,15 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
                         }
 
+                        //lista di elementi HashMap
                         List<HashMap<String, String>> listItems = new ArrayList<>();
 
-
+                        //Adapter per la listView
                         adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
                                 new String[]{"First Line", "Second Line"},
                                 new int[]{R.id.textView12, R.id.textView13});
 
+                        //Iterator accede alla mappa e accoppia la mappa con l' adapter
                         Iterator it = map.entrySet().iterator();
                         while (it.hasNext()) {
                             HashMap<String, String> resultsMap = new HashMap<>();
@@ -228,6 +231,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                             listItems.add(resultsMap);
                         }
 
+                        //mostro i valori nella listView
                         listView.setAdapter(adapter);
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -250,8 +254,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 parts = dir2.split("=");
                                 numero = parts[1];
 
-                                int count = position;
-                                numeroTelefono = contatti.get(count).number;
+                                numeroTelefono = contatti.get(position).number;
                                 MainActivity.n.setText(numeroTelefono);
                                 Toast.makeText(rootView.getContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
                             }
@@ -270,6 +273,22 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 d.getWindow().setAttributes(layoutParams);
 
                                 return true;
+                            }
+                        });
+
+                        nomeSearch.addTextChangedListener(new TextWatcher() {
+                            @Override
+                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                            }
+
+                            @Override
+                            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                FragmentContatti.this.adapter.getFilter().filter(s);
+                            }
+
+                            @Override
+                            public void afterTextChanged(Editable s) {
+
                             }
                         });
 
