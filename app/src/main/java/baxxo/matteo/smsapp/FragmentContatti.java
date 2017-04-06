@@ -6,6 +6,9 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -31,7 +34,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Matteo on 11/02/2017.
@@ -39,8 +41,6 @@ import java.util.Set;
 
 public class FragmentContatti extends android.support.v4.app.Fragment {
 
-    String numeroTelefono = "";
-    String nomeTelefono = "";
     Button button;
     Button search;
     EditText nomeSearch;
@@ -198,12 +198,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         //hash map con nomi e numeri
                         HashMap<String, String> nomeNumero = new HashMap<>();
 
-                        Set set = nomeNumero.entrySet();
-                       // Iterator iterator = set.iterator();
-                        /*while (iterator.hasNext()) {
-                           // Map.Entry me = (Map.Entry) iterator.next();
-                        }*/
-
                         //map con valori ordinati
                         Map<String, String> map = sortByValues(nomeNumero);
 
@@ -254,20 +248,51 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 parts = dir2.split("=");
                                 numero = parts[1];
 
-                                numeroTelefono = contatti.get(position).number;
-                                MainActivity.n.setText(numeroTelefono);
+                                MainActivity.n.setText(numero);
                                 Toast.makeText(rootView.getContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
+
+                                new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            Thread.sleep(100);
+                                        } catch (InterruptedException e) {
+                                            e.printStackTrace();
+                                        }
+                                        ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                MainActivity.mViewPager.setCurrentItem(0);
+                                            }
+                                        });
+                                    }
+                                }).start();
+
                             }
                         });
 
                         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                             @Override
                             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                                Object o = listView.getItemAtPosition(position);
+                                String res = o.toString();
+                                res = res.replace("{", "");
+                                res = res.replace("}", "");
 
-                                nomeTelefono = contatti.get(position).name;
-                                numeroTelefono = contatti.get(position).number;
-                                tvNome.setText(nomeTelefono);
-                                tvNumero.setText(numeroTelefono);
+                                String parts[] = res.split(",");
+
+                                String dir1 = parts[1];
+                                String dir2 = parts[0];
+
+                                parts = dir1.split("=");
+
+                                nome = parts[1];
+
+                                parts = dir2.split("=");
+                                numero = parts[1];
+
+                                tvNome.setText(nome);
+                                tvNumero.setText(numero);
 
                                 d.show();
                                 d.getWindow().setAttributes(layoutParams);

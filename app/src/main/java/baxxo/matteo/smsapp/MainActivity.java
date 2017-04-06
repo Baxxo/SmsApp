@@ -30,12 +30,11 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager mViewPager;
+    public static ViewPager mViewPager;
     int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
     FragmentContatti myFragment = null;
     private int anno = 1;
@@ -103,8 +102,6 @@ public class MainActivity extends AppCompatActivity {
     public void onDestroy() {
         super.onDestroy();
         System.out.println("destroy");
-        // Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        //vibrator.vibrate(1000);
     }
 
     static final TextWatcher contaCaratteri = new TextWatcher() {
@@ -217,8 +214,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<>();
-        private final List<String> mFragmentTitleList = new ArrayList<>();
+      //  private final List<Fragment> mFragmentList = new ArrayList<>();
+      //  private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public TabsPagerAdapter(FragmentManager fm) {
             super(fm);
