@@ -132,8 +132,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         if (!contatti.isEmpty()) {
             contatti.clear();
         }
+        int p=0;
         ContentResolver cr = getContext().getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        progressBar.setMax(cur.getCount());
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
@@ -145,6 +147,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         phoneNumber = phoneNumber.replaceAll("\\s+", "");
                         phoneNumber = phoneNumber.replaceAll("-", "");
                         contatti.add(new Contact(name, phoneNumber));
+                        p++;
+                        progressBar.setProgress(p);
                     }
                     phones.close();
                 }
