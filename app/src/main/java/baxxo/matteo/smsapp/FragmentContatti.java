@@ -56,6 +56,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     SimpleAdapter adapter;
     String nome;
     String numero;
+    int p = 0;
 
     public FragmentContatti() {
 
@@ -132,10 +133,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         if (!contatti.isEmpty()) {
             contatti.clear();
         }
-        int p=0;
+        p = 0;
         ContentResolver cr = getContext().getContentResolver();
-        Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        progressBar.setMax(cur.getCount());
+        final Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        progressBar.setMax(cur.getCount() * 7);
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
@@ -159,6 +160,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         Collections.sort(contatti, new Comparator<Contact>() {
                     @Override
                     public int compare(Contact c1, Contact c2) {
+                        p++;
+                        progressBar.setProgress(p);
                         return c1.name.compareTo(c2.name);
                     }
                 }
@@ -168,12 +171,16 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
                 contatti.get(i).number = contatti.get(i).number.substring(3);
             }
+            p++;
+            progressBar.setProgress(p);
         }
 
         for (int i = 0; i < contatti.size(); i++) {
             if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
                 contatti.remove(i);
             }
+            p++;
+            progressBar.setProgress(p);
         }
 
         int j = 0;
@@ -185,13 +192,18 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     j++;
                     contatti.remove(i - 1);
                 }
+                progressBar.setProgress(p);
+
             }
             j = 0;
             for (int i = 1; i < contatti.size(); i++) {
                 if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
                     j++;
                     contatti.remove(i - 1);
+                    p++;
                 }
+                progressBar.setProgress(p);
+
             }
         }
 
@@ -207,6 +219,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
                         //inserisco i contatti
                         for (int i = 0; i < contatti.size(); i++) {
+                            p++;
+                            progressBar.setProgress(p);
                             map.put(contatti.get(i).name, contatti.get(i).number);
 
                         }
@@ -231,6 +245,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
                         //mostro i valori nella listView
                         listView.setAdapter(adapter);
+                        progressBar.setProgress(cur.getCount() * 7);
 
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
