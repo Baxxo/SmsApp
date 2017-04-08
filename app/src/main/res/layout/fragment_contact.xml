@@ -66,8 +66,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
         android:layout_alignTop="@+id/nomeSearch"
-        android:layout_alignEnd="@+id/listView"
+        android:indeterminate="false"
+        android:layout_alignLeft="@+id/listView"
         android:layout_alignStart="@+id/listView"
-        android:indeterminate="false" />
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp" />
 
 </RelativeLayout>
