@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contact;
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
+    public DatabaseManager db;
 
     public void alarm() {
 
@@ -95,6 +96,16 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //nuovo messaggio
+        Messaggio m = new Messaggio();
+        m.setNome(nomeNumero);
+        m.setNumero(numero);
+        m.setTesto(testo);
+        m.setData(calendar.getTimeInMillis());
+        m.setInviato(false);
+        db.aggiungiMessaggio(m);
+
         System.out.println(ora + " : " + minuto);
     }
 
@@ -131,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_CALENDAR
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
+
+        db = new DatabaseManager(getApplicationContext());
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -214,8 +227,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
-      //  private final List<Fragment> mFragmentList = new ArrayList<>();
-      //  private final List<String> mFragmentTitleList = new ArrayList<>();
+        //  private final List<Fragment> mFragmentList = new ArrayList<>();
+        //  private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public TabsPagerAdapter(FragmentManager fm) {
             super(fm);

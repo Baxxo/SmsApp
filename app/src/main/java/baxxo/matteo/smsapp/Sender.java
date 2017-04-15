@@ -16,6 +16,7 @@ import android.telephony.SmsManager;
  */
 
 public class Sender extends IntentService {
+
     NotificationCompat.Builder builder;
 
     SmsManager sms;
@@ -33,9 +34,11 @@ public class Sender extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+
         numero = intent.getStringExtra("Numero");
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
+
         System.out.println("parte");
 
         try {

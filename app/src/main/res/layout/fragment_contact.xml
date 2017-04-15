@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <Button
         android:id="@+id/button"
@@ -29,12 +29,12 @@
         android:id="@+id/search"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="26dp"
         android:layout_above="@+id/listView"
         android:layout_alignEnd="@+id/listView"
         android:layout_alignTop="@+id/button"
-        android:layout_toEndOf="@+id/nomeSearch"
+        android:layout_marginEnd="26dp"
         android:layout_marginStart="52dp"
+        android:layout_toEndOf="@+id/nomeSearch"
         android:background="@drawable/ic_search" />
 
     <EditText
@@ -42,11 +42,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/button"
+        android:layout_alignEnd="@+id/button"
         android:layout_alignStart="@+id/button"
         android:ems="10"
         android:inputType="textPersonName"
-        android:textColor="#ffffff"
-        android:layout_alignEnd="@+id/button" />
+        android:textColor="#ffffff" />
 
     <ListView
         android:id="@+id/listView"
@@ -61,15 +61,19 @@
         android:choiceMode="singleChoice" />
 
     <ProgressBar
+        android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/progressBar"
-        android:layout_alignTop="@+id/nomeSearch"
-        android:indeterminate="false"
         android:layout_alignLeft="@+id/listView"
         android:layout_alignStart="@+id/listView"
+        android:layout_alignTop="@+id/nomeSearch"
+        android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginRight="16dp"
+        android:layout_marginStart="16dp"
+        android:indeterminate="false"
+        android:layout_alignRight="@+id/listView"
+        android:layout_alignEnd="@+id/listView" />
 
 </RelativeLayout>
