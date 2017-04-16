@@ -2,6 +2,7 @@ package baxxo.matteo.smsapp;
 
 import android.Manifest;
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -21,6 +22,8 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
@@ -66,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contact;
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
+    Dialog d;
     public DatabaseManager db;
 
     public void alarm() {
@@ -329,4 +333,31 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
     }
+
+    public void onBackPressed() {
+        d = new Dialog(this);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        d.setCancelable(true);
+        d.setContentView(R.layout.esci);
+        d.show();
+
+        Button esci = (Button) d.findViewById(R.id.esci1);
+        esci.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        });
+
+        Button torna = (Button) d.findViewById(R.id.torna);
+        torna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+        return;
+    }
+
 }

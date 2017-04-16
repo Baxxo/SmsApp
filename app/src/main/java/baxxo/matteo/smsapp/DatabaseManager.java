@@ -56,6 +56,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
 
+
     // Adding new contact
     void aggiungiMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();

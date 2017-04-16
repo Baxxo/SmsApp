@@ -14,6 +14,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -75,6 +76,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         nomeSearch.setVisibility(View.INVISIBLE);
 
         d = new Dialog(rootView.getContext());
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         d.setTitle("Numero");
         d.setCancelable(true);
         d.setContentView(R.layout.dialog);
@@ -133,6 +135,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         if (!contatti.isEmpty()) {
             contatti.clear();
         }
+        search.setVisibility(View.INVISIBLE);
         p = 0;
         ContentResolver cr = getContext().getContentResolver();
         final Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
@@ -166,7 +169,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     }
                 }
         );
-
+        //rimuovo +39
         for (int i = 1; i < contatti.size(); i++) {
             if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
                 contatti.get(i).number = contatti.get(i).number.substring(3);
@@ -174,8 +177,11 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             p++;
             progressBar.setProgress(p);
         }
-
+        //rimuovo numeri di casa
         for (int i = 0; i < contatti.size(); i++) {
+            if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
+                contatti.remove(i);
+            }
             if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
                 contatti.remove(i);
             }
@@ -345,7 +351,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         );
     }
 
-    //funzione per ordinare l' hash map con i contatti
+    //funzione per ordinare l' hash map con i contatti(funzione trovata)
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
         // Defined Custom Comparator here
