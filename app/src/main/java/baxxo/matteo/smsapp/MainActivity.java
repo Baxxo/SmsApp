@@ -155,13 +155,13 @@ public class MainActivity extends AppCompatActivity {
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(tabsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
+                    //animazione per botton che sparisde
                     Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
                     fab.setAnimation(animFadeOut);
 
@@ -169,6 +169,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
                 if (position == 0) {
+                    //animazione per botton che appare
                     Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
                     fab.setAnimation(animFadeIn);
 
