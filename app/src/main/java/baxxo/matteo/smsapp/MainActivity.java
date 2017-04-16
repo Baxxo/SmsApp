@@ -155,6 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
+        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(tabsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
