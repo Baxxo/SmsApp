@@ -77,7 +77,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         d = new Dialog(rootView.getContext());
         d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setTitle("Numero");
         d.setCancelable(true);
         d.setContentView(R.layout.dialog);
 

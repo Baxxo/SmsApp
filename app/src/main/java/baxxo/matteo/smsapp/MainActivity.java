@@ -76,66 +76,6 @@ public class MainActivity extends AppCompatActivity {
     public static FloatingActionButton fab;
     public DatabaseManager db;
 
-    public void alarm() {
-
-        nomeNumero = numero;
-
-        //prendo il nome del destinatario
-        if (!FragmentContatti.contatti.isEmpty()) {
-            contact = FragmentContatti.contatti;
-            for (int i = 0; i < contact.size(); i++) {
-                if (numero.equals(contact.get(i).number)) {
-                    nomeNumero = contact.get(i).name;
-                }
-            }
-        }
-
-        calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, giorno);
-        calendar.set(Calendar.HOUR_OF_DAY, ora);
-        calendar.set(Calendar.MINUTE, minuto);
-
-
-        Intent intent = new Intent(this, Receiver.class);
-        intent.putExtra("Numero", numero);
-        intent.putExtra("Testo", testo);
-        intent.putExtra("Nome", nomeNumero);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
-
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-        //nuovo messaggio
-        Messaggio m = new Messaggio();
-        m.setNome(nomeNumero);
-        m.setNumero(numero);
-        m.setTesto(testo);
-        m.setData(calendar.getTimeInMillis());
-        m.setInviato(false);
-        db.aggiungiMessaggio(m);
-
-        System.out.println(ora + " : " + minuto);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        System.out.println("destroy");
-    }
-
-    static final TextWatcher contaCaratteri = new TextWatcher() {
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String t = "Caratteri: " + String.valueOf(s.length()) + "/160";
-            conta.setText(t);
-        }
-
-        public void afterTextChanged(Editable s) {
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,6 +137,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //prendo l'ora
+
                 //se android è >= M allora uso il time e date picker
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ora = timepicker.getHour();
@@ -255,8 +196,67 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    //swipe----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    public void alarm() {
 
+        nomeNumero = numero;
+
+        //prendo il nome del destinatario
+        if (!FragmentContatti.contatti.isEmpty()) {
+            contact = FragmentContatti.contatti;
+            for (int i = 0; i < contact.size(); i++) {
+                if (numero.equals(contact.get(i).number)) {
+                    nomeNumero = contact.get(i).name;
+                }
+            }
+        }
+
+        calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, giorno);
+        calendar.set(Calendar.HOUR_OF_DAY, ora);
+        calendar.set(Calendar.MINUTE, minuto);
+
+        Intent intent = new Intent(this, Receiver.class);
+        intent.putExtra("Numero", numero);
+        intent.putExtra("Testo", testo);
+        intent.putExtra("Nome", nomeNumero);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+
+        //nuovo messaggio nel database
+        Messaggio m = new Messaggio();
+        m.setNome(nomeNumero);
+        m.setNumero(numero);
+        m.setTesto(testo);
+        m.setData(calendar.getTimeInMillis());
+        m.setInviato(false);
+
+        db.aggiungiMessaggio(m);
+
+        //System.out.println(ora + " : " + minuto);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        System.out.println("destroy");
+    }
+
+    static final TextWatcher contaCaratteri = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            String t = "Caratteri: " + String.valueOf(s.length()) + "/160";
+            conta.setText(t);
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
+
+    //swipe----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
@@ -298,9 +298,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-
-    //fragment
+    //fragment----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public static class PlaceholderFragment extends Fragment {
 
         private static final String ARG_SECTION_NUMBER = "section_number";
@@ -391,5 +391,6 @@ public class MainActivity extends AppCompatActivity {
         });
         return;
     }
+    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 }
