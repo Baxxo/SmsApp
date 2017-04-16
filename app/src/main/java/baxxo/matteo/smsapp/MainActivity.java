@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
@@ -23,6 +24,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -70,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
     Dialog d;
+    public static FloatingActionButton fab;
     public DatabaseManager db;
 
     public void alarm() {
@@ -154,12 +158,39 @@ public class MainActivity extends AppCompatActivity {
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(tabsPagerAdapter);
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 1) {
+                    Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
+                    fab.setAnimation(animFadeOut);
+
+                    fab.setVisibility(View.GONE);
+
+                }
+                if (position == 0) {
+                    Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
+                    fab.setAnimation(animFadeIn);
+
+                    fab.setVisibility(View.VISIBLE);
+                }
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+            }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+        });
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
         setupTabIcons();
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
