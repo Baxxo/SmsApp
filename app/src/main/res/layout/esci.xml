@@ -61,6 +61,6 @@
         android:layout_above="@+id/textView11"
         android:layout_alignEnd="@+id/view"
         android:background="@drawable/backbutton"
-        android:text="Resta" />
+        android:text="Annulla" />
 
 </RelativeLayout>

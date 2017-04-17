@@ -108,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
                     fab.setVisibility(View.GONE);
 
                 }
+
                 if (position == 0) {
                     //animazione per botton che appare
                     Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
