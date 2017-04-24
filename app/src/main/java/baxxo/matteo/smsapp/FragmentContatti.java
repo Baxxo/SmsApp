@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,6 +67,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_contact, container, false);
+        Log.i("Create","Entrato");
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true);
@@ -125,6 +128,15 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             }
         });
 
+        button.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+        contatti.clear();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                getContact();
+            }
+        }).start();
 
         return rootView;
     }
@@ -138,7 +150,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         p = 0;
         ContentResolver cr = getContext().getContentResolver();
         final Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        progressBar.setMax(cur.getCount() * 7);
+        progressBar.setMax(cur.getCount() * 2);
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
                 String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
@@ -279,7 +291,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                     @Override
                                     public void run() {
                                         try {
-                                            Thread.sleep(100);
+                                            Thread.sleep(200);
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -345,6 +357,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         button.setText("Ricarica Lista");
                         button.setVisibility(View.VISIBLE);
                         search.setVisibility(View.VISIBLE);
+                        //listView.setBackground( getResources().getDrawable(R.drawable.back_list));
                     }
                 }
         );
