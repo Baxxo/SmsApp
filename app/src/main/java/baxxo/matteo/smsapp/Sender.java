@@ -11,7 +11,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
 import android.util.Log;
-import baxxo.matteo.smsapp.MainActivity;
+
 /**
  * Created by Matteo on 20/03/2017.
  */
