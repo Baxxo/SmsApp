@@ -6,6 +6,7 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Vibrator;
@@ -20,6 +21,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -75,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
     Dialog d;
     public static FloatingActionButton fab;
     public DatabaseManager db;
+    public SharedPreferences preferences;
+    int lunghezza;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +96,20 @@ public class MainActivity extends AppCompatActivity {
         }
 
         db = new DatabaseManager(getApplicationContext());
+
+        preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
+
+        try {
+            //Log.i("Lunghezza", String.valueOf(db.getMessagesCount()));
+            lunghezza = db.getMessagesCount();
+        } catch (Exception e) {
+            //Log.i("Lunghezza", String.valueOf(0));
+            lunghezza = 0;
+        }
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("Count", lunghezza);
+        editor.apply();
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -197,7 +215,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //fine onCreate-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    //funzione per impostare messaggio----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     public void alarm() {
+
+        //System.out.println(ora + " : " + minuto);
 
         nomeNumero = numero;
 
@@ -226,17 +249,25 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
 
         //nuovo messaggio nel database
+
         Messaggio m = new Messaggio();
+        m.setId(String.valueOf(lunghezza++));
         m.setNome(nomeNumero);
         m.setNumero(numero);
         m.setTesto(testo);
         m.setData(calendar.getTimeInMillis());
         m.setInviato(false);
 
+      /*  Log.i("Nome", m.getId());
+        Log.i("Testo", m.getTesto());*/
+
         db.aggiungiMessaggio(m);
 
-        //System.out.println(ora + " : " + minuto);
+        Log.i("Testo", db.getMessaggio(1).getTesto());
+
     }
+
+    //fine onCreate-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     @Override
     public void onDestroy() {
@@ -390,7 +421,6 @@ public class MainActivity extends AppCompatActivity {
                 d.dismiss();
             }
         });
-        return;
     }
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 

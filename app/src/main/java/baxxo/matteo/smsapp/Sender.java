@@ -20,11 +20,11 @@ public class Sender extends IntentService {
     NotificationCompat.Builder builder;
 
     SmsManager sms;
-    String text;
-    String numero;
-    String nomeNumero;
-    String testo;
-    String sub;
+    String text = "";
+    String numero = "";
+    String nomeNumero = "";
+    String testo = "";
+    String sub = "";
     PendingIntent pendingIntent;
 
     public Sender() {
@@ -39,7 +39,7 @@ public class Sender extends IntentService {
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
 
-        System.out.println("parte");
+        //System.out.println("parte");
 
         try {
             sms = SmsManager.getDefault();
@@ -54,6 +54,7 @@ public class Sender extends IntentService {
             text = "Non inviato! \n" + testo;
             sub = "Non inviato!";
         }
+
         builder = new NotificationCompat.Builder(this);
         builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text));
         builder.setSmallIcon(R.mipmap.unnamed)

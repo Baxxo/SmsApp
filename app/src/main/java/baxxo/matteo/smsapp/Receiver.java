@@ -16,7 +16,7 @@ public class Receiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        System.out.println("Allarme");
+        //System.out.println("Allarme");
         numero = intent.getStringExtra("Numero");
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
@@ -25,9 +25,6 @@ public class Receiver extends WakefulBroadcastReceiver {
         service.putExtra("Numero", numero);
         service.putExtra("Testo", testo);
         service.putExtra("Nome", nomeNumero);
-
-        // launching. This is the Intent to deliver to the service.
-        //this will send a notification message
 
         startWakefulService(context, service);
 

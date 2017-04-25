@@ -67,7 +67,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_contact, container, false);
-        Log.i("Create","Entrato");
+        //Log.i("Create","Entrato");
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true);

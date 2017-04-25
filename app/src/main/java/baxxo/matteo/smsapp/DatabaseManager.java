@@ -96,7 +96,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Getting All Contacts
-    public List<Messaggio> getAllContacts() {
+    public List<Messaggio> getAllMessages() {
         List<Messaggio> messaggioList = new ArrayList<Messaggio>();
         // Select All Query
         String selectQuery = "SELECT  * FROM " + NameTable;
@@ -124,7 +124,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Updating single contact
-    public int updateContact(Messaggio messaggio) {
+    public int updateMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -150,14 +150,17 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
 
     // Getting contacts Count
-    public int getContactsCount() {
+    public int getMessagesCount() {
+
+        int l;
         String countQuery = "SELECT  * FROM " + NameTable;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
+        l = cursor.getCount();
         cursor.close();
 
         // return count
-        return cursor.getCount();
+        return l;
     }
 
 }
