@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
@@ -76,8 +75,8 @@ public class MainActivity extends AppCompatActivity {
     static RelativeLayout relativeLayout;
     Dialog d;
     public static FloatingActionButton fab;
-    public DatabaseManager db;
-    public SharedPreferences preferences;
+    DatabaseManager db;
+    public static SharedPreferences preferences;
     int lunghezza;
 
     @Override
@@ -100,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
         preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
 
         try {
-            //Log.i("Lunghezza", String.valueOf(db.getMessagesCount()));
+            Log.i("Lunghezza", String.valueOf(db.getMessagesCount()));
             lunghezza = db.getMessagesCount();
         } catch (Exception e) {
-            //Log.i("Lunghezza", String.valueOf(0));
+            Log.i("Lunghezza", String.valueOf(0));
             lunghezza = 0;
         }
 
@@ -119,19 +118,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 if (position == 1) {
-                    //animazione per botton che sparisde
+                    //animazione per botton che sparisce
                     Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
                     fab.setAnimation(animFadeOut);
-
                     fab.setVisibility(View.GONE);
-
                 }
 
                 if (position == 0) {
                     //animazione per botton che appare
                     Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
                     fab.setAnimation(animFadeIn);
-
                     fab.setVisibility(View.VISIBLE);
                 }
 
@@ -332,6 +328,32 @@ public class MainActivity extends AppCompatActivity {
     }
     //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+    public void onBackPressed() {
+        d = new Dialog(this);
+        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        d.setCancelable(true);
+        d.setContentView(R.layout.esci);
+        d.show();
+
+        Button esci = (Button) d.findViewById(R.id.esci1);
+        esci.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+        });
+
+        Button torna = (Button) d.findViewById(R.id.torna);
+        torna.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                d.dismiss();
+            }
+        });
+    }
+
     //fragment----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public static class PlaceholderFragment extends Fragment {
 
@@ -397,31 +419,4 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
     }
-
-    public void onBackPressed() {
-        d = new Dialog(this);
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setCancelable(true);
-        d.setContentView(R.layout.esci);
-        d.show();
-
-        Button esci = (Button) d.findViewById(R.id.esci1);
-        esci.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.dismiss();
-                android.os.Process.killProcess(android.os.Process.myPid());
-            }
-        });
-
-        Button torna = (Button) d.findViewById(R.id.torna);
-        torna.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.dismiss();
-            }
-        });
-    }
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 }

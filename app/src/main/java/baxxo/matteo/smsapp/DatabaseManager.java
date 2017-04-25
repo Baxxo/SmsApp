@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,10 +57,16 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     }
 
-
     // Adding new contact
     void aggiungiMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
+
+        Log.i("Id", messaggio.getId());
+        Log.i("Nome", messaggio.getNome());
+        Log.i("Numero", messaggio.getNumero());
+        Log.i("Testo", messaggio.getTesto());
+        Log.i("Data", String.valueOf(messaggio.getData()));
+        Log.i("Inviato", messaggio.getInviato()+"");
 
         ContentValues values = new ContentValues();
         values.put(Id, messaggio.getId()); // Messaggio Id
@@ -123,6 +130,20 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return messaggioList;
     }
 
+    // Getting contacts Count
+    public int getMessagesCount() {
+
+        int l;
+        String countQuery = "SELECT  * FROM " + NameTable;
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = db.rawQuery(countQuery, null);
+        l = cursor.getCount();
+        cursor.close();
+
+        // return count
+        return l;
+    }
+/*
     // Updating single contact
     public int updateMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -141,26 +162,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Deleting single contact
-    public void deleteContact(Messaggio messaggio) {
+    public void deleteMessage(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(NameTable, Id + " = ?",
                 new String[]{String.valueOf(messaggio.getId())});
         db.close();
-    }
-
-
-    // Getting contacts Count
-    public int getMessagesCount() {
-
-        int l;
-        String countQuery = "SELECT  * FROM " + NameTable;
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor = db.rawQuery(countQuery, null);
-        l = cursor.getCount();
-        cursor.close();
-
-        // return count
-        return l;
-    }
+    }*/
 
 }

@@ -10,7 +10,8 @@ import android.os.Vibrator;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
-
+import android.util.Log;
+import baxxo.matteo.smsapp.MainActivity;
 /**
  * Created by Matteo on 20/03/2017.
  */
@@ -26,6 +27,7 @@ public class Sender extends IntentService {
     String testo = "";
     String sub = "";
     PendingIntent pendingIntent;
+    DatabaseManager database;
 
     public Sender() {
         super("Sender");
@@ -39,8 +41,16 @@ public class Sender extends IntentService {
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
 
-        //System.out.println("parte");
+        database = new DatabaseManager(this);
 
+        try {
+            Log.i("Lunghezza", String.valueOf(database.getMessagesCount()));
+        } catch (Exception e) {
+            Log.i("Lunghezza", String.valueOf(0));
+        }
+
+
+        //System.out.println("parte");
         try {
             sms = SmsManager.getDefault();
             sms.sendTextMessage(numero, null, testo, null, null);
