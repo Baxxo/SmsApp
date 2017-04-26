@@ -4,12 +4,8 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -67,7 +63,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_contact, container, false);
-        //Log.i("Create","Entrato");
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true);
@@ -171,6 +166,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             }
         }
 
+        //ordino per nome
         Collections.sort(contatti, new Comparator<Contact>() {
                     @Override
                     public int compare(Contact c1, Contact c2) {
@@ -180,6 +176,14 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     }
                 }
         );
+
+
+        //rimuovo gli spazi
+        for (int i = 0; i < contatti.size(); i++) {
+            contatti.get(i).number.replace(" ", "");
+        }
+
+
         //rimuovo +39
         for (int i = 1; i < contatti.size(); i++) {
             if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
@@ -188,6 +192,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             p++;
             progressBar.setProgress(p);
         }
+
+
         //rimuovo numeri di casa
         for (int i = 0; i < contatti.size(); i++) {
             if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
@@ -232,15 +238,20 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         HashMap<String, String> nomeNumero = new HashMap<>();
 
                         //map con valori ordinati
-                        Map<String, String> map = sortByValues(nomeNumero);
+                        HashMap map = sortByValues(nomeNumero);
+
+                        //TODO capire perchè qui cancella contatti
 
                         //inserisco i contatti
                         for (int i = 0; i < contatti.size(); i++) {
+                            map.put(contatti.get(i).name, contatti.get(i).number);
+                            Log.i("contatto", contatti.get(i).name + " " + contatti.get(i).number);
                             p++;
                             progressBar.setProgress(p);
-                            map.put(contatti.get(i).name, contatti.get(i).number);
-
                         }
+
+                        Log.i("size contatto", String.valueOf(contatti.size()));
+                        Log.i("size map", String.valueOf(map.size()));
 
                         //lista di elementi HashMap
                         List<HashMap<String, String>> listItems = new ArrayList<>();
@@ -248,13 +259,13 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         //Adapter per la listView
                         adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
                                 new String[]{"First Line", "Second Line"},
-                                new int[]{R.id.textView12, R.id.textView13});
+                                new int[]{R.id.textView12, R.id.textView13}
+                        );
 
                         //Iterator accede alla mappa e accoppia la mappa con l' adapter
-                        Iterator it = map.entrySet().iterator();
-                        while (it.hasNext()) {
+                        for (Object o : map.entrySet()) {
                             HashMap<String, String> resultsMap = new HashMap<>();
-                            Map.Entry pair = (Map.Entry) it.next();
+                            Map.Entry pair = (Map.Entry) o;
                             resultsMap.put("First Line", pair.getKey().toString());
                             resultsMap.put("Second Line", pair.getValue().toString());
                             listItems.add(resultsMap);
@@ -357,7 +368,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         button.setText("Ricarica Lista");
                         button.setVisibility(View.VISIBLE);
                         search.setVisibility(View.VISIBLE);
-                        //listView.setBackground( getResources().getDrawable(R.drawable.back_list));
+
                     }
                 }
         );
