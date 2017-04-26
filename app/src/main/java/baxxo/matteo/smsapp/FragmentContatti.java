@@ -119,6 +119,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 } else {
                     button.setVisibility(View.VISIBLE);
                     nomeSearch.setVisibility(View.INVISIBLE);
+                    nomeSearch.setText("");
                 }
             }
         });
@@ -230,6 +231,14 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             }
         }
 
+        for (int i = 1; i < contatti.size(); i++) {
+            if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
+                contatti.get(i).name = contatti.get(i).name + "|";
+                p++;
+            }
+            progressBar.setProgress(p);
+        }
+
         ((Activity) rootView.getContext()).runOnUiThread(
                 new Runnable() {
                     @Override
@@ -241,7 +250,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         HashMap map = sortByValues(nomeNumero);
 
                         //TODO capire perchè qui cancella contatti
-
                         //inserisco i contatti
                         for (int i = 0; i < contatti.size(); i++) {
                             map.put(contatti.get(i).name, contatti.get(i).number);
@@ -249,9 +257,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                             p++;
                             progressBar.setProgress(p);
                         }
-
-                        Log.i("size contatto", String.valueOf(contatti.size()));
-                        Log.i("size map", String.valueOf(map.size()));
 
                         //lista di elementi HashMap
                         List<HashMap<String, String>> listItems = new ArrayList<>();
@@ -266,7 +271,11 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         for (Object o : map.entrySet()) {
                             HashMap<String, String> resultsMap = new HashMap<>();
                             Map.Entry pair = (Map.Entry) o;
-                            resultsMap.put("First Line", pair.getKey().toString());
+                            String n = pair.getKey().toString();
+                            if (String.valueOf(n.charAt(n.length() - 1)).equals("|")) {
+                                n = String.valueOf(n.substring(0, n.length() - 1));
+                            }
+                            resultsMap.put("First Line", n);
                             resultsMap.put("Second Line", pair.getValue().toString());
                             listItems.add(resultsMap);
                         }
@@ -325,6 +334,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 String res = o.toString();
                                 res = res.replace("{", "");
                                 res = res.replace("}", "");
+                                res = res.replace("|", "");
 
                                 String parts[] = res.split(",");
 

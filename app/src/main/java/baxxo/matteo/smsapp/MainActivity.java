@@ -38,6 +38,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static baxxo.matteo.smsapp.R.id.container;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(tabsPagerAdapter);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -121,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
                     //animazione per botton che sparisce
                     Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
                     fab.setAnimation(animFadeOut);
-                    fab.setVisibility(View.GONE);
+                    fab.setVisibility(View.INVISIBLE);
                 }
 
                 if (position == 0) {
@@ -147,6 +149,7 @@ public class MainActivity extends AppCompatActivity {
         setupTabIcons();
 
         fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setVisibility(View.INVISIBLE);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -265,11 +268,41 @@ public class MainActivity extends AppCompatActivity {
 
     //fine onCreate-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+    public void animOut() {
+
+        Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
+        fab.setAnimation(animFadeOut);
+    }
+
+    public void animINn() {
+
+        Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
+        fab.setAnimation(animFadeIn);
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
         System.out.println("destroy");
     }
+
+    static final TextWatcher contaCaratteriNumero = new TextWatcher() {
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            if (count == 0) {
+                fab.setVisibility(View.INVISIBLE);
+
+            } else {
+                fab.setVisibility(View.VISIBLE);
+            }
+        }
+
+        public void afterTextChanged(Editable s) {
+        }
+    };
 
     static final TextWatcher contaCaratteri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -278,6 +311,11 @@ public class MainActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             String t = "Caratteri: " + String.valueOf(s.length()) + "/160";
             conta.setText(t);
+            if (count == 0) {
+                fab.setVisibility(View.INVISIBLE);
+            } else {
+                fab.setVisibility(View.VISIBLE);
+            }
         }
 
         public void afterTextChanged(Editable s) {
@@ -395,6 +433,7 @@ public class MainActivity extends AppCompatActivity {
             relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
 
             t.addTextChangedListener(contaCaratteri);
+            t.addTextChangedListener(contaCaratteriNumero);
             editOra.setText(calendar.get(Calendar.HOUR_OF_DAY) + "");
             editMin.setText(calendar.get(Calendar.MINUTE) + "");
             editAnno.setText(calendar.get(Calendar.YEAR) + "");
