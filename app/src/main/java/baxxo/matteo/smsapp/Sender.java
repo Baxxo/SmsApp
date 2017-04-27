@@ -44,14 +44,6 @@ public class Sender extends IntentService {
         database = new DatabaseManager(this);
 
         try {
-            Log.i("Lunghezza", String.valueOf(database.getMessagesCount()));
-        } catch (Exception e) {
-            Log.i("Lunghezza", String.valueOf(0));
-        }
-
-
-        //System.out.println("parte");
-        try {
             sms = SmsManager.getDefault();
             sms.sendTextMessage(numero, null, testo, null, null);
             text = "Inviato! \n" + testo;

@@ -80,6 +80,8 @@ public class MainActivity extends AppCompatActivity {
     DatabaseManager db;
     public static SharedPreferences preferences;
     int lunghezza;
+    static Context context;
+    static boolean[] check = {false, false};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +97,15 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_CALENDAR
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
+        MainActivity.context = getApplicationContext();
 
         db = new DatabaseManager(getApplicationContext());
 
         preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
 
         try {
-            Log.i("Lunghezza", String.valueOf(db.getMessagesCount()));
             lunghezza = db.getMessagesCount();
         } catch (Exception e) {
-            Log.i("Lunghezza", String.valueOf(0));
             lunghezza = 0;
         }
 
@@ -121,16 +122,23 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 if (position == 1) {
                     //animazione per botton che sparisce
-                    Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
-                    fab.setAnimation(animFadeOut);
+                    check[0] = false;
+
+                    if (fab.getVisibility() == View.VISIBLE) {
+                        animOut();
+                    }
                     fab.setVisibility(View.INVISIBLE);
                 }
 
                 if (position == 0) {
                     //animazione per botton che appare
-                    Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
-                    fab.setAnimation(animFadeIn);
-                    fab.setVisibility(View.VISIBLE);
+                    check[0] = true;
+
+                    if (check[0] && check[1]) {
+                        animIn();
+                        fab.setVisibility(View.VISIBLE);
+
+                    }
                 }
 
             }
@@ -257,26 +265,27 @@ public class MainActivity extends AppCompatActivity {
         m.setData(calendar.getTimeInMillis());
         m.setInviato(false);
 
-      /*  Log.i("Nome", m.getId());
-        Log.i("Testo", m.getTesto());*/
-
         db.aggiungiMessaggio(m);
-
-        Log.i("Testo", db.getMessaggio(1).getTesto());
 
     }
 
     //fine onCreate-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public void animOut() {
+    public static void animOut() {
 
-        Animation animFadeOut = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_down_animation);
+        Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
         fab.setAnimation(animFadeOut);
     }
 
-    public void animINn() {
+    public static void animIn() {
 
-        Animation animFadeIn = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.slide_up_animation);
+        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
+        fab.setAnimation(animFadeIn);
+    }
+
+    public static void animLeft() {
+
+        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_appear_animation);
         fab.setAnimation(animFadeIn);
     }
 
@@ -293,10 +302,21 @@ public class MainActivity extends AppCompatActivity {
         public void onTextChanged(CharSequence s, int start, int before, int count) {
 
             if (count == 0) {
+                check[1] = false;
+
+                if (fab.getVisibility() == View.VISIBLE) {
+                    animOut();
+                }
                 fab.setVisibility(View.INVISIBLE);
 
             } else {
-                fab.setVisibility(View.VISIBLE);
+
+                check[1] = true;
+
+                if (check[0] && check[1]) {
+                    animLeft();
+                    fab.setVisibility(View.VISIBLE);
+                }
             }
         }
 

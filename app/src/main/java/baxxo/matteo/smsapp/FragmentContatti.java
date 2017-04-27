@@ -182,18 +182,24 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         //rimuovo gli spazi
         for (int i = 0; i < contatti.size(); i++) {
             contatti.get(i).number.replace(" ", "");
+            contatti.get(i).number.replace("\u202A", "");
+            contatti.get(i).number.replace("+39", "");
+            contatti.get(i).number.replace("\u202A+39", "");
+            contatti.get(i).number.replace("\u202C+39", "");
         }
 
-
         //rimuovo +39
-        for (int i = 1; i < contatti.size(); i++) {
+        for (int i = 0; i < contatti.size(); i++) {
+
             if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
                 contatti.get(i).number = contatti.get(i).number.substring(3);
+            }
+            if (String.valueOf(contatti.get(i).number.substring(0, 4)).equals("\u202A+39")) {
+                contatti.get(i).number = contatti.get(i).number.substring(4);
             }
             p++;
             progressBar.setProgress(p);
         }
-
 
         //rimuovo numeri di casa
         for (int i = 0; i < contatti.size(); i++) {
@@ -207,7 +213,14 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             progressBar.setProgress(p);
         }
 
+        for (int i = 0; i < contatti.size(); i++) {
+            if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
+                contatti.remove(i);
+            }
+        }
+
         int j = 0;
+
         //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
         while (j == 0) {
             j = 0;
@@ -219,7 +232,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 progressBar.setProgress(p);
 
             }
-            j = 0;
             for (int i = 1; i < contatti.size(); i++) {
                 if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
                     j++;
@@ -253,7 +265,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         //inserisco i contatti
                         for (int i = 0; i < contatti.size(); i++) {
                             map.put(contatti.get(i).name, contatti.get(i).number);
-                            Log.i("contatto", contatti.get(i).name + " " + contatti.get(i).number);
                             p++;
                             progressBar.setProgress(p);
                         }
