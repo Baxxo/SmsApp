@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -45,6 +46,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     EditText nomeSearch;
     LinearLayout.LayoutParams lp;
     public static ArrayList<Contact> contatti = new ArrayList<>();
+    ArrayList<String> a = new ArrayList<String>();
     ProgressBar progressBar;
     View rootView;
     Dialog d;
@@ -56,6 +58,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     String nome;
     String numero;
     int p = 0;
+    List<HashMap<String, String>> listItems;
 
     public FragmentContatti() {
 
@@ -165,6 +168,16 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 }
 
             }
+        } else {
+            adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
+                    new String[]{"First Line", "Second Line"},
+                    new int[]{R.id.textView12, R.id.textView13}
+            );
+
+            HashMap<String, String> resultsMap = new HashMap<>();
+            resultsMap.put("First Line", "Nessun contatto");
+            resultsMap.put("Second Line", "");
+            listItems.add(resultsMap);
         }
 
         //ordino per nome
@@ -261,7 +274,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         //map con valori ordinati
                         HashMap map = sortByValues(nomeNumero);
 
-                        //TODO capire perchè qui cancella contatti
                         //inserisco i contatti
                         for (int i = 0; i < contatti.size(); i++) {
                             map.put(contatti.get(i).name, contatti.get(i).number);
@@ -270,7 +282,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         }
 
                         //lista di elementi HashMap
-                        List<HashMap<String, String>> listItems = new ArrayList<>();
+                        listItems = new ArrayList<>();
 
                         //Adapter per la listView
                         adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
@@ -280,12 +292,12 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
                         //Iterator accede alla mappa e accoppia la mappa con l' adapter
                         for (Object o : map.entrySet()) {
-                            HashMap<String, String> resultsMap = new HashMap<>();
                             Map.Entry pair = (Map.Entry) o;
                             String n = pair.getKey().toString();
                             if (String.valueOf(n.charAt(n.length() - 1)).equals("|")) {
                                 n = String.valueOf(n.substring(0, n.length() - 1));
                             }
+                            HashMap<String, String> resultsMap = new HashMap<>();
                             resultsMap.put("First Line", n);
                             resultsMap.put("Second Line", pair.getValue().toString());
                             listItems.add(resultsMap);

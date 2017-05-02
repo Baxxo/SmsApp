@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     public static ViewPager mViewPager;
     int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
     FragmentContatti myFragment = null;
+    DatabaseFragment myFragment1 = null;
     private int anno = 1;
     private int mese = 1;
     private int giorno = 1;
@@ -295,12 +296,12 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("destroy");
     }
 
-    static final TextWatcher contaCaratteriNumero = new TextWatcher() {
+    static final TextWatcher contaNumeri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+            Log.i("Size num", count + "");
             if (count == 0) {
                 check[1] = false;
 
@@ -310,12 +311,13 @@ public class MainActivity extends AppCompatActivity {
                 fab.setVisibility(View.INVISIBLE);
 
             } else {
+                if (!check[1]) {
+                    check[1] = true;
 
-                check[1] = true;
-
-                if (check[0] && check[1]) {
-                    animLeft();
-                    fab.setVisibility(View.VISIBLE);
+                    if (check[0]) {
+                        animLeft();
+                        fab.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }
@@ -329,12 +331,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String t = "Caratteri: " + String.valueOf(s.length()) + "/160";
+            String t = "Caratteri: " + count + "/160";
             conta.setText(t);
             if (count == 0) {
+                check[0] = false;
+
+                if (fab.getVisibility() == View.VISIBLE) {
+                    animOut();
+                }
                 fab.setVisibility(View.INVISIBLE);
+
             } else {
-                fab.setVisibility(View.VISIBLE);
+                if (!check[0]) {
+                    check[0] = true;
+
+                    if (check[1]) {
+                        animLeft();
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                }
             }
         }
 
@@ -346,25 +361,23 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_assignment);
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
-        //  private final List<Fragment> mFragmentList = new ArrayList<>();
-        //  private final List<String> mFragmentTitleList = new ArrayList<>();
 
         public TabsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
-        /*public void addFragment(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }*/
 
         @Override
         public Fragment getItem(int position) {
             if (position == 1) {
                 return myFragment = new FragmentContatti();
+            }
+            if (position == 2) {
+                return myFragment1 = new DatabaseFragment();
             }
 
             return PlaceholderFragment.newInstance(position + 1);
@@ -372,13 +385,16 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 1) {
                 return getString(R.string.title2);
+            }
+            if (position == 2) {
+                return getString(R.string.title3);
             }
             return getString(R.string.title1);
         }
@@ -453,7 +469,7 @@ public class MainActivity extends AppCompatActivity {
             relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
 
             t.addTextChangedListener(contaCaratteri);
-            t.addTextChangedListener(contaCaratteriNumero);
+            n.addTextChangedListener(contaNumeri);
             editOra.setText(calendar.get(Calendar.HOUR_OF_DAY) + "");
             editMin.setText(calendar.get(Calendar.MINUTE) + "");
             editAnno.setText(calendar.get(Calendar.YEAR) + "");
