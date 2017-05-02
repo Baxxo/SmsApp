@@ -61,7 +61,6 @@ public class DatabaseFragment extends Fragment {
                 mess1.clear();
                 s = databaseManager.getMessagesCount();
                 Log.i("size", String.valueOf(databaseManager.getMessagesCount()));
-
                 if (s > 0) {
 
                     caricaDb();
