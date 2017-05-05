@@ -130,6 +130,33 @@ public class DatabaseManager extends SQLiteOpenHelper {
         return messaggioList;
     }
 
+    public ArrayList<Messaggio> getNotSentMessages() {
+        ArrayList<Messaggio> messaggioList = new ArrayList<Messaggio>();
+        // Select All Query
+        String selectQuery = "SELECT  * FROM " + NameTable + " WHERE inviato = 'false';";
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        if (cursor.moveToFirst()) {
+            do {
+                Messaggio mess = new Messaggio();
+                mess.setId(cursor.getString(0));//id
+                mess.setNome(cursor.getString(1));//nome
+                mess.setNumero(cursor.getString(2));//numero
+                mess.setTesto(cursor.getString(3));//testo
+                mess.setData(Long.parseLong(cursor.getString(4)));//data/ora
+                mess.setInviato(Boolean.parseBoolean(cursor.getString(5)));//inivato
+                // Adding contact to list
+                messaggioList.add(mess);
+            } while (cursor.moveToNext());
+        }
+
+        // return contact list
+        return messaggioList;
+    }
+
     // Getting contacts Count
     public int getMessagesCount() {
 
@@ -144,7 +171,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         // return count
         return l;
     }
-/*
+
     // Updating single contact
     public int updateMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -168,6 +195,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.delete(NameTable, Id + " = ?",
                 new String[]{String.valueOf(messaggio.getId())});
         db.close();
-    }*/
+    }
 
 }
