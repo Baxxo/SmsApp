@@ -58,7 +58,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     String nome;
     String numero;
     int p = 0;
+    HashMap<String, String> resultsMap;
     List<HashMap<String, String>> listItems;
+    ArrayAdapter<String> list;
+    ArrayList<String> mess1 = new ArrayList<String>();
 
     public FragmentContatti() {
 
@@ -66,6 +69,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_contact, container, false);
+        resultsMap = new HashMap<>();
+        listItems = new ArrayList<>();
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true);
@@ -167,244 +172,245 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     phones.close();
                 }
 
-            }
-        } else {
-            adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
-                    new String[]{"First Line", "Second Line"},
-                    new int[]{R.id.textView12, R.id.textView13}
-            );
 
-            HashMap<String, String> resultsMap = new HashMap<>();
-            resultsMap.put("First Line", "Nessun contatto");
-            resultsMap.put("Second Line", "");
-            listItems.add(resultsMap);
-        }
+                //ordino per nome
+                Collections.sort(contatti, new Comparator<Contact>() {
+                            @Override
+                            public int compare(Contact c1, Contact c2) {
+                                p++;
+                                progressBar.setProgress(p);
+                                return c1.name.compareTo(c2.name);
+                            }
+                        }
+                );
 
-        //ordino per nome
-        Collections.sort(contatti, new Comparator<Contact>() {
-                    @Override
-                    public int compare(Contact c1, Contact c2) {
-                        p++;
-                        progressBar.setProgress(p);
-                        return c1.name.compareTo(c2.name);
+
+                //rimuovo gli spazi
+                for (int i = 0; i < contatti.size(); i++) {
+                    contatti.get(i).number.replace(" ", "");
+                    contatti.get(i).number.replace("\u202A", "");
+                    contatti.get(i).number.replace("+39", "");
+                    contatti.get(i).number.replace("\u202A+39", "");
+                    contatti.get(i).number.replace("\u202C+39", "");
+                }
+
+                //rimuovo +39
+                for (int i = 0; i < contatti.size(); i++) {
+
+                    if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
+                        contatti.get(i).number = contatti.get(i).number.substring(3);
+                    }
+                    if (String.valueOf(contatti.get(i).number.substring(0, 4)).equals("\u202A+39")) {
+                        contatti.get(i).number = contatti.get(i).number.substring(4);
+                    }
+                    p++;
+                    progressBar.setProgress(p);
+                }
+
+                //rimuovo numeri di casa
+                for (int i = 0; i < contatti.size(); i++) {
+                    if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
+                        contatti.remove(i);
+                    }
+                    if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
+                        contatti.remove(i);
+                    }
+                    p++;
+                    progressBar.setProgress(p);
+                }
+
+                for (int i = 0; i < contatti.size(); i++) {
+                    if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
+                        contatti.remove(i);
                     }
                 }
-        );
 
+                int j = 0;
 
-        //rimuovo gli spazi
-        for (int i = 0; i < contatti.size(); i++) {
-            contatti.get(i).number.replace(" ", "");
-            contatti.get(i).number.replace("\u202A", "");
-            contatti.get(i).number.replace("+39", "");
-            contatti.get(i).number.replace("\u202A+39", "");
-            contatti.get(i).number.replace("\u202C+39", "");
-        }
+                //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
+                while (j == 0) {
+                    j = 0;
+                    for (int i = 1; i < contatti.size(); i++) {
+                        if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                            j++;
+                            contatti.remove(i - 1);
+                        }
+                        progressBar.setProgress(p);
 
-        //rimuovo +39
-        for (int i = 0; i < contatti.size(); i++) {
-
-            if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
-                contatti.get(i).number = contatti.get(i).number.substring(3);
-            }
-            if (String.valueOf(contatti.get(i).number.substring(0, 4)).equals("\u202A+39")) {
-                contatti.get(i).number = contatti.get(i).number.substring(4);
-            }
-            p++;
-            progressBar.setProgress(p);
-        }
-
-        //rimuovo numeri di casa
-        for (int i = 0; i < contatti.size(); i++) {
-            if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
-                contatti.remove(i);
-            }
-            if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
-                contatti.remove(i);
-            }
-            p++;
-            progressBar.setProgress(p);
-        }
-
-        for (int i = 0; i < contatti.size(); i++) {
-            if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
-                contatti.remove(i);
-            }
-        }
-
-        int j = 0;
-
-        //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
-        while (j == 0) {
-            j = 0;
-            for (int i = 1; i < contatti.size(); i++) {
-                if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
-                    j++;
-                    contatti.remove(i - 1);
-                }
-                progressBar.setProgress(p);
-
-            }
-            for (int i = 1; i < contatti.size(); i++) {
-                if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
-                    j++;
-                    contatti.remove(i - 1);
-                    p++;
-                }
-                progressBar.setProgress(p);
-
-            }
-        }
-
-        for (int i = 1; i < contatti.size(); i++) {
-            if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
-                contatti.get(i).name = contatti.get(i).name + "|";
-                p++;
-            }
-            progressBar.setProgress(p);
-        }
-
-        ((Activity) rootView.getContext()).runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        //hash map con nomi e numeri
-                        HashMap<String, String> nomeNumero = new HashMap<>();
-
-                        //map con valori ordinati
-                        HashMap map = sortByValues(nomeNumero);
-
-                        //inserisco i contatti
-                        for (int i = 0; i < contatti.size(); i++) {
-                            map.put(contatti.get(i).name, contatti.get(i).number);
+                    }
+                    for (int i = 1; i < contatti.size(); i++) {
+                        if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                            j++;
+                            contatti.remove(i - 1);
                             p++;
-                            progressBar.setProgress(p);
                         }
+                        progressBar.setProgress(p);
 
-                        //lista di elementi HashMap
-                        listItems = new ArrayList<>();
+                    }
+                }
 
-                        //Adapter per la listView
-                        adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
-                                new String[]{"First Line", "Second Line"},
-                                new int[]{R.id.textView12, R.id.textView13}
-                        );
+                for (int i = 1; i < contatti.size(); i++) {
+                    if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
+                        contatti.get(i).name = contatti.get(i).name + "|";
+                        p++;
+                    }
+                    progressBar.setProgress(p);
+                }
 
-                        //Iterator accede alla mappa e accoppia la mappa con l' adapter
-                        for (Object o : map.entrySet()) {
-                            Map.Entry pair = (Map.Entry) o;
-                            String n = pair.getKey().toString();
-                            if (String.valueOf(n.charAt(n.length() - 1)).equals("|")) {
-                                n = String.valueOf(n.substring(0, n.length() - 1));
-                            }
-                            HashMap<String, String> resultsMap = new HashMap<>();
-                            resultsMap.put("First Line", n);
-                            resultsMap.put("Second Line", pair.getValue().toString());
-                            listItems.add(resultsMap);
-                        }
-
-                        //mostro i valori nella listView
-                        listView.setAdapter(adapter);
-                        progressBar.setProgress(cur.getCount() * 7);
-
-                        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                ((Activity) rootView.getContext()).runOnUiThread(
+                        new Runnable() {
                             @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Object o = listView.getItemAtPosition(position);
-                                String res = o.toString();
-                                res = res.replace("{", "");
-                                res = res.replace("}", "");
+                            public void run() {
+                                //hash map con nomi e numeri
+                                HashMap<String, String> nomeNumero = new HashMap<>();
 
-                                String parts[] = res.split(",");
+                                //map con valori ordinati
+                                HashMap map = sortByValues(nomeNumero);
 
-                                String dir1 = parts[1];
-                                String dir2 = parts[0];
+                                //inserisco i contatti
+                                for (int i = 0; i < contatti.size(); i++) {
+                                    map.put(contatti.get(i).name, contatti.get(i).number);
+                                    p++;
+                                    progressBar.setProgress(p);
+                                }
 
-                                parts = dir1.split("=");
+                                //Adapter per la listView
+                                adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
+                                        new String[]{"First Line", "Second Line"},
+                                        new int[]{R.id.textView12, R.id.textView13}
+                                );
 
-                                nome = parts[1];
+                                //Iterator accede alla mappa e accoppia la mappa con l' adapter
+                                for (Object o : map.entrySet()) {
+                                    Map.Entry pair = (Map.Entry) o;
+                                    String n = pair.getKey().toString();
+                                    if (String.valueOf(n.charAt(n.length() - 1)).equals("|")) {
+                                        n = String.valueOf(n.substring(0, n.length() - 1));
+                                    }
+                                    resultsMap.put("First Line", n);
+                                    resultsMap.put("Second Line", pair.getValue().toString());
+                                    listItems.add(resultsMap);
+                                }
 
-                                parts = dir2.split("=");
-                                numero = parts[1];
+                                //mostro i valori nella listView
+                                listView.setAdapter(adapter);
+                                progressBar.setProgress(cur.getCount() * 7);
 
-                                MainActivity.n.setText(numero);
-                                Toast.makeText(rootView.getContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
-
-                                new Thread(new Runnable() {
+                                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                                     @Override
-                                    public void run() {
-                                        try {
-                                            Thread.sleep(200);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                        ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Object o = listView.getItemAtPosition(position);
+                                        String res = o.toString();
+                                        res = res.replace("{", "");
+                                        res = res.replace("}", "");
+
+                                        String parts[] = res.split(",");
+
+                                        String dir1 = parts[1];
+                                        String dir2 = parts[0];
+
+                                        parts = dir1.split("=");
+
+                                        nome = parts[1];
+
+                                        parts = dir2.split("=");
+                                        numero = parts[1];
+
+                                        MainActivity.n.setText(numero);
+                                        Toast.makeText(rootView.getContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
+
+                                        new Thread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                MainActivity.mViewPager.setCurrentItem(0);
+                                                try {
+                                                    Thread.sleep(200);
+                                                } catch (InterruptedException e) {
+                                                    e.printStackTrace();
+                                                }
+                                                ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
+                                                    @Override
+                                                    public void run() {
+                                                        MainActivity.mViewPager.setCurrentItem(0);
+                                                    }
+                                                });
                                             }
-                                        });
+                                        }).start();
+
                                     }
-                                }).start();
+                                });
 
+                                listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                                    @Override
+                                    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                                        Object o = listView.getItemAtPosition(position);
+                                        String res = o.toString();
+                                        res = res.replace("{", "");
+                                        res = res.replace("}", "");
+                                        res = res.replace("|", "");
+
+                                        String parts[] = res.split(",");
+
+                                        String dir1 = parts[1];
+                                        String dir2 = parts[0];
+
+                                        parts = dir1.split("=");
+
+                                        nome = parts[1];
+
+                                        parts = dir2.split("=");
+                                        numero = parts[1];
+
+                                        tvNome.setText(nome);
+                                        tvNumero.setText(numero);
+
+                                        d.show();
+                                        d.getWindow().setAttributes(layoutParams);
+
+                                        return true;
+                                    }
+                                });
+
+                                nomeSearch.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                                    }
+
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                        FragmentContatti.this.adapter.getFilter().filter(s);
+                                    }
+
+                                    @Override
+                                    public void afterTextChanged(Editable s) {
+
+                                    }
+                                });
+
+                                progressBar.setVisibility(View.INVISIBLE);
+                                button.setText("Ricarica Lista");
+                                button.setVisibility(View.VISIBLE);
+                                search.setVisibility(View.VISIBLE);
                             }
                         });
+            }
+        } else {
+            mess1.add("Nessun messaggio");
 
-                        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                            @Override
-                            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                                Object o = listView.getItemAtPosition(position);
-                                String res = o.toString();
-                                res = res.replace("{", "");
-                                res = res.replace("}", "");
-                                res = res.replace("|", "");
+            list = new ArrayAdapter(rootView.getContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
 
-                                String parts[] = res.split(",");
+            listView.setAdapter(list);
 
-                                String dir1 = parts[1];
-                                String dir2 = parts[0];
 
-                                parts = dir1.split("=");
-
-                                nome = parts[1];
-
-                                parts = dir2.split("=");
-                                numero = parts[1];
-
-                                tvNome.setText(nome);
-                                tvNumero.setText(numero);
-
-                                d.show();
-                                d.getWindow().setAttributes(layoutParams);
-
-                                return true;
-                            }
-                        });
-
-                        nomeSearch.addTextChangedListener(new TextWatcher() {
-                            @Override
-                            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                            }
-
-                            @Override
-                            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                                FragmentContatti.this.adapter.getFilter().filter(s);
-                            }
-
-                            @Override
-                            public void afterTextChanged(Editable s) {
-
-                            }
-                        });
-
-                        progressBar.setVisibility(View.INVISIBLE);
-                        button.setText("Ricarica Lista");
-                        button.setVisibility(View.VISIBLE);
-                        search.setVisibility(View.VISIBLE);
-
-                    }
+            ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    button.setText("Ricarica Lista");
+                    button.setVisibility(View.VISIBLE);
+                    search.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.INVISIBLE);
                 }
-        );
+            });
+        }
     }
 
     //funzione per ordinare l' hash map con i contatti(funzione trovata)
