@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_CALENDAR
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
+
         MainActivity.context = getApplicationContext();
 
         db = new DatabaseManager(getApplicationContext());

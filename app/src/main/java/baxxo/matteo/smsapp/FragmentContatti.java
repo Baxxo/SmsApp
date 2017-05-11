@@ -3,6 +3,7 @@ package baxxo.matteo.smsapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -61,7 +62,9 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     HashMap<String, String> resultsMap;
     List<HashMap<String, String>> listItems;
     ArrayAdapter<String> list;
+    Cursor cur;
     ArrayList<String> mess1 = new ArrayList<String>();
+    String permission = "android.permission.READ_CONTACTS";
 
     public FragmentContatti() {
 
@@ -135,12 +138,44 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         button.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
         contatti.clear();
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                getContact();
-            }
-        }).start();
+
+        Log.i("Permission", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
+
+        if (getContext().checkCallingOrSelfPermission(permission) == 0) {
+            Log.i("PermissionPrimoIf", "Ciaone");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        getContact();
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), "Accetta i permessi", Toast.LENGTH_LONG).show();
+                    }
+                }
+            }).start();
+        }
+
+        if (getContext().checkCallingOrSelfPermission(permission) == -1) {
+            Log.i("Permission1234", "Bello");
+            do {
+                Log.i("Permission1234", "Ciaone da while");
+                Log.i("Permission1234", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
+                if (getContext().checkCallingOrSelfPermission(permission) == 0) {
+                    Log.i("Permission1234", "Ciaone da if");
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                getContact();
+                            } catch (Exception e) {
+                                Toast.makeText(getContext(), "Accetta i permessi", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    }).start();
+                }
+            }while (getContext().checkCallingOrSelfPermission(permission) == -1);
+        }
+
 
         return rootView;
     }
@@ -153,7 +188,9 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         search.setVisibility(View.INVISIBLE);
         p = 0;
         ContentResolver cr = getContext().getContentResolver();
-        final Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
+        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+
         progressBar.setMax(cur.getCount() * 2);
         if (cur.getCount() > 0) {
             while (cur.moveToNext()) {
@@ -394,7 +431,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         });
             }
         } else {
-            mess1.add("Nessun messaggio");
+            mess1.add("Non ci sono contatti");
 
             list = new ArrayAdapter(rootView.getContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
 
