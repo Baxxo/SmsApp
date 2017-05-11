@@ -37,10 +37,6 @@
             android:name=".Sender"
             android:exported="false" />
 
-        <activity
-            android:name=".Database"
-            android:label="@string/title_activity_database"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
