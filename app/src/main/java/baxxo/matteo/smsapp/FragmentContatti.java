@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+//import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -139,10 +139,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         progressBar.setVisibility(View.VISIBLE);
         contatti.clear();
 
-        Log.i("Permission", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
+        //Log.i("Permission", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
 
         if (getContext().checkCallingOrSelfPermission(permission) == 0) {
-            Log.i("PermissionPrimoIf", "Ciaone");
+            //Log.i("PermissionPrimoIf", "Ciaone");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -156,12 +156,12 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         }
 
         if (getContext().checkCallingOrSelfPermission(permission) == -1) {
-            Log.i("Permission1234", "Bello");
+            //Log.i("Permission1234", "Bello");
             do {
-                Log.i("Permission1234", "Ciaone da while");
-                Log.i("Permission1234", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
+                //Log.i("Permission1234", "Ciaone da while");
+                //Log.i("Permission1234", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
                 if (getContext().checkCallingOrSelfPermission(permission) == 0) {
-                    Log.i("Permission1234", "Ciaone da if");
+                    //Log.i("Permission1234", "Ciaone da if");
                     new Thread(new Runnable() {
                         @Override
                         public void run() {

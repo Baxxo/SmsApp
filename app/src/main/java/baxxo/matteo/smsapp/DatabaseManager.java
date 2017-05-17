@@ -61,12 +61,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
     void aggiungiMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-        Log.i("Id", messaggio.getId());
+       /* Log.i("Id", messaggio.getId());
         Log.i("Nome", messaggio.getNome());
         Log.i("Numero", messaggio.getNumero());
         Log.i("Testo", messaggio.getTesto());
         Log.i("Data", String.valueOf(messaggio.getData()));
-        Log.i("Inviato", messaggio.getInviato() + "");
+        Log.i("Inviato", messaggio.getInviato() + "");*/
 
         ContentValues values = new ContentValues();
         values.put(Id, messaggio.getId()); // Messaggio Id
@@ -166,7 +166,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(countQuery, null);
         l = cursor.getCount();
         cursor.close();
-        Log.i("Size db", String.valueOf(l));
+        //Log.i("Size db", String.valueOf(l));
 
         // return count
         return l;
