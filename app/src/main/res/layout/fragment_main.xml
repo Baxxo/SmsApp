@@ -10,7 +10,7 @@
     tools:context="baxxo.matteo.smsapp.MainActivity$PlaceholderFragment">
 
     <ScrollView
-        android:id="@+id/scrollView"
+        android:id="@+id/scrollViewMain"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"

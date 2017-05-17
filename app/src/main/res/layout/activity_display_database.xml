@@ -1,9 +1,10 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/back_database"
-    tools:context="baxxo.matteo.smsapp.DatabaseFragment">
+    tools:context="baxxo.matteo.smsapp.DisplayDatabase">
 
     <RelativeLayout
         android:layout_width="368dp"
@@ -33,4 +34,5 @@
             android:textColor="@android:color/background_light"
             android:textStyle="bold" />
     </RelativeLayout>
-</FrameLayout>
+
+</android.support.constraint.ConstraintLayout>

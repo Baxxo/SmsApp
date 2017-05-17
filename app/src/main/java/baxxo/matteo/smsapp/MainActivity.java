@@ -18,10 +18,14 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,6 +35,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -76,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contact;
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
+    static ScrollView scroll;
     Dialog d;
     public static FloatingActionButton fab;
     DatabaseManager db;
@@ -88,8 +94,11 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
             requestPermissions(new String[]{
                     Manifest.permission.READ_CONTACTS,
                     Manifest.permission.SEND_SMS,
@@ -271,6 +280,27 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.action_settings) {
+            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
+            startActivity(intent);
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
     //fine onCreate-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public static void animOut() {
@@ -362,7 +392,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_assignment);
+        //tabLayout.getTabAt(2).setIcon(R.drawable.ic_assignment);
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -376,27 +406,28 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 1) {
                 return myFragment = new FragmentContatti();
-            }
+            }/*
             if (position == 2) {
                 return myFragment1 = new DatabaseFragment();
-            }
+            }*/
 
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            // return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 1) {
                 return getString(R.string.title2);
-            }
+            }/*
             if (position == 2) {
                 return getString(R.string.title3);
-            }
+            }*/
             return getString(R.string.title1);
         }
 
@@ -451,7 +482,6 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             Calendar calendar = Calendar.getInstance();
 
-
             n = (EditText) rootView.findViewById(R.id.Numero);
             t = (EditText) rootView.findViewById(R.id.Testo);
             conta = (TextView) rootView.findViewById(R.id.textView3);
@@ -492,6 +522,26 @@ public class MainActivity extends AppCompatActivity {
                 relativeLayout.removeView(timepicker);
                 relativeLayout.removeView(data);
             }
+
+            scroll = (ScrollView) rootView.findViewById(R.id.scrollViewMain);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                scroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+                    @Override
+                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+                        Log.i("Y  ", String.valueOf(scrollY));
+                        Log.i("OldY  ", String.valueOf(oldScrollY));
+                       /* if (scrollY < oldScrollY) {
+
+                            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+                        }else{
+
+                            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+                        }*/
+
+                    }
+                });
+            }
+
             return rootView;
         }
     }

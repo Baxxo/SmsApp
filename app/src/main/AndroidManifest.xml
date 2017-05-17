@@ -37,6 +37,7 @@
             android:name=".Sender"
             android:exported="false" />
 
+        <activity android:name=".DisplayDatabase"></activity>
     </application>
 
 </manifest>
