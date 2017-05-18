@@ -132,7 +132,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public ArrayList<Messaggio> getNotSentMessages() {
         ArrayList<Messaggio> messaggioList = new ArrayList<Messaggio>();
         // Select All Query
-        String selectQuery = "SELECT  * FROM " + NameTable + " WHERE inviato = 'false';";
+        String selectQuery = "SELECT  * FROM " + NameTable + " WHERE inviato = '0';";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);

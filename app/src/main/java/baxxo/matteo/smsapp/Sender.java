@@ -45,6 +45,8 @@ public class Sender extends IntentService {
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
 
+        //TODO settare messagio se inviato a true
+
         database = new DatabaseManager(this);
 
         try {

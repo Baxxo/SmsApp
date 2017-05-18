@@ -22,6 +22,7 @@ public class DisplayDatabase extends AppCompatActivity {
     RelativeLayout relativeLayout;
     ArrayAdapter<String> list;
     Button b;
+    Button n;
     int s;
     ListView lv;
     List<HashMap<String, String>> listItems;
@@ -39,6 +40,22 @@ public class DisplayDatabase extends AppCompatActivity {
         databaseManager = new DatabaseManager(getApplicationContext());
 
         b = (Button) findViewById(R.id.button5);
+        n = (Button) findViewById(R.id.button4);
+        n.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                databaseManager.deleteMessage(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
+                databaseManager.deleteMessage(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
+                databaseManager.deleteMessage(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
+                databaseManager.deleteMessage(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, false));
+                databaseManager.deleteMessage(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, false));
+                databaseManager.aggiungiMessaggio(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
+                databaseManager.aggiungiMessaggio(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
+                databaseManager.aggiungiMessaggio(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
+                databaseManager.aggiungiMessaggio(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, false));
+                databaseManager.aggiungiMessaggio(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, false));
+            }
+        });
 
         b.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,13 +80,13 @@ public class DisplayDatabase extends AppCompatActivity {
 
     public void caricaDb() {
 
-        mess = databaseManager.getAllMessages();
+        mess = databaseManager.getNotSentMessages();
 
         HashMap<String, String> map = new HashMap<>();
 
 
         for (int i = 0; i < s; i++) {
-            map.put("Messaggio a: " + mess.get(i).getNome(), "Testo: " + mess.get(i).getTesto());
+            map.put("Messaggio a: " + mess.get(i).getNome(), "Testo: " + mess.get(i).getTesto() + " - " + mess.get(i).getInviato());
         }
 
         listItems = new ArrayList<>();
