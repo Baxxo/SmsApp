@@ -24,6 +24,7 @@ public class DisplayDatabase extends AppCompatActivity {
     Button b;
     Button n;
     Button t;
+    Button e;
     int s;
     ListView lv;
     List<HashMap<String, String>> listItems;
@@ -35,14 +36,21 @@ public class DisplayDatabase extends AppCompatActivity {
         setContentView(R.layout.activity_display_database);
 
         lv = (ListView) findViewById(R.id.list);
+        b = (Button) findViewById(R.id.button5);
+        n = (Button) findViewById(R.id.button4);
+        t = (Button) findViewById(R.id.button7);
+        e = (Button) findViewById(R.id.button2);
 
         relativeLayout = (RelativeLayout) findViewById(R.id.relative);
 
         databaseManager = new DatabaseManager(getApplicationContext());
 
-        b = (Button) findViewById(R.id.button5);
-        n = (Button) findViewById(R.id.button4);
-        t = (Button) findViewById(R.id.button7);
+        e.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                databaseManager.deleteAllMessage();
+            }
+        });
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -101,10 +109,12 @@ public class DisplayDatabase extends AppCompatActivity {
 
     public void caricaNonInviatiDb() {
 
+        mess.clear();
+
         mess = databaseManager.getNotSentMessages();
 
         HashMap<String, String> map = new HashMap<>();
-        Log.i("Messaggio","Sono Qui non inviati");
+        Log.i("Messaggio", "Sono Qui non inviati");
 
 
         for (int i = 0; i < s; i++) {
@@ -135,10 +145,12 @@ public class DisplayDatabase extends AppCompatActivity {
 
     public void caricaDb() {
 
+        mess.clear();
+
         mess = databaseManager.getAllMessages();
 
         HashMap<String, String> map = new HashMap<>();
-        Log.i("Messaggio","Sono Qui tutti");
+        Log.i("Messaggio", "Sono Qui tutti");
 
 
         for (int i = 0; i < s; i++) {

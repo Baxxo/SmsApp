@@ -175,6 +175,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public int updateMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
 
+        Log.i("DB Messaggio", messaggio.getId() + " " + messaggio.getNome() + " " + messaggio.getNumero() + " " + messaggio.getTesto() + " " + messaggio.getData() + " " + messaggio.getInviato() + " ");
+
         ContentValues values = new ContentValues();
         values.put(Id, messaggio.getId()); // Messaggio Id
         values.put(Nome, messaggio.getNome()); // Messaggio Nome
@@ -193,6 +195,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(NameTable, Id + " = ?",
                 new String[]{String.valueOf(messaggio.getId())});
+        db.close();
+    }
+
+    // Deleting single contact
+    public void deleteAllMessage() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(NameTable, "1", new String[]{String.valueOf(1)});
         db.close();
     }
 

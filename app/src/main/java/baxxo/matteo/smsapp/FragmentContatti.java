@@ -84,17 +84,15 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
         nomeSearch.setVisibility(View.INVISIBLE);
 
+        button = (Button) rootView.findViewById(R.id.button);
+
         d = new Dialog(rootView.getContext());
         d.requestWindowFeature(Window.FEATURE_NO_TITLE);
         d.setCancelable(true);
         d.setContentView(R.layout.dialog);
 
-        button = (Button) rootView.findViewById(R.id.button);
-
         tvNumero = (TextView) d.findViewById(R.id.numero);
         tvNome = (TextView) d.findViewById(R.id.nome);
-
-        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
         lp.setMargins(5, 10, 10, 5);
@@ -103,6 +101,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         layoutParams.copyFrom(d.getWindow().getAttributes());
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT;
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT;
+
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
 
         progressBar.setVisibility(View.INVISIBLE);
 

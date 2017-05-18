@@ -233,11 +233,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //fine onCreate-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     //funzione per impostare messaggio----------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     public void alarm() {
-
-        //System.out.println(ora + " : " + minuto);
 
         nomeNumero = numero;
 
@@ -260,8 +258,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Numero", numero);
         intent.putExtra("Testo", testo);
         intent.putExtra("Nome", nomeNumero);
-        Log.i("Messaggio", "Lun: " + lunghezza);
-        intent.putExtra("Id", lunghezza);
+        Log.i("Messaggio", "Lun main: " + lunghezza);
+        intent.putExtra("Id", lunghezza+"");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
 
