@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -35,7 +34,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
@@ -49,46 +47,46 @@ import static baxxo.matteo.smsapp.R.id.container;
 public class MainActivity extends AppCompatActivity {
 
     public static ViewPager mViewPager;
-    int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
-    FragmentContatti myFragment = null;
-    DatabaseFragment myFragment1 = null;
-    private int anno = 1;
-    private int mese = 1;
-    private int giorno = 1;
-    private int ora = 1;
-    private int minuto = 1;
-    private String testo;
-    private String numero;
-    String nomeNumero;
     static EditText n;
     static EditText t;
-    static DatePicker data;
-    static TimePicker timepicker;
     static EditText editOra;
     static EditText editMin;
     static EditText editAnno;
     static EditText editMese;
     static EditText editGiorno;
+    static DatePicker data;
+    static TimePicker timepicker;
     static TextView puntini;
     static TextView barrette1;
     static TextView barrette2;
     static TextView hhmm;
     static TextView dataS;
     static TextView conta;
-    private String text;
     private Calendar calendar;
     private TabLayout tabLayout;
-    ArrayList<Contact> contact;
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
-    static ScrollView scroll;
-    Dialog d;
+    //static ScrollView scroll;
     public static FloatingActionButton fab;
-    DatabaseManager db;
     public static SharedPreferences preferences;
-    int lunghezza;
     static Context context;
     static boolean[] check = {false, false};
+    int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
+    private int lunghezza;
+    private int anno = 1;
+    private int mese = 1;
+    private int giorno = 1;
+    private int ora = 1;
+    private int minuto = 1;
+    private String text;//testo preso per il messaggio
+    private String testo;
+    private String numero;
+    FragmentContatti myFragment = null;
+    //DatabaseFragment myFragment1 = null;
+    String nomeNumero;
+    Dialog d;
+    ArrayList<Contact> contact;
+    DatabaseManager db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,7 +330,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            Log.i("Size num", count + "");
+            //Log.i("Size num", count + "");
             if (count == 0) {
                 check[1] = false;
 
@@ -523,7 +521,7 @@ public class MainActivity extends AppCompatActivity {
                 relativeLayout.removeView(data);
             }
 
-            scroll = (ScrollView) rootView.findViewById(R.id.scrollViewMain);
+            /*scroll = (ScrollView) rootView.findViewById(R.id.scrollViewMain);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 scroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
                     @Override
@@ -536,11 +534,12 @@ public class MainActivity extends AppCompatActivity {
                         }else{
 
                             ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-                        }*/
+                        }
 
                     }
                 });
-            }
+            }*/
+
 
             return rootView;
         }

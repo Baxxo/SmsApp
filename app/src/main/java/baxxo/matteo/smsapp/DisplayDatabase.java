@@ -45,7 +45,7 @@ public class DisplayDatabase extends AppCompatActivity {
             public void onClick(View v) {
                 mess1.clear();
                 s = databaseManager.getMessagesCount();
-                Log.i("size", String.valueOf(databaseManager.getMessagesCount()));
+                //Log.i("size", String.valueOf(databaseManager.getMessagesCount()));
                 if (s > 0) {
 
                     caricaDb();
