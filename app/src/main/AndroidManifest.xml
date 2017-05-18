@@ -37,7 +37,15 @@
             android:name=".Sender"
             android:exported="false" />
 
-        <activity android:name=".DisplayDatabase"></activity>
+        <activity
+            android:name=".DisplayDatabase"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ContactDetail"
+            android:label="@string/title_activity_contact_detail"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

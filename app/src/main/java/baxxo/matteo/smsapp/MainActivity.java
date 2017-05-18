@@ -523,26 +523,6 @@ public class MainActivity extends AppCompatActivity {
                 relativeLayout.removeView(data);
             }
 
-            /*scroll = (ScrollView) rootView.findViewById(R.id.scrollViewMain);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                scroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-                    @Override
-                    public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                        Log.i("Y  ", String.valueOf(scrollY));
-                        Log.i("OldY  ", String.valueOf(oldScrollY));
-                       /* if (scrollY < oldScrollY) {
-
-                            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-                        }else{
-
-                            ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-                        }
-
-                    }
-                });
-            }*/
-
-
             return rootView;
         }
     }

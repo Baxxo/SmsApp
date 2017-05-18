@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">SmsApp</string>
-    <string name="action_settings">Database</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title1">SMS</string>
     <string name="title2">Contatti</string>
@@ -8,4 +7,6 @@
     <string name="title_activity_service">Service</string>
     <string name="local_service_started">Running</string>
     <string name="title_activity_database">Database</string>
+    <string name="title_activity_contact_detail">Numero</string>
+    <string name="action_settings">Settings</string>
 </resources>
