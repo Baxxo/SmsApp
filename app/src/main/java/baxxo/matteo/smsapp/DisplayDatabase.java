@@ -23,6 +23,7 @@ public class DisplayDatabase extends AppCompatActivity {
     ArrayAdapter<String> list;
     Button b;
     Button n;
+    Button t;
     int s;
     ListView lv;
     List<HashMap<String, String>> listItems;
@@ -41,6 +42,26 @@ public class DisplayDatabase extends AppCompatActivity {
 
         b = (Button) findViewById(R.id.button5);
         n = (Button) findViewById(R.id.button4);
+        t = (Button) findViewById(R.id.button7);
+        t.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mess1.clear();
+                s = databaseManager.getMessagesCount();
+                //Log.i("size", String.valueOf(databaseManager.getMessagesCount()));
+                if (s > 0) {
+
+                    caricaDb();
+
+                } else {
+                    mess1.add("Nessun messaggio");
+
+                    list = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
+
+                    lv.setAdapter(list);
+                }
+            }
+        });
         n.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,7 +86,7 @@ public class DisplayDatabase extends AppCompatActivity {
                 //Log.i("size", String.valueOf(databaseManager.getMessagesCount()));
                 if (s > 0) {
 
-                    caricaDb();
+                    caricaNonInviatiDb();
 
                 } else {
                     mess1.add("Nessun messaggio");
@@ -78,11 +99,46 @@ public class DisplayDatabase extends AppCompatActivity {
         });
     }
 
-    public void caricaDb() {
+    public void caricaNonInviatiDb() {
 
         mess = databaseManager.getNotSentMessages();
 
         HashMap<String, String> map = new HashMap<>();
+        Log.i("Messaggio","Sono Qui non inviati");
+
+
+        for (int i = 0; i < s; i++) {
+            map.put("Messaggio a: " + mess.get(i).getNome(), "Testo: " + mess.get(i).getTesto() + " - " + mess.get(i).getInviato());
+        }
+
+        listItems = new ArrayList<>();
+
+        adapter = new SimpleAdapter(getApplicationContext(), listItems, R.layout.list_item_2,
+                new String[]{"First Line", "Second Line"},
+                new int[]{R.id.textView20, R.id.textView21}
+        );
+
+        for (Object o : map.entrySet()) {
+            Map.Entry pair = (Map.Entry) o;
+            String n = pair.getKey().toString();
+            if (String.valueOf(n.charAt(n.length() - 1)).equals("|")) {
+                n = String.valueOf(n.substring(0, n.length() - 1));
+            }
+            HashMap<String, String> resultsMap = new HashMap<>();
+            resultsMap.put("First Line", n);
+            resultsMap.put("Second Line", pair.getValue().toString());
+            listItems.add(resultsMap);
+        }
+
+        lv.setAdapter(adapter);
+    }
+
+    public void caricaDb() {
+
+        mess = databaseManager.getAllMessages();
+
+        HashMap<String, String> map = new HashMap<>();
+        Log.i("Messaggio","Sono Qui tutti");
 
 
         for (int i = 0; i < s; i++) {

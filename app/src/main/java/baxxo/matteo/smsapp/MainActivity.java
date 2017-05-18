@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             lunghezza = 0;
         }
+        lunghezza = lunghezza + 1;
 
         SharedPreferences.Editor editor = preferences.edit();
         editor.putInt("Count", lunghezza);
@@ -259,6 +260,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Numero", numero);
         intent.putExtra("Testo", testo);
         intent.putExtra("Nome", nomeNumero);
+        Log.i("Messaggio", "Lun: " + lunghezza);
+        intent.putExtra("Id", lunghezza);
+
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
@@ -267,7 +271,7 @@ public class MainActivity extends AppCompatActivity {
         //nuovo messaggio nel database
 
         Messaggio m = new Messaggio();
-        m.setId(String.valueOf(lunghezza++));
+        m.setId(String.valueOf(lunghezza));
         m.setNome(nomeNumero);
         m.setNumero(numero);
         m.setTesto(testo);

@@ -28,6 +28,7 @@ public class Sender extends IntentService {
     String nomeNumero = "";
     String testo = "";
     String sub = "";
+    String id = "";
     PendingIntent pendingIntent;
     DatabaseManager database;
     int numMess;
@@ -44,16 +45,27 @@ public class Sender extends IntentService {
         numero = intent.getStringExtra("Numero");
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
-
-        //TODO settare messagio se inviato a true
+        id = intent.getStringExtra("Id");
+        Log.i("Messsaggio", numero + " - " + testo + " - " + nomeNumero + " - " + id);
 
         database = new DatabaseManager(this);
+        mess = database.getNotSentMessages();
+        int i = 0;
+        //prendo il messaggoi con il giusto id
+        for (Messaggio messaggio : mess) {
+            if (messaggio.getId().equals(id)) {
+                numMess = i;
+            }
+            i++;
+        }
 
         try {
             sms = SmsManager.getDefault();
             sms.sendTextMessage(numero, null, testo, null, null);
             text = "Inviato! \n" + testo;
             sub = "Inviato!";
+            mess.get(i).setInviato(true);
+            database.updateMessaggio(mess.get(i));
 
             Intent intent1 = new Intent(this, MainActivity.class);
             intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
