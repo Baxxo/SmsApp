@@ -90,10 +90,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
@@ -105,6 +101,11 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.READ_CALENDAR
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
+
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         MainActivity.context = getApplicationContext();
 
@@ -259,9 +260,9 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Testo", testo);
         intent.putExtra("Nome", nomeNumero);
         Log.i("Messaggio", "Lun main: " + lunghezza);
-        intent.putExtra("Id", lunghezza+"");
+        intent.putExtra("Id", lunghezza + "");
 
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), 0, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), lunghezza, intent, lunghezza);
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

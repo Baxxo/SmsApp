@@ -201,7 +201,8 @@ public class DatabaseManager extends SQLiteOpenHelper {
     // Deleting single contact
     public void deleteAllMessage() {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(NameTable, "1", new String[]{String.valueOf(1)});
+        db.execSQL("delete from " + NameTable);
+        Log.i("Db","Eliminato tutto");
         db.close();
     }
 

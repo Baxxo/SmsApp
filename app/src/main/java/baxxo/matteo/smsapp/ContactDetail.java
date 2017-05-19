@@ -58,8 +58,8 @@ public class ContactDetail extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Toast.makeText(getApplicationContext(), "Numero caricato", Toast.LENGTH_LONG).show();
                 MainActivity.n.setText(numero);
-                Toast.makeText(getApplicationContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
                 onBackPressed();
             }
         });

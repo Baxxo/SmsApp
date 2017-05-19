@@ -51,6 +51,7 @@ public class DisplayDatabase extends AppCompatActivity {
                 databaseManager.deleteAllMessage();
             }
         });
+
         t.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -59,7 +60,7 @@ public class DisplayDatabase extends AppCompatActivity {
                 //Log.i("size", String.valueOf(databaseManager.getMessagesCount()));
                 if (s > 0) {
 
-                    caricaDb();
+                    caricaAllDb();
 
                 } else {
                     mess1.add("Nessun messaggio");
@@ -76,13 +77,13 @@ public class DisplayDatabase extends AppCompatActivity {
                 databaseManager.deleteMessage(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
                 databaseManager.deleteMessage(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
                 databaseManager.deleteMessage(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
-                databaseManager.deleteMessage(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, false));
-                databaseManager.deleteMessage(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, false));
+                databaseManager.deleteMessage(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, true));
+                databaseManager.deleteMessage(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, true));
                 databaseManager.aggiungiMessaggio(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
                 databaseManager.aggiungiMessaggio(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
                 databaseManager.aggiungiMessaggio(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
-                databaseManager.aggiungiMessaggio(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, false));
-                databaseManager.aggiungiMessaggio(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, false));
+                databaseManager.aggiungiMessaggio(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, true));
+                databaseManager.aggiungiMessaggio(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, true));
             }
         });
 
@@ -109,52 +110,29 @@ public class DisplayDatabase extends AppCompatActivity {
 
     public void caricaNonInviatiDb() {
 
-        mess.clear();
-
         mess = databaseManager.getNotSentMessages();
 
-        HashMap<String, String> map = new HashMap<>();
         Log.i("Messaggio", "Sono Qui non inviati");
 
-
-        for (int i = 0; i < s; i++) {
-            map.put("Messaggio a: " + mess.get(i).getNome(), "Testo: " + mess.get(i).getTesto() + " - " + mess.get(i).getInviato());
-        }
-
-        listItems = new ArrayList<>();
-
-        adapter = new SimpleAdapter(getApplicationContext(), listItems, R.layout.list_item_2,
-                new String[]{"First Line", "Second Line"},
-                new int[]{R.id.textView20, R.id.textView21}
-        );
-
-        for (Object o : map.entrySet()) {
-            Map.Entry pair = (Map.Entry) o;
-            String n = pair.getKey().toString();
-            if (String.valueOf(n.charAt(n.length() - 1)).equals("|")) {
-                n = String.valueOf(n.substring(0, n.length() - 1));
-            }
-            HashMap<String, String> resultsMap = new HashMap<>();
-            resultsMap.put("First Line", n);
-            resultsMap.put("Second Line", pair.getValue().toString());
-            listItems.add(resultsMap);
-        }
-
-        lv.setAdapter(adapter);
+        caricaDb();
     }
 
-    public void caricaDb() {
-
-        mess.clear();
+    public void caricaAllDb() {
 
         mess = databaseManager.getAllMessages();
 
-        HashMap<String, String> map = new HashMap<>();
         Log.i("Messaggio", "Sono Qui tutti");
 
+        caricaDb();
 
-        for (int i = 0; i < s; i++) {
-            map.put("Messaggio a: " + mess.get(i).getNome(), "Testo: " + mess.get(i).getTesto() + " - " + mess.get(i).getInviato());
+    }
+
+    public void caricaDb() {
+        HashMap<String, String> map = new HashMap<>();
+
+
+        for (int i = 0; i < mess.size(); i++) {
+            map.put("Messaggio a: " + mess.get(i).getNome(), "Testo: " + mess.get(i).getTesto());
         }
 
         listItems = new ArrayList<>();
