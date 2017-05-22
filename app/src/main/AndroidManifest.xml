@@ -41,6 +41,8 @@
             android:name=".DisplayDatabase"
             android:screenOrientation="portrait" />
 
+        <activity android:name=".AndroidDatabaseManager" />
+
         <activity
             android:name=".ContactDetail"
             android:label="@string/title_activity_contact_detail"

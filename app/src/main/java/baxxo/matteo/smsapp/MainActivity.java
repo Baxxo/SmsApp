@@ -66,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
     private TabLayout tabLayout;
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
-    //static ScrollView scroll;
     public static FloatingActionButton fab;
     public static SharedPreferences preferences;
     static Context context;
@@ -82,7 +81,6 @@ public class MainActivity extends AppCompatActivity {
     private String testo;
     private String numero;
     FragmentContatti myFragment = null;
-    //DatabaseFragment myFragment1 = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
@@ -112,17 +110,6 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseManager(getApplicationContext());
 
         preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
-
-        try {
-            lunghezza = db.getMessagesCount();
-        } catch (Exception e) {
-            lunghezza = 0;
-        }
-        lunghezza = lunghezza + 1;
-
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("Count", lunghezza);
-        editor.apply();
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -238,6 +225,13 @@ public class MainActivity extends AppCompatActivity {
     //funzione per impostare messaggio----------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void alarm() {
 
+        try {
+            lunghezza = db.getMessagesCount();
+        } catch (Exception e) {
+            lunghezza = 0;
+        }
+        lunghezza = lunghezza + 1;
+
         nomeNumero = numero;
 
         //prendo il nome del destinatario
@@ -259,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Numero", numero);
         intent.putExtra("Testo", testo);
         intent.putExtra("Nome", nomeNumero);
-        Log.i("Messaggio", "Lun main: " + lunghezza);
+        //Log.i("Messaggio", "Lun main: " + lunghezza);
         intent.putExtra("Id", lunghezza + "");
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), lunghezza, intent, lunghezza);
@@ -295,6 +289,11 @@ public class MainActivity extends AppCompatActivity {
 
         if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
+            startActivity(intent);
+            return true;
+        }
+        if (id == R.id.data) {
+            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
             startActivity(intent);
             return true;
         }

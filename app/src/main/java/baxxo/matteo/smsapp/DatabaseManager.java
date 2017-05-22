@@ -60,12 +60,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
     void aggiungiMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
 
-       /* Log.i("Id", messaggio.getId());
+        Log.i("Id", messaggio.getId());
         Log.i("Nome", messaggio.getNome());
         Log.i("Numero", messaggio.getNumero());
         Log.i("Testo", messaggio.getTesto());
         Log.i("Data", String.valueOf(messaggio.getData()));
-        Log.i("Inviato", messaggio.getInviato() + "");*/
+        Log.i("Inviato", messaggio.getInviato() + "");
 
         ContentValues values = new ContentValues();
         values.put(Id, messaggio.getId()); // Messaggio Id
@@ -99,6 +99,24 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 Boolean.parseBoolean(cursor.getString(5)));//inviato
         // return contact
         return mess;
+    }
+
+    public ArrayList<Cursor> getData(String selectQuery) {
+
+        ArrayList<Cursor> result = new ArrayList<Cursor>();
+
+        SQLiteDatabase db = this.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectQuery, null);
+
+        // looping through all rows and adding to list
+        int j = 0;
+        if (cursor.moveToFirst()) {
+            do {
+                result.add(cursor);
+                j++;
+            } while (cursor.moveToNext());
+        }
+        return result;
     }
 
     // Getting All Contacts
@@ -202,7 +220,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     public void deleteAllMessage() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from " + NameTable);
-        Log.i("Db","Eliminato tutto");
+        Log.i("Db", "Eliminato tutto");
         db.close();
     }
 

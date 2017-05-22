@@ -3,8 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="baxxo.matteo.smsapp.MainActivity">
     <item
+        android:id="@+id/data"
+        android:orderInCategory="100"
+        android:title="Database Android" />
+    <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="Database"
-        app:showAsAction="never" />
+        android:title="Database SmsApp" />
+
 </menu>
