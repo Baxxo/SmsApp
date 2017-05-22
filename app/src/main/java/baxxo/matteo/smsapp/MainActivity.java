@@ -85,6 +85,7 @@ public class MainActivity extends AppCompatActivity {
     Dialog d;
     ArrayList<Contact> contact;
     DatabaseManager db;
+    static int c = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.SEND_SMS,
                     Manifest.permission.WAKE_LOCK,
                     Manifest.permission.SET_ALARM,
+                    Manifest.permission.RECEIVE_BOOT_COMPLETED,
                     Manifest.permission.READ_CALENDAR
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
@@ -104,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+       /* Intent intent = new Intent(MainActivity.this, BootReceiver.class);
+        sendBroadcast(intent);*/
 
         MainActivity.context = getApplicationContext();
 
@@ -225,13 +230,6 @@ public class MainActivity extends AppCompatActivity {
     //funzione per impostare messaggio----------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void alarm() {
 
-        try {
-            lunghezza = db.getMessagesCount();
-        } catch (Exception e) {
-            lunghezza = 0;
-        }
-        lunghezza = lunghezza + 1;
-
         nomeNumero = numero;
 
         //prendo il nome del destinatario
@@ -244,6 +242,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        try {
+            lunghezza = db.getMessagesCount();
+        } catch (Exception e) {
+            lunghezza = 0;
+        }
+        lunghezza = lunghezza + 1;
+
+
         calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, giorno);
         calendar.set(Calendar.HOUR_OF_DAY, ora);
@@ -253,8 +259,8 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra("Numero", numero);
         intent.putExtra("Testo", testo);
         intent.putExtra("Nome", nomeNumero);
-        //Log.i("Messaggio", "Lun main: " + lunghezza);
         intent.putExtra("Id", lunghezza + "");
+        //Log.i("Messaggio", "Lun main: " + lunghezza);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this.getApplicationContext(), lunghezza, intent, lunghezza);
 
@@ -362,9 +368,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            String t = "Caratteri: " + count + "/160";
+            //Log.i("Size char", s.length() + " " + s);
+            c = s.length();
+            String t = "Caratteri: " + c + "/160";
             conta.setText(t);
-            if (count == 0) {
+            if (c == 0) {
                 check[0] = false;
 
                 if (fab.getVisibility() == View.VISIBLE) {

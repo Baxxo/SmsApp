@@ -57,7 +57,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Adding new contact
-    void aggiungiMessaggio(Messaggio messaggio) {
+    public void aggiungiMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         Log.i("Id", messaggio.getId());
@@ -81,7 +81,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
     }
 
     // Getting single contact
-    Messaggio getMessaggio(int i) {
+    public Messaggio getMessaggio(int i) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         Cursor cursor = db.query(NameTable, new String[]{Id,
