@@ -46,7 +46,7 @@ public class Sender extends IntentService {
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
-        Log.i("Messaggio", numero + " - " + testo + " - " + nomeNumero + " - " + id);
+        //Log.i("Messaggio", numero + " - " + testo + " - " + nomeNumero + " - " + id);
 
         database = new DatabaseManager(this);
         mess = database.getNotSentMessages();
@@ -55,13 +55,13 @@ public class Sender extends IntentService {
         for (Messaggio messaggio : mess) {
             if (messaggio.getId().equals(id)) {
                 numMess = i;
-                Log.i("Sender", messaggio.getId() + " " + id);
+               // Log.i("Sender", messaggio.getId() + " " + id);
             }
             i++;
         }
         i--;
-        Log.i("Sender", "i: " + i);
-        Log.i("Sender", "Mess" + mess.get(i).getTesto());
+       /* Log.i("Sender", "i: " + i);
+        Log.i("Sender", "Mess" + mess.get(i).getTesto());*/
 
         try {
             sms = SmsManager.getDefault();
@@ -73,7 +73,7 @@ public class Sender extends IntentService {
                 mess.get(i).setInviato(true);
                 db = database.updateMessaggio(mess.get(i));
             } catch (Exception e) {
-                Log.i("Sender", "Errore messagio non diventa true " + i);
+               // Log.i("Sender", "Errore messagio non diventa true " + i);
             }
 
             Intent intent1 = new Intent(this, MainActivity.class);

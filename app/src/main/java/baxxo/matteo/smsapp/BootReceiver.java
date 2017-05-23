@@ -29,20 +29,20 @@ public class BootReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
 
         DatabaseManager db = new DatabaseManager(context);
-
+/*
         Messaggio m = db.getMessaggio(7);
         m.setInviato(false);
         db.updateMessaggio(m);
 
         m = db.getMessaggio(8);
         m.setInviato(false);
-        db.updateMessaggio(m);
+        db.updateMessaggio(m);*/
 
         messaggioArrayList = db.getNotSentMessages();
 
 
         for (Messaggio messaggio : messaggioArrayList) {
-            Log.i("messasggio", messaggio.getNumero() + " - " + messaggio.getTesto() + " - " + messaggio.getNome() + " - " + messaggio.getId() + " - " + messaggio.getData());
+            //Log.i("messasggio", messaggio.getNumero() + " - " + messaggio.getTesto() + " - " + messaggio.getNome() + " - " + messaggio.getId() + " - " + messaggio.getData());
 
             numero = messaggio.getNumero();
             testo = messaggio.getTesto();

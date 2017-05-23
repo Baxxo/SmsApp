@@ -3,11 +3,8 @@ package baxxo.matteo.smsapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -422,13 +419,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 nome = parts[1];
 
                                 parts = dir2.split("=");
-                                numero = parts[1];/*
-
-                                tvNome.setText(nome);
-                                tvNumero.setText(numero);
-
-                                d.show();
-                                d.getWindow().setAttributes(layoutParams);*/
+                                numero = parts[1];
 
                                 Intent intent = new Intent(rootView.getContext(), ContactDetail.class);
                                 intent.putExtra("nome", nome);

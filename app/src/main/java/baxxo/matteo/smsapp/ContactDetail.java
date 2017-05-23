@@ -1,9 +1,7 @@
 package baxxo.matteo.smsapp;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.ContentUris;
-import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,42 +10,90 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.graphics.Palette;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 public class ContactDetail extends AppCompatActivity {
 
     String nome;
     String numero;
-    TextView tv;
     AppBarLayout appBar;
+    ArrayList<Messaggio> mess;
+    ArrayList<String> messNumero = new ArrayList<>();
+    ListView lv;
+    ArrayAdapter<String> list;
+    DatabaseManager db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_contatto);
-        setSupportActionBar(toolbar);
-
-        appBar = (AppBarLayout) findViewById(R.id.app_bar);
 
         nome = getIntent().getStringExtra("nome");
         numero = getIntent().getStringExtra("numero");
-        setTitle(nome);
 
-        tv = (TextView) findViewById(R.id.text_contatto);
+        setContentView(R.layout.activity_contact_detail);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_contatto);
+        toolbar.setTitle(nome);
+        toolbar.setSubtitle(numero);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(true);
 
-        tv.setText(numero);//nome + "\n" +
+        appBar = (AppBarLayout) findViewById(R.id.app_bar);
+
+        db = new DatabaseManager(getApplicationContext());
+
+        mess = db.getAllMessages();
+        //Log.i("mess", mess.size() + "");
+
+        lv = (ListView) findViewById(R.id.list_mess);
+
+        for (Messaggio m : mess) {
+            if (m.getNumero().equals(numero)) {
+                messNumero.add(m.getTesto());
+            }
+        }
+
+        if (messNumero.size() == 0) {
+
+            messNumero.add("Nessun messaggio");
+            lv.setEnabled(false);
+
+        }
+
+        list = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, messNumero);
+
+        lv.setAdapter(list);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Object o = lv.getItemAtPosition(i);
+                String res = o.toString();
+                res = res.replace("{", "");
+                res = res.replace("}", "");
+
+
+                Toast.makeText(getApplicationContext(), "Testo e numero caricati", Toast.LENGTH_LONG).show();
+
+                MainActivity.n.setText(numero);
+                MainActivity.t.setText(res);
+
+                onBackPressed();
+
+            }
+        });
 
         Bitmap myBitmap = getPhoto(numero);
 
@@ -72,7 +118,7 @@ public class ContactDetail extends AppCompatActivity {
 
     public Bitmap getPhoto(String phoneNumber) {
         Uri phoneUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
-        Uri photoUri = null;
+        Uri photoUri;
         ContentResolver cr = this.getContentResolver();
         Cursor contact = cr.query(phoneUri,
                 new String[]{ContactsContract.Contacts._ID}, null, null, null);

@@ -23,7 +23,7 @@ public class Receiver extends WakefulBroadcastReceiver {
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
-        Log.i("Messaggio", "Lun receiver: " + id);
+        //Log.i("Messaggio", "Lun receiver: " + id);
 
         Intent service = new Intent(context, Sender.class);
         service.putExtra("Numero", numero);

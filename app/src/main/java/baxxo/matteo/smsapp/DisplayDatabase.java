@@ -1,6 +1,5 @@
 package baxxo.matteo.smsapp;
 
-import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -113,7 +112,7 @@ public class DisplayDatabase extends AppCompatActivity {
 
         mess = databaseManager.getNotSentMessages();
 
-        Log.i("Messaggio", "Sono Qui non inviati");
+        //Log.i("Messaggio", "Sono Qui non inviati");
 
         caricaDb();
     }
@@ -122,7 +121,7 @@ public class DisplayDatabase extends AppCompatActivity {
 
         mess = databaseManager.getAllMessages();
 
-        Log.i("Messaggio", "Sono Qui tutti");
+       // Log.i("Messaggio", "Sono Qui tutti");
 
         caricaDb();
 
