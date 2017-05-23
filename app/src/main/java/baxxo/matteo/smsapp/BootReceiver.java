@@ -20,7 +20,7 @@ public class BootReceiver extends BroadcastReceiver {
 
     ArrayList<Messaggio> messaggioArrayList;
     int lunghezza;
-    Calendar calendar;
+    Calendar calendar = Calendar.getInstance();
     private String testo = "vuoto";
     private String numero = "vuoto";
     String nome = "vuoto";
@@ -28,20 +28,28 @@ public class BootReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        Log.i("Boot", "Ciaone da Receiver");
-
         DatabaseManager db = new DatabaseManager(context);
+
+        Messaggio m = db.getMessaggio(7);
+        m.setInviato(false);
+        db.updateMessaggio(m);
+
+        m = db.getMessaggio(8);
+        m.setInviato(false);
+        db.updateMessaggio(m);
 
         messaggioArrayList = db.getNotSentMessages();
 
+
         for (Messaggio messaggio : messaggioArrayList) {
-            Log.i("messasggio", messaggio.getNumero() + " - " + messaggio.getTesto() + " - " + messaggio.getNome() + " - " + messaggio.getId());
+            Log.i("messasggio", messaggio.getNumero() + " - " + messaggio.getTesto() + " - " + messaggio.getNome() + " - " + messaggio.getId() + " - " + messaggio.getData());
 
             numero = messaggio.getNumero();
             testo = messaggio.getTesto();
             nome = messaggio.getNome();
             lunghezza = Integer.parseInt(messaggio.getId());
             calendar.setTimeInMillis(messaggio.getData());
+
 
             Intent sender = new Intent(context, Receiver.class);
             sender.putExtra("Numero", numero);

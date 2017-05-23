@@ -107,8 +107,6 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       /* Intent intent = new Intent(MainActivity.this, BootReceiver.class);
-        sendBroadcast(intent);*/
 
         MainActivity.context = getApplicationContext();
 
@@ -222,6 +220,11 @@ public class MainActivity extends AppCompatActivity {
             }
 
         });
+
+        //Log.i("Ciao", "ciao");
+
+        Intent intent = new Intent(MainActivity.this, BootReceiver.class);
+        sendBroadcast(intent);
 
     }
 

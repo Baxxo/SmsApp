@@ -49,7 +49,11 @@ public class DisplayDatabase extends AppCompatActivity {
         e.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                databaseManager.deleteAllMessage();
+                databaseManager.deleteMessage(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
+                databaseManager.deleteMessage(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
+                databaseManager.deleteMessage(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
+                databaseManager.deleteMessage(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, true));
+                databaseManager.deleteMessage(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, true));
             }
         });
 
@@ -75,11 +79,6 @@ public class DisplayDatabase extends AppCompatActivity {
         n.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                databaseManager.deleteMessage(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
-                databaseManager.deleteMessage(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
-                databaseManager.deleteMessage(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
-                databaseManager.deleteMessage(new Messaggio("400", "NomeProva4", "NumeroProva4", "TestoProva4", 4, true));
-                databaseManager.deleteMessage(new Messaggio("500", "NomeProva5", "NumeroProva5", "TestoProva5", 5, true));
                 databaseManager.aggiungiMessaggio(new Messaggio("100", "NomeProva1", "NumeroProva1", "TestoProva1", 1, false));
                 databaseManager.aggiungiMessaggio(new Messaggio("200", "NomeProva2", "NumeroProva2", "TestoProva2", 2, false));
                 databaseManager.aggiungiMessaggio(new Messaggio("300", "NomeProva3", "NumeroProva3", "TestoProva3", 3, false));
