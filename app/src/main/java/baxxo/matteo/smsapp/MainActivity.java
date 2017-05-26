@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
     private String text;//testo preso per il messaggio
     private String testo;
     private String numero;
+    Boolean optionsCheck;
     FragmentContatti myFragment = null;
     String nomeNumero;
     Dialog d;
@@ -284,10 +285,15 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        SharedPreferences settings = getSharedPreferences("settings", 0);
+        boolean isChecked = settings.getBoolean("checkbox", false);
+        MenuItem item = menu.findItem(R.id.whastapp);
+        item.setChecked(isChecked);
         return true;
     }
 
@@ -309,6 +315,16 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
+            return true;
+        }
+        if (id == R.id.whastapp) {
+            item.setChecked(!item.isChecked());
+            optionsCheck = item.isChecked();
+
+            SharedPreferences settings = getSharedPreferences("settings", 0);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("checkbox", item.isChecked());
+            editor.commit();
             return true;
         }
 
