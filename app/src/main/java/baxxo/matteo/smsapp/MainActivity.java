@@ -237,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
         fabWhats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Snackbar.make(view, "Presto verrà mandato un messaggio anche attraverso whatsapp", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
         });
 
@@ -312,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SharedPreferences settings = getSharedPreferences("settings", 0);
-        boolean isChecked = settings.getBoolean("checkbox", false);
+        isChecked = settings.getBoolean("checkbox", false);
         MenuItem item = menu.findItem(R.id.whastapp);
         item.setChecked(false);
 
@@ -346,16 +346,6 @@ public class MainActivity extends AppCompatActivity {
             Log.i("could whats", couldWhats + "");
             if (!couldWhats) {
                 fabWhats.setVisibility(View.INVISIBLE);
-            } else {
-                if (pos == 0) {
-                    //animazione per botton che appare
-                    check[0] = true;
-
-                    if (check[0] && check[1]) {
-                        animInWhats();
-
-                    }
-                }
             }
             SharedPreferences settings = getSharedPreferences("settings", 0);
             SharedPreferences.Editor editor = settings.edit();
