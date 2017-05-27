@@ -67,6 +67,8 @@ public class MainActivity extends AppCompatActivity {
     private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
     public static FloatingActionButton fab;
+    public static FloatingActionButton fabWhats;
+    static boolean couldWhats;
     public static SharedPreferences preferences;
     static Context context;
     static boolean[] check = {false, false};
@@ -77,8 +79,8 @@ public class MainActivity extends AppCompatActivity {
     private int giorno = 1;
     private int ora = 1;
     private int minuto = 1;
-    private String text;//testo preso per il messaggio
-    private String testo;
+    private String text;//testo per snackbar con data e ora
+    private String testo;//testo preso per il messaggio
     private String numero;
     Boolean optionsCheck;
     FragmentContatti myFragment = null;
@@ -87,6 +89,8 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contact;
     DatabaseManager db;
     static int c = 0;
+    boolean isChecked = false;
+    int pos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,14 +126,15 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
+                pos = position;
                 if (position == 1) {
                     //animazione per botton che sparisce
                     check[0] = false;
 
                     if (fab.getVisibility() == View.VISIBLE) {
                         animOut();
+                        animOutWhats();
                     }
-                    fab.setVisibility(View.INVISIBLE);
                 }
 
                 if (position == 0) {
@@ -138,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
 
                     if (check[0] && check[1]) {
                         animIn();
-                        fab.setVisibility(View.VISIBLE);
+                        animInWhats();
 
                     }
                 }
@@ -222,6 +227,21 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        SharedPreferences settings = getSharedPreferences("settings", 0);
+        isChecked = settings.getBoolean("checkbox", false);
+        couldWhats = isChecked;
+        Log.i("whast main", couldWhats + "");
+
+        fabWhats = (FloatingActionButton) findViewById(R.id.fab_whatsapp);
+        fabWhats.setVisibility(View.INVISIBLE);
+        fabWhats.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
         //Log.i("Ciao", "ciao");
 
         Intent intent = new Intent(MainActivity.this, BootReceiver.class);
@@ -290,10 +310,12 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
 
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
         SharedPreferences settings = getSharedPreferences("settings", 0);
         boolean isChecked = settings.getBoolean("checkbox", false);
         MenuItem item = menu.findItem(R.id.whastapp);
-        item.setChecked(isChecked);
+        item.setChecked(false);
+
         return true;
     }
 
@@ -320,7 +342,21 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.whastapp) {
             item.setChecked(!item.isChecked());
             optionsCheck = item.isChecked();
+            couldWhats = item.isChecked();
+            Log.i("could whats", couldWhats + "");
+            if (!couldWhats) {
+                fabWhats.setVisibility(View.INVISIBLE);
+            } else {
+                if (pos == 0) {
+                    //animazione per botton che appare
+                    check[0] = true;
 
+                    if (check[0] && check[1]) {
+                        animInWhats();
+
+                    }
+                }
+            }
             SharedPreferences settings = getSharedPreferences("settings", 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("checkbox", item.isChecked());
@@ -333,43 +369,69 @@ public class MainActivity extends AppCompatActivity {
 
     //fine onCreate-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-    public static void animOut() {
-
-        Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
-        fab.setAnimation(animFadeOut);
-    }
-
-    public static void animIn() {
-
-        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
-        fab.setAnimation(animFadeIn);
-    }
-
-    public static void animLeft() {
-
-        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_appear_animation);
-        fab.setAnimation(animFadeIn);
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         System.out.println("destroy");
     }
 
+    //---------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+    public static void animOut() {
+        Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
+        fab.setAnimation(animFadeOut);
+        fab.setVisibility(View.INVISIBLE);
+    }
+
+    public static void animIn() {
+        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
+        fab.setAnimation(animFadeIn);
+        fab.setVisibility(View.VISIBLE);
+    }
+
+    public static void animLeft() {
+        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_appear_animation);
+        fab.setAnimation(animFadeIn);
+        fab.setVisibility(View.VISIBLE);
+    }
+
+    //animazioni per bottone whatsapp
+
+    public static void animOutWhats() {
+        if (couldWhats) {
+            Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
+            fabWhats.setAnimation(animFadeOut);
+            fabWhats.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public static void animInWhats() {
+        if (couldWhats) {
+            Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
+            fabWhats.setAnimation(animFadeIn);
+            fabWhats.setVisibility(View.VISIBLE);
+        }
+    }
+
+    public static void animLeftWhats() {
+        if (couldWhats) {
+            Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_appear_whastapp);
+            fabWhats.setAnimation(animFadeIn);
+            fabWhats.setVisibility(View.VISIBLE);
+        }
+    }
+
     static final TextWatcher contaNumeri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            //Log.i("Size num", count + "");
             if (count == 0) {
                 check[1] = false;
 
                 if (fab.getVisibility() == View.VISIBLE) {
                     animOut();
                 }
-                fab.setVisibility(View.INVISIBLE);
+                if (fabWhats.getVisibility() == View.VISIBLE) {
+                    animOutWhats();
+                }
 
             } else {
                 if (!check[1]) {
@@ -377,7 +439,30 @@ public class MainActivity extends AppCompatActivity {
 
                     if (check[0]) {
                         animLeft();
-                        fab.setVisibility(View.VISIBLE);
+                        animLeftWhats();
+                    }
+                }
+            }
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (count == 0) {
+                check[1] = false;
+
+                if (fab.getVisibility() == View.VISIBLE) {
+                    animOut();
+                }
+                if (fabWhats.getVisibility() == View.VISIBLE) {
+                    animOutWhats();
+                }
+
+            } else {
+                if (!check[1]) {
+                    check[1] = true;
+
+                    if (check[0]) {
+                        animLeft();
+                        animLeftWhats();
                     }
                 }
             }
@@ -389,10 +474,6 @@ public class MainActivity extends AppCompatActivity {
 
     static final TextWatcher contaCaratteri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-            //Log.i("Size char", s.length() + " " + s);
             c = s.length();
             String t = "Caratteri: " + c + "/160";
             conta.setText(t);
@@ -402,7 +483,9 @@ public class MainActivity extends AppCompatActivity {
                 if (fab.getVisibility() == View.VISIBLE) {
                     animOut();
                 }
-                fab.setVisibility(View.INVISIBLE);
+                if (fabWhats.getVisibility() == View.VISIBLE) {
+                    animOutWhats();
+                }
 
             } else {
                 if (!check[0]) {
@@ -410,7 +493,33 @@ public class MainActivity extends AppCompatActivity {
 
                     if (check[1]) {
                         animLeft();
-                        fab.setVisibility(View.VISIBLE);
+                        animLeftWhats();
+                    }
+                }
+            }
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            c = s.length();
+            String t = "Caratteri: " + c + "/160";
+            conta.setText(t);
+            if (c == 0) {
+                check[0] = false;
+
+                if (fab.getVisibility() == View.VISIBLE) {
+                    animOut();
+                }
+                if (fabWhats.getVisibility() == View.VISIBLE) {
+                    animOutWhats();
+                }
+
+            } else {
+                if (!check[0]) {
+                    check[0] = true;
+
+                    if (check[1]) {
+                        animLeft();
+                        animLeftWhats();
                     }
                 }
             }
