@@ -45,7 +45,6 @@ import java.util.Map;
 public class FragmentContatti extends android.support.v4.app.Fragment {
 
     Button button;
-    Button search;
     EditText nomeSearch;
     LinearLayout.LayoutParams lp;
     public static ArrayList<Contact> contatti = new ArrayList<>();
@@ -80,9 +79,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true);
-
-        search = (Button) rootView.findViewById(R.id.search);
-        search.setVisibility(View.INVISIBLE);
 
         nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
         nomeSearch.setVisibility(View.INVISIBLE);
@@ -121,20 +117,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         getContact();
                     }
                 }).start();
-            }
-        });
-
-        search.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (button.getVisibility() == View.VISIBLE) {
-                    button.setVisibility(View.INVISIBLE);
-                    nomeSearch.setVisibility(View.VISIBLE);
-                } else {
-                    button.setVisibility(View.VISIBLE);
-                    nomeSearch.setVisibility(View.INVISIBLE);
-                    nomeSearch.setText("");
-                }
             }
         });
 
@@ -190,7 +172,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         if (!contatti.isEmpty()) {
             contatti.clear();
         }
-        search.setVisibility(View.INVISIBLE);
         p = 0;
         ContentResolver cr = getContext().getContentResolver();
 
@@ -229,7 +210,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 public void run() {
                     button.setText("Ricarica Lista");
                     button.setVisibility(View.VISIBLE);
-                    search.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
             });
@@ -454,7 +434,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         button.setText("Ricarica Lista");
                         button.setVisibility(View.VISIBLE);
-                        search.setVisibility(View.VISIBLE);
 
                     }
                 }

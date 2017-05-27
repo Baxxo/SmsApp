@@ -131,9 +131,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (position == 0) {
-                    fab.setImageResource(R.drawable.ic_dialog_email);
                     if (check[0] && check[1]) {
-                        animIn();
+                        fab.setImageResource(R.drawable.ic_dialog_email);
                     } else {
                         animOut();
                     }
@@ -160,64 +159,78 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                //prendo l'ora
-                //se android è >= M allora uso il time e date picker
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    ora = timepicker.getHour();
-                    minuto = timepicker.getMinute();
-                    anno = data.getYear();
-                    mese = data.getMonth();
-                    giorno = data.getDayOfMonth();
+                if (pos == 0) {
+
+
+                    //prendo l'ora
+                    //se android è >= M allora uso il time e date picker
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        ora = timepicker.getHour();
+                        minuto = timepicker.getMinute();
+                        anno = data.getYear();
+                        mese = data.getMonth();
+                        giorno = data.getDayOfMonth();
+                    } else {
+                        //altrimenti due campi di testo
+                        ora = Integer.parseInt(String.valueOf(editOra.getText()));
+                        minuto = Integer.parseInt(String.valueOf(editMin.getText()));
+
+                        if (ora < 0) {
+                            ora = 0;
+                        }
+                        if (ora > 23) {
+                            ora = 23;
+                        }
+                        if (minuto < 0) {
+                            minuto = 0;
+                        }
+                        if (minuto > 59) {
+                            minuto = 59;
+                        }
+
+                        anno = Integer.parseInt(String.valueOf(editAnno.getText()));
+                        mese = Integer.parseInt(String.valueOf(editMese.getText()));
+                        giorno = Integer.parseInt(String.valueOf(editGiorno.getText()));
+                    }
+
+                    //prendo il testo del messaggio e il numero
+                    testo = String.valueOf(t.getText());
+                    numero = String.valueOf(n.getText());
+
+                    if (testo.length() > 160) {
+
+                        Toast.makeText(getApplicationContext(), "Troppi caratteri", Toast.LENGTH_LONG).show();
+
+                    } else {
+                        alarm();
+                        testo = "";
+                        t.setText("");
+
+                        Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                        vibrator.vibrate(100);
+                    }
+                    String m = minuto + "";
+                    if (m.length() < 1) {
+                        m = "0" + m;
+                    }
+                    text = "Il messaggio verrà inviato alle " + ora + ":" + m + " del " + giorno + "/" + mese + "/" + anno;
+                    Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
                 } else {
-                    //altrimenti due campi di testo
-                    ora = Integer.parseInt(String.valueOf(editOra.getText()));
-                    minuto = Integer.parseInt(String.valueOf(editMin.getText()));
-
-                    if (ora < 0) {
-                        ora = 0;
+                    if (myFragment.button.getVisibility() == View.VISIBLE) {
+                        myFragment.button.setVisibility(View.INVISIBLE);
+                        myFragment.nomeSearch.setVisibility(View.VISIBLE);
+                    } else {
+                        myFragment.button.setVisibility(View.VISIBLE);
+                        myFragment.nomeSearch.setVisibility(View.INVISIBLE);
+                        myFragment.nomeSearch.setText("");
                     }
-                    if (ora > 23) {
-                        ora = 23;
-                    }
-                    if (minuto < 0) {
-                        minuto = 0;
-                    }
-                    if (minuto > 59) {
-                        minuto = 59;
-                    }
-
-                    anno = Integer.parseInt(String.valueOf(editAnno.getText()));
-                    mese = Integer.parseInt(String.valueOf(editMese.getText()));
-                    giorno = Integer.parseInt(String.valueOf(editGiorno.getText()));
                 }
-
-                //prendo il testo del messaggio e il numero
-                testo = String.valueOf(t.getText());
-                numero = String.valueOf(n.getText());
-
-                if (testo.length() > 160) {
-
-                    Toast.makeText(getApplicationContext(), "Troppi caratteri", Toast.LENGTH_LONG).show();
-
-                } else {
-                    alarm();
-                    testo = "";
-                    t.setText("");
-
-                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(100);
-                }
-                String m = minuto + "";
-                if (m.length() < 1) {
-                    m = "0" + m;
-                }
-                text = "Il messaggio verrà inviato alle " + ora + ":" + m + " del " + giorno + "/" + mese + "/" + anno;
-                Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
             }
 
         });
 
         Intent intent = new Intent(MainActivity.this, BootReceiver.class);
+
         sendBroadcast(intent);
     }
 
@@ -329,12 +342,6 @@ public class MainActivity extends AppCompatActivity {
         fab.setVisibility(View.VISIBLE);
     }
 
-    public static void animLeft() {
-        Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_appear_animation);
-        fab.setAnimation(animFadeIn);
-        fab.setVisibility(View.VISIBLE);
-    }
-
     static final TextWatcher contaNumeri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
         }
@@ -352,7 +359,7 @@ public class MainActivity extends AppCompatActivity {
                     check[1] = true;
 
                     if (check[0]) {
-                        animLeft();
+                        animIn();
                     }
                 }
             }
@@ -382,7 +389,7 @@ public class MainActivity extends AppCompatActivity {
                     check[0] = true;
 
                     if (check[1]) {
-                        animLeft();
+                        animIn();
                     }
                 }
             }

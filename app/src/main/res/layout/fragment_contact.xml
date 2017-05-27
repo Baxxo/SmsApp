@@ -9,12 +9,8 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
 
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:layout_marginEnd="147dp"
-        android:layout_marginStart="32dp"
 
         android:layout_marginTop="23dp"
         android:background="@drawable/buttonshape"
@@ -24,19 +20,10 @@
         android:shadowRadius="5"
         android:text="Ricarica Lista"
         android:textColor="#FFF"
-        android:textSize="15sp" />
-
-    <Button
-        android:id="@+id/search"
-        android:layout_width="20dp"
-        android:layout_height="20dp"
-        android:layout_above="@+id/listView"
+        android:textSize="15sp"
         android:layout_alignEnd="@+id/listView"
-        android:layout_alignTop="@+id/button"
-        android:layout_marginEnd="25dp"
-        android:layout_marginStart="25dp"
-        android:layout_toEndOf="@+id/nomeSearch"
-        android:background="@drawable/ic_search" />
+        android:layout_marginEnd="16dp"
+        android:layout_alignStart="@+id/progressBar" />
 
     <EditText
         android:id="@+id/nomeSearch"
@@ -48,6 +35,7 @@
         android:textAlignment="center"
         android:textColor="#ffffff"
         android:layout_above="@+id/listView"
+        android:layout_alignEnd="@+id/button"
         android:layout_alignStart="@+id/button" />
 
     <ListView
