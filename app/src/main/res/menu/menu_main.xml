@@ -18,13 +18,5 @@
         android:orderInCategory="400"
         android:title="Impostazioni" />
 
-    <item
-        android:id="@+id/whastapp"
-        android:checkable="true"
-        android:orderInCategory="500"
-        android:title="Whatsapp"
-        android:visible="true"
-        app:showAsAction="never" />
-
 
 </menu>
