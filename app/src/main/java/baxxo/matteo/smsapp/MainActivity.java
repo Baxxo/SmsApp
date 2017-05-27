@@ -4,11 +4,15 @@ import android.Manifest;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -68,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     static RelativeLayout relativeLayout;
     public static FloatingActionButton fab;
     public static FloatingActionButton fabWhats;
-    static boolean couldWhats;
     public static SharedPreferences preferences;
     static Context context;
     static boolean[] check = {false, false};
@@ -82,14 +85,13 @@ public class MainActivity extends AppCompatActivity {
     private String text;//testo per snackbar con data e ora
     private String testo;//testo preso per il messaggio
     private String numero;
-    Boolean optionsCheck;
     FragmentContatti myFragment = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
     DatabaseManager db;
     static int c = 0;
-    boolean isChecked = false;
+    static boolean isChecked = false;
     int pos;
 
     @Override
@@ -129,18 +131,16 @@ public class MainActivity extends AppCompatActivity {
                 pos = position;
                 if (position == 1) {
                     //animazione per botton che sparisce
-                    check[0] = false;
-
                     if (fab.getVisibility() == View.VISIBLE) {
                         animOut();
+                    }
+                    if (fabWhats.getVisibility() == View.VISIBLE) {
                         animOutWhats();
                     }
                 }
 
                 if (position == 0) {
                     //animazione per botton che appare
-                    check[0] = true;
-
                     if (check[0] && check[1]) {
                         animIn();
                         animInWhats();
@@ -170,7 +170,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //prendo l'ora
-
                 //se android è >= M allora uso il time e date picker
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ora = timepicker.getHour();
@@ -227,26 +226,46 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        SharedPreferences settings = getSharedPreferences("settings", 0);
-        isChecked = settings.getBoolean("checkbox", false);
-        couldWhats = isChecked;
-        Log.i("whast main", couldWhats + "");
-
         fabWhats = (FloatingActionButton) findViewById(R.id.fab_whatsapp);
         fabWhats.setVisibility(View.INVISIBLE);
         fabWhats.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Presto verrà mandato un messaggio anche attraverso whatsapp", Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
+                testo = String.valueOf(t.getText());
+
+                try {
+
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, testo);
+                    sendIntent.setType("text/plain");
+                    sendIntent.setPackage("com.whatsapp");
+                    startActivity(sendIntent);
+/*
+                    Intent sendIntent = new Intent("android.intent.action.MAIN");
+                    sendIntent.setComponent(new ComponentName("com.whatsapp", "com.whatsapp.Conversation"));
+                    sendIntent.setType("text/plain");
+                    sendIntent.putExtra("jid", numero + "@s.whatsapp.net");
+                    sendIntent.putExtra(Intent.EXTRA_TEXT, testo);
+                    sendIntent.putExtra("sms_body", "sms_body test");
+                    sendIntent.putExtra("body", "body test");
+                    sendIntent.putExtra("text", "text test");
+                    context.startActivity(sendIntent);*/
+
+
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Error/n" + e.toString(), Toast.LENGTH_SHORT).show();
+                }
+
+                testo = "";
+                t.setText("");
+
             }
         });
 
-
-        //Log.i("Ciao", "ciao");
-
         Intent intent = new Intent(MainActivity.this, BootReceiver.class);
         sendBroadcast(intent);
-
     }
 
     //fine onCreate-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -307,8 +326,15 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.whastapp).isChecked();
+        isChecked = menu.findItem(R.id.whastapp).isChecked();
+        super.onPrepareOptionsMenu(menu);
+        return true;
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
 
         SharedPreferences settings = getSharedPreferences("settings", 0);
@@ -321,7 +347,6 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
@@ -341,11 +366,14 @@ public class MainActivity extends AppCompatActivity {
         }
         if (id == R.id.whastapp) {
             item.setChecked(!item.isChecked());
-            optionsCheck = item.isChecked();
-            couldWhats = item.isChecked();
-            Log.i("could whats", couldWhats + "");
-            if (!couldWhats) {
-                fabWhats.setVisibility(View.INVISIBLE);
+            isChecked = item.isChecked();
+            Log.i("could whats", isChecked + "");
+            if (!isChecked) {
+                animOutWhats();
+            } else {
+                if (check[0] && check[1]) {
+                    animLeftWhats();
+                }
             }
             SharedPreferences settings = getSharedPreferences("settings", 0);
             SharedPreferences.Editor editor = settings.edit();
@@ -388,7 +416,8 @@ public class MainActivity extends AppCompatActivity {
     //animazioni per bottone whatsapp
 
     public static void animOutWhats() {
-        if (couldWhats) {
+        Log.i("whats out", isChecked + "");
+        if (isChecked) {
             Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
             fabWhats.setAnimation(animFadeOut);
             fabWhats.setVisibility(View.INVISIBLE);
@@ -396,7 +425,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void animInWhats() {
-        if (couldWhats) {
+        Log.i("whats in", isChecked + "");
+        if (isChecked) {
             Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_up_animation);
             fabWhats.setAnimation(animFadeIn);
             fabWhats.setVisibility(View.VISIBLE);
@@ -404,7 +434,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public static void animLeftWhats() {
-        if (couldWhats) {
+        Log.i("whats left", isChecked + "");
+        if (isChecked) {
             Animation animFadeIn = AnimationUtils.loadAnimation(context, R.anim.slide_appear_whastapp);
             fabWhats.setAnimation(animFadeIn);
             fabWhats.setVisibility(View.VISIBLE);
@@ -413,26 +444,6 @@ public class MainActivity extends AppCompatActivity {
 
     static final TextWatcher contaNumeri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            if (count == 0) {
-                check[1] = false;
-
-                if (fab.getVisibility() == View.VISIBLE) {
-                    animOut();
-                }
-                if (fabWhats.getVisibility() == View.VISIBLE) {
-                    animOutWhats();
-                }
-
-            } else {
-                if (!check[1]) {
-                    check[1] = true;
-
-                    if (check[0]) {
-                        animLeft();
-                        animLeftWhats();
-                    }
-                }
-            }
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -464,29 +475,6 @@ public class MainActivity extends AppCompatActivity {
 
     static final TextWatcher contaCaratteri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            c = s.length();
-            String t = "Caratteri: " + c + "/160";
-            conta.setText(t);
-            if (c == 0) {
-                check[0] = false;
-
-                if (fab.getVisibility() == View.VISIBLE) {
-                    animOut();
-                }
-                if (fabWhats.getVisibility() == View.VISIBLE) {
-                    animOutWhats();
-                }
-
-            } else {
-                if (!check[0]) {
-                    check[0] = true;
-
-                    if (check[1]) {
-                        animLeft();
-                        animLeftWhats();
-                    }
-                }
-            }
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
