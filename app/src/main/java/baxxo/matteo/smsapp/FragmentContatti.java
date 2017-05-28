@@ -1,12 +1,10 @@
 package baxxo.matteo.smsapp;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
@@ -66,7 +64,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     Cursor cur;
     ArrayList<String> mess1 = new ArrayList<String>();
     String permission = "android.permission.READ_CONTACTS";
-    int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
 
     public FragmentContatti() {
 
@@ -124,10 +121,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         progressBar.setVisibility(View.VISIBLE);
         contatti.clear();
 
-        //Log.i("PermissionContatti", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
-
         if (getContext().checkCallingOrSelfPermission(permission) == 0) {
-            //Log.i("PermissionPrimoIf", "Ciaone");
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -141,16 +135,11 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         }
 
         if (getContext().checkCallingOrSelfPermission(permission) == -1) {
-            //Log.i("Permission1234", "Bello");
             Toast.makeText(getContext(), "Accetta i permessi", Toast.LENGTH_LONG).show();
             do {
-                // Log.i("Permission1234", "Ciaone da while");
-                //Log.i("Permission1234", String.valueOf(getContext().checkCallingOrSelfPermission(permission)));
-
+                Toast.makeText(getContext(), "Aspetto permessi", Toast.LENGTH_SHORT).show();
             } while (getContext().checkCallingOrSelfPermission(permission) == -1);
-
             if (getContext().checkCallingOrSelfPermission(permission) == 0) {
-                //Log.i("Permission1234", "Ciaone da if");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

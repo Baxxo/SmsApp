@@ -18,12 +18,10 @@ public class Receiver extends WakefulBroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
 
-        //System.out.println("Allarme");
         numero = intent.getStringExtra("Numero");
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
-        //Log.i("Messaggio", "Lun receiver: " + id);
 
         Intent service = new Intent(context, Sender.class);
         service.putExtra("Numero", numero);

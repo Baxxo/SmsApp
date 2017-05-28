@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
+import android.os.Parcelable;
 import android.os.Vibrator;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -99,9 +100,11 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.WAKE_LOCK,
                     Manifest.permission.SET_ALARM,
                     Manifest.permission.RECEIVE_BOOT_COMPLETED,
-                    Manifest.permission.READ_CALENDAR
+                    Manifest.permission.READ_CALENDAR,
+                    Manifest.permission.INSTALL_SHORTCUT
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
+
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -114,6 +117,24 @@ public class MainActivity extends AppCompatActivity {
         db = new DatabaseManager(getApplicationContext());
 
         preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
+
+
+        if (!preferences.getBoolean("icon", false)) {
+
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putBoolean("icon", true);
+            editor.apply();
+
+            Intent shortcutintent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
+            shortcutintent.putExtra("duplicate", false);
+            shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
+            Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.unnamed);
+            shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
+            shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(getApplicationContext(), MainActivity.class));
+            sendBroadcast(shortcutintent);
+
+        }
+
 
         tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -132,10 +153,10 @@ public class MainActivity extends AppCompatActivity {
 
                 if (position == 0) {
                     if (check[0] && check[1]) {
-                        fab.setImageResource(R.drawable.ic_dialog_email);
                     } else {
                         animOut();
                     }
+                    fab.setImageResource(R.drawable.ic_dialog_email);
                 }
 
             }
@@ -160,11 +181,9 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (pos == 0) {
-
-
-                    //prendo l'ora
                     //se android è >= M allora uso il time e date picker
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        //prendo l'ora e tempo
                         ora = timepicker.getHour();
                         minuto = timepicker.getMinute();
                         anno = data.getYear();
@@ -197,25 +216,21 @@ public class MainActivity extends AppCompatActivity {
                     testo = String.valueOf(t.getText());
                     numero = String.valueOf(n.getText());
 
-                    if (testo.length() > 160) {
+                    alarm();
+                    testo = "";
+                    t.setText("");
 
-                        Toast.makeText(getApplicationContext(), "Troppi caratteri", Toast.LENGTH_LONG).show();
-
-                    } else {
-                        alarm();
-                        testo = "";
-                        t.setText("");
-
-                        Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                        vibrator.vibrate(100);
-                    }
+                    Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    vibrator.vibrate(100);
                     String m = minuto + "";
                     if (m.length() < 1) {
                         m = "0" + m;
                     }
                     text = "Il messaggio verrà inviato alle " + ora + ":" + m + " del " + giorno + "/" + mese + "/" + anno;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
+
                 } else {
+
                     if (myFragment.button.getVisibility() == View.VISIBLE) {
                         myFragment.button.setVisibility(View.INVISIBLE);
                         myFragment.nomeSearch.setVisibility(View.VISIBLE);
@@ -224,6 +239,7 @@ public class MainActivity extends AppCompatActivity {
                         myFragment.nomeSearch.setVisibility(View.INVISIBLE);
                         myFragment.nomeSearch.setText("");
                     }
+
                 }
             }
 
@@ -403,7 +419,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
-        //tabLayout.getTabAt(2).setIcon(R.drawable.ic_assignment);
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -417,17 +432,13 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             if (position == 1) {
                 return myFragment = new FragmentContatti();
-            }/*
-            if (position == 2) {
-                return myFragment1 = new DatabaseFragment();
-            }*/
+            }
 
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            // return 3;
             return 2;
         }
 
@@ -435,10 +446,7 @@ public class MainActivity extends AppCompatActivity {
         public CharSequence getPageTitle(int position) {
             if (position == 1) {
                 return getString(R.string.title2);
-            }/*
-            if (position == 2) {
-                return getString(R.string.title3);
-            }*/
+            }
             return getString(R.string.title1);
         }
 

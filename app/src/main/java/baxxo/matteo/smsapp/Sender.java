@@ -5,6 +5,7 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
@@ -20,6 +21,8 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+
+import static baxxo.matteo.smsapp.MainActivity.context;
 
 /**
  * Created by Matteo on 20/03/2017.
@@ -49,13 +52,10 @@ public class Sender extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
 
-        //Log.i("Air", String.valueOf(Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0)));
-
         numero = intent.getStringExtra("Numero");
         testo = intent.getStringExtra("Testo");
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
-        //Log.i("Messaggio", numero + " - " + testo + " - " + nomeNumero + " - " + id);
 
         database = new DatabaseManager(this);
         mess = database.getNotSentMessages();
@@ -64,13 +64,10 @@ public class Sender extends IntentService {
         for (Messaggio messaggio : mess) {
             if (messaggio.getId().equals(id)) {
                 numMess = i;
-                // Log.i("Sender", messaggio.getId() + " " + id);
             }
             i++;
         }
         i--;
-       /* Log.i("Sender", "i: " + i);
-        Log.i("Sender", "Mess" + mess.get(i).getTesto());*/
 
         //fa aprire l'app quando si clicca sulla notifica
         Intent intent1 = new Intent(this, MainActivity.class);
@@ -85,8 +82,12 @@ public class Sender extends IntentService {
         } else {
 
             try {
+
                 sms = SmsManager.getDefault();
-                sms.sendTextMessage(numero, null, testo, null, null);
+                ArrayList<String> parts = sms.divideMessage(testo);
+                sms.sendMultipartTextMessage(numero, null, parts, null, null);
+
+                //sms.sendTextMessage(numero, null, testo, null, null);
                 text = "Inviato! \n" + testo;
                 sub = "Inviato!";
                 int db = 112233;
@@ -135,7 +136,7 @@ public class Sender extends IntentService {
                     .setContentText(text)
                     .build();
             Notification notification = builder.build();
-            NotificationManagerCompat.from(this).notify(0, notification);
+            NotificationManagerCompat.from(this).notify(Integer.parseInt(id), notification);
 
         } else {
             Log.i("Sound1Pref", "false");
@@ -152,7 +153,7 @@ public class Sender extends IntentService {
                     .setContentText(text)
                     .build();
             Notification notification = builder.build();
-            NotificationManagerCompat.from(this).notify(0, notification);
+            NotificationManagerCompat.from(this).notify(Integer.parseInt(id), notification);
 
         }
 
