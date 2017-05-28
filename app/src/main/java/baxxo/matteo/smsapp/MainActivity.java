@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.os.Build;
 import android.os.Parcelable;
 import android.os.Vibrator;
@@ -220,10 +221,20 @@ public class MainActivity extends AppCompatActivity {
                     testo = "";
                     t.setText("");
 
+                    AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
                     Vibrator vibrator = (Vibrator) getApplicationContext().getSystemService(Context.VIBRATOR_SERVICE);
-                    vibrator.vibrate(100);
+
+                    switch (am.getRingerMode()) {
+                        case AudioManager.RINGER_MODE_VIBRATE:
+                            vibrator.vibrate(100);
+                            break;
+                        case AudioManager.RINGER_MODE_NORMAL:
+                            vibrator.vibrate(100);
+                            break;
+                    }
+
                     String m = minuto + "";
-                    if (m.length() < 1) {
+                    if (m.length() == 1) {
                         m = "0" + m;
                     }
                     text = "Il messaggio verrà inviato alle " + ora + ":" + m + " del " + giorno + "/" + mese + "/" + anno;
