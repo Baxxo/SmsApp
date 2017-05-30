@@ -6,6 +6,9 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -125,10 +128,14 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    try {
+                   try {
                         getContact();
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), "Errore nel caricamneto contatti", Toast.LENGTH_LONG).show();
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                Toast.makeText(getContext(), "Errore nel caricamneto contatti", Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
                 }
             }).start();
@@ -148,6 +155,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         } catch (Exception e) {
                             Toast.makeText(getContext(), "Errore nel caricamneto contatti", Toast.LENGTH_LONG).show();
                         }
+                        getContact();
                     }
                 }).start();
             }
@@ -158,6 +166,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
 
     public void getContact() {
+
         if (!contatti.isEmpty()) {
             contatti.clear();
         }
@@ -227,12 +236,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         //rimuovo +39
         for (int i = 0; i < contatti.size(); i++) {
+            //Log.i("Contatti", String.valueOf(contatti.get(i).number.substring(0, 3)));
 
             if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
                 contatti.get(i).number = contatti.get(i).number.substring(3);
-            }
-            if (String.valueOf(contatti.get(i).number.substring(0, 4)).equals("\u202A+39")) {
-                contatti.get(i).number = contatti.get(i).number.substring(4);
             }
             p++;
             progressBar.setProgress(p);
@@ -255,8 +262,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 contatti.remove(i);
             }
         }
+        //Log.i("Contatti", "Sono arrivato");
 
         int j = 0;
+
 
         //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
         while (j == 0) {

@@ -192,7 +192,13 @@ public class MainActivity extends AppCompatActivity {
                         giorno = data.getDayOfMonth();
                     } else {
                         //altrimenti due campi di testo
-                        ora = Integer.parseInt(String.valueOf(editOra.getText()));
+                        ora = timepicker.getCurrentHour();
+                        minuto = timepicker.getCurrentMinute();
+                        anno = data.getYear();
+                        mese = data.getMonth();
+                        giorno = data.getDayOfMonth();
+                        Log.i("ora minuto", ora + "-" + minuto);
+                       /* ora = Integer.parseInt(String.valueOf(editOra.getText()));
                         minuto = Integer.parseInt(String.valueOf(editMin.getText()));
 
                         if (ora < 0) {
@@ -210,7 +216,14 @@ public class MainActivity extends AppCompatActivity {
 
                         anno = Integer.parseInt(String.valueOf(editAnno.getText()));
                         mese = Integer.parseInt(String.valueOf(editMese.getText()));
+                        if(mese<0){
+                            mese=1;
+                        }
+                        if(mese>12){
+                            mese=12;
+                        }
                         giorno = Integer.parseInt(String.valueOf(editGiorno.getText()));
+                        //if()*/
                     }
 
                     //prendo il testo del messaggio e il numero
@@ -537,21 +550,21 @@ public class MainActivity extends AppCompatActivity {
             editMese.setText(calendar.get(Calendar.MONTH) + "");
             editGiorno.setText(calendar.get(Calendar.DAY_OF_MONTH) + "");
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                relativeLayout.removeView(editOra);
-                relativeLayout.removeView(editMin);
-                relativeLayout.removeView(editAnno);
-                relativeLayout.removeView(editMese);
-                relativeLayout.removeView(editGiorno);
-                relativeLayout.removeView(hhmm);
-                relativeLayout.removeView(dataS);
-                relativeLayout.removeView(puntini);
-                relativeLayout.removeView(barrette1);
-                relativeLayout.removeView(barrette2);
-            } else {
-                relativeLayout.removeView(timepicker);
-                relativeLayout.removeView(data);
-            }
+            //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            relativeLayout.removeView(editOra);
+            relativeLayout.removeView(editMin);
+            relativeLayout.removeView(editAnno);
+            relativeLayout.removeView(editMese);
+            relativeLayout.removeView(editGiorno);
+            relativeLayout.removeView(hhmm);
+            relativeLayout.removeView(dataS);
+            relativeLayout.removeView(puntini);
+            relativeLayout.removeView(barrette1);
+            relativeLayout.removeView(barrette2);
+            //   } else {
+            //       relativeLayout.removeView(timepicker);
+            //       relativeLayout.removeView(data);
+            //   }
 
             return rootView;
         }
