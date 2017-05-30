@@ -116,7 +116,7 @@ public class Sender extends IntentService {
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean vibrate = preferences.getBoolean("Vibrate", false);
-        Log.i("VibratePref", String.valueOf(vibrate));
+        //Log.i("VibratePref", String.valueOf(vibrate));
         String s = preferences.getString("Sound", "");
         //Log.i("SoundPref", s);
 
