@@ -48,7 +48,6 @@ public class Sender extends IntentService {
         super("Sender");
     }
 
-
     @Override
     protected void onHandleIntent(Intent intent) {
 
