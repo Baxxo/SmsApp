@@ -64,6 +64,7 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
     Button next;
     Spinner select_table;
     TextView tv;
+    Cursor c2 = null;
 
     indexInfo info = new indexInfo();
 
@@ -380,295 +381,324 @@ public class AndroidDatabaseManager extends Activity implements OnItemClickListe
 
                     //getting contents of the table which user selected from the select_table spinner
                     ArrayList<Cursor> alc2 = dbm.getData(Query2);
-                    final Cursor c2 = alc2.get(0);
-                    //saving cursor to the static indexinfo class which can be resued by the other functions
-                    indexInfo.maincursor = c2;
+                    try {
+                        c2 = alc2.get(0);
+                        //saving cursor to the static indexinfo class which can be resued by the other functions
+                        indexInfo.maincursor = c2;
 
-                    // if the cursor returned form the database is not null we display the data in table layout
-                    if (c2 != null) {
-                        int counts = c2.getCount();
-                        indexInfo.isEmpty = false;
-                        Log.d("counts", "" + counts);
-                        tv.setText("" + counts);
-
-
-                        //the spinnertable has the 3 items to drop , delete , add row to the table selected by the user
-                        //here we handle the 3 operations.
-                        spinnertable.setOnItemSelectedListener((new OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                        // if the cursor returned form the database is not null we display the data in table layout
+                        if (c2 != null) {
+                            int counts = c2.getCount();
+                            indexInfo.isEmpty = false;
+                            Log.d("counts", "" + counts);
+                            tv.setText("" + counts);
 
 
-                                ((TextView) parentView.getChildAt(0)).setTextColor(Color.rgb(0, 0, 0));
-                                //when user selects to drop the table the below code in if block will be executed
-                                if (spinnertable.getSelectedItem().toString().equals("Drop this table")) {
-                                    // an alert dialog to confirm user selection
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (!isFinishing()) {
+                            //the spinnertable has the 3 items to drop , delete , add row to the table selected by the user
+                            //here we handle the 3 operations.
+                            spinnertable.setOnItemSelectedListener((new OnItemSelectedListener() {
+                                @Override
+                                public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
 
-                                                new AlertDialog.Builder(AndroidDatabaseManager.this)
-                                                        .setTitle("Are you sure ?")
-                                                        .setMessage("Pressing yes will remove " + indexInfo.table_name + " table from database")
-                                                        .setPositiveButton("yes",
-                                                                new DialogInterface.OnClickListener() {
-                                                                    // when user confirms by clicking on yes we drop the table by executing drop table query
-                                                                    public void onClick(DialogInterface dialog, int which) {
 
-                                                                        String Query6 = "Drop table " + indexInfo.table_name;
-                                                                        ArrayList<Cursor> aldropt = dbm.getData(Query6);
-                                                                        Cursor tempc = aldropt.get(1);
-                                                                        tempc.moveToLast();
-                                                                        Log.d("Drop table Mesage", tempc.getString(0));
-                                                                        if (tempc.getString(0).equalsIgnoreCase("Success")) {
-                                                                            tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
-                                                                            tvmessage.setText(indexInfo.table_name + "Dropped successfully");
-                                                                            refreshactivity();
-                                                                        } else {
-                                                                            //if there is any error we displayd the error message at the bottom of the screen
-                                                                            tvmessage.setBackgroundColor(Color.parseColor("#e74c3c"));
-                                                                            tvmessage.setText("Error:" + tempc.getString(0));
-                                                                            spinnertable.setSelection(0);
-                                                                        }
-                                                                    }
-                                                                })
-                                                        .setNegativeButton("No",
-                                                                new DialogInterface.OnClickListener() {
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        spinnertable.setSelection(0);
-                                                                    }
-                                                                })
-                                                        .create().show();
-                                            }
-                                        }
-                                    });
+                                    ((TextView) parentView.getChildAt(0)).setTextColor(Color.rgb(0, 0, 0));
+                                    //when user selects to drop the table the below code in if block will be executed
+                                    if (spinnertable.getSelectedItem().toString().equals("Drop this table")) {
+                                        // an alert dialog to confirm user selection
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (!isFinishing()) {
 
-                                }
-                                //when user selects to drop the table the below code in if block will be executed
-                                if (spinnertable.getSelectedItem().toString().equals("Delete this table")) {    // an alert dialog to confirm user selection
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (!isFinishing()) {
+                                                    new AlertDialog.Builder(AndroidDatabaseManager.this)
+                                                            .setTitle("Are you sure ?")
+                                                            .setMessage("Pressing yes will remove " + indexInfo.table_name + " table from database")
+                                                            .setPositiveButton("yes",
+                                                                    new DialogInterface.OnClickListener() {
+                                                                        // when user confirms by clicking on yes we drop the table by executing drop table query
+                                                                        public void onClick(DialogInterface dialog, int which) {
 
-                                                new AlertDialog.Builder(AndroidDatabaseManager.this)
-                                                        .setTitle("Are you sure?")
-                                                        .setMessage("Clicking on yes will delete all the contents of " + indexInfo.table_name + " table from database")
-                                                        .setPositiveButton("yes",
-                                                                new DialogInterface.OnClickListener() {
-
-                                                                    // when user confirms by clicking on yes we drop the table by executing delete table query
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        String Query7 = "Delete  from " + indexInfo.table_name;
-                                                                        Log.d("delete table query", Query7);
-                                                                        ArrayList<Cursor> aldeletet = dbm.getData(Query7);
-                                                                        Cursor tempc = aldeletet.get(1);
-                                                                        tempc.moveToLast();
-                                                                        Log.d("Delete table Mesage", tempc.getString(0));
-                                                                        if (tempc.getString(0).equalsIgnoreCase("Success")) {
-                                                                            tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
-                                                                            tvmessage.setText(indexInfo.table_name + " table content deleted successfully");
-                                                                            indexInfo.isEmpty = true;
-                                                                            refreshTable(0);
-                                                                        } else {
-                                                                            tvmessage.setBackgroundColor(Color.parseColor("#e74c3c"));
-                                                                            tvmessage.setText("Error:" + tempc.getString(0));
-                                                                            spinnertable.setSelection(0);
-                                                                        }
-                                                                    }
-                                                                })
-                                                        .setNegativeButton("No",
-                                                                new DialogInterface.OnClickListener() {
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        spinnertable.setSelection(0);
-                                                                    }
-                                                                })
-                                                        .create().show();
-                                            }
-                                        }
-                                    });
-
-                                }
-
-                                //when user selects to add row to the table the below code in if block will be executed
-                                if (spinnertable.getSelectedItem().toString().equals("Add row to this table")) {
-                                    //we create a layout which has textviews with column names of the table and edittexts where
-                                    //user can enter value which will be inserted into the datbase.
-                                    final LinkedList<TextView> addnewrownames = new LinkedList<TextView>();
-                                    final LinkedList<EditText> addnewrowvalues = new LinkedList<EditText>();
-                                    final ScrollView addrowsv = new ScrollView(AndroidDatabaseManager.this);
-                                    Cursor c4 = indexInfo.maincursor;
-                                    if (indexInfo.isEmpty) {
-                                        getcolumnnames();
-                                        for (int i = 0; i < indexInfo.emptytablecolumnnames.size(); i++) {
-                                            String cname = indexInfo.emptytablecolumnnames.get(i);
-                                            TextView tv = new TextView(getApplicationContext());
-                                            tv.setText(cname);
-                                            addnewrownames.add(tv);
-
-                                        }
-                                        for (int i = 0; i < addnewrownames.size(); i++) {
-                                            EditText et = new EditText(getApplicationContext());
-
-                                            addnewrowvalues.add(et);
-                                        }
-
-                                    } else {
-                                        for (int i = 0; i < c4.getColumnCount(); i++) {
-                                            String cname = c4.getColumnName(i);
-                                            TextView tv = new TextView(getApplicationContext());
-                                            tv.setText(cname);
-                                            addnewrownames.add(tv);
-
-                                        }
-                                        for (int i = 0; i < addnewrownames.size(); i++) {
-                                            EditText et = new EditText(getApplicationContext());
-
-                                            addnewrowvalues.add(et);
-                                        }
-                                    }
-                                    final RelativeLayout addnewlayout = new RelativeLayout(AndroidDatabaseManager.this);
-                                    RelativeLayout.LayoutParams addnewparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                                    addnewparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                                    for (int i = 0; i < addnewrownames.size(); i++) {
-                                        TextView tv = addnewrownames.get(i);
-                                        EditText et = addnewrowvalues.get(i);
-                                        int t = i + 400;
-                                        int k = i + 500;
-                                        int lid = i + 600;
-
-                                        tv.setId(t);
-                                        tv.setTextColor(Color.parseColor("#000000"));
-                                        et.setBackgroundColor(Color.parseColor("#F2F2F2"));
-                                        et.setTextColor(Color.parseColor("#000000"));
-                                        et.setId(k);
-                                        final LinearLayout ll = new LinearLayout(AndroidDatabaseManager.this);
-                                        LinearLayout.LayoutParams tvl = new LinearLayout.LayoutParams(0, 100);
-                                        tvl.weight = 1;
-                                        ll.addView(tv, tvl);
-                                        ll.addView(et, tvl);
-                                        ll.setId(lid);
-
-                                        Log.d("Edit Text Value", "" + et.getText().toString());
-
-                                        RelativeLayout.LayoutParams rll = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                                        rll.addRule(RelativeLayout.BELOW, ll.getId() - 1);
-                                        rll.setMargins(0, 20, 0, 0);
-                                        addnewlayout.addView(ll, rll);
-
-                                    }
-                                    addnewlayout.setBackgroundColor(Color.WHITE);
-                                    addrowsv.addView(addnewlayout);
-                                    Log.d("Button Clicked", "");
-                                    //the above form layout which we have created above will be displayed in an alert dialog
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            if (!isFinishing()) {
-                                                new AlertDialog.Builder(AndroidDatabaseManager.this)
-                                                        .setTitle("values")
-                                                        .setCancelable(false)
-                                                        .setView(addrowsv)
-                                                        .setPositiveButton("Add",
-                                                                new DialogInterface.OnClickListener() {
-                                                                    // after entering values if user clicks on add we take the values and run a insert query
-                                                                    public void onClick(DialogInterface dialog, int which) {
-
-                                                                        indexInfo.index = 10;
-                                                                        //tableLayout.removeAllViews();
-                                                                        //trigger select table listener to be triggerd
-                                                                        String Query4 = "Insert into " + indexInfo.table_name + " (";
-                                                                        for (int i = 0; i < addnewrownames.size(); i++) {
-
-                                                                            TextView tv = addnewrownames.get(i);
-                                                                            tv.getText().toString();
-                                                                            if (i == addnewrownames.size() - 1) {
-
-                                                                                Query4 = Query4 + tv.getText().toString();
-
+                                                                            String Query6 = "Drop table " + indexInfo.table_name;
+                                                                            ArrayList<Cursor> aldropt = dbm.getData(Query6);
+                                                                            Cursor tempc = aldropt.get(1);
+                                                                            tempc.moveToLast();
+                                                                            Log.d("Drop table Mesage", tempc.getString(0));
+                                                                            if (tempc.getString(0).equalsIgnoreCase("Success")) {
+                                                                                tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
+                                                                                tvmessage.setText(indexInfo.table_name + "Dropped successfully");
+                                                                                refreshactivity();
                                                                             } else {
-                                                                                Query4 = Query4 + tv.getText().toString() + ", ";
+                                                                                //if there is any error we displayd the error message at the bottom of the screen
+                                                                                tvmessage.setBackgroundColor(Color.parseColor("#e74c3c"));
+                                                                                tvmessage.setText("Error:" + tempc.getString(0));
+                                                                                spinnertable.setSelection(0);
                                                                             }
                                                                         }
-                                                                        Query4 = Query4 + " ) VALUES ( ";
-                                                                        for (int i = 0; i < addnewrownames.size(); i++) {
-                                                                            EditText et = addnewrowvalues.get(i);
-                                                                            et.getText().toString();
-
-                                                                            if (i == addnewrownames.size() - 1) {
-
-                                                                                Query4 = Query4 + "'" + et.getText().toString() + "' ) ";
-                                                                            } else {
-                                                                                Query4 = Query4 + "'" + et.getText().toString() + "' , ";
-                                                                            }
-
-
-                                                                        }
-                                                                        //this is the insert query which has been generated
-                                                                        Log.d("Insert Query", Query4);
-                                                                        ArrayList<Cursor> altc = dbm.getData(Query4);
-                                                                        Cursor tempc = altc.get(1);
-                                                                        tempc.moveToLast();
-                                                                        Log.d("Add New Row", tempc.getString(0));
-                                                                        if (tempc.getString(0).equalsIgnoreCase("Success")) {
-                                                                            tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
-                                                                            tvmessage.setText("New Row added succesfully to " + indexInfo.table_name);
-                                                                            refreshTable(0);
-                                                                        } else {
-                                                                            tvmessage.setBackgroundColor(Color.parseColor("#e74c3c"));
-                                                                            tvmessage.setText("Error:" + tempc.getString(0));
+                                                                    })
+                                                            .setNegativeButton("No",
+                                                                    new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int which) {
                                                                             spinnertable.setSelection(0);
                                                                         }
+                                                                    })
+                                                            .create().show();
+                                                }
+                                            }
+                                        });
 
-                                                                    }
-                                                                })
-                                                        .setNegativeButton("close",
-                                                                new DialogInterface.OnClickListener() {
-                                                                    public void onClick(DialogInterface dialog, int which) {
-                                                                        spinnertable.setSelection(0);
-                                                                    }
-                                                                })
-                                                        .create().show();
+                                    }
+                                    //when user selects to drop the table the below code in if block will be executed
+                                    if (spinnertable.getSelectedItem().toString().equals("Delete this table")) {    // an alert dialog to confirm user selection
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (!isFinishing()) {
+
+                                                    new AlertDialog.Builder(AndroidDatabaseManager.this)
+                                                            .setTitle("Are you sure?")
+                                                            .setMessage("Clicking on yes will delete all the contents of " + indexInfo.table_name + " table from database")
+                                                            .setPositiveButton("yes",
+                                                                    new DialogInterface.OnClickListener() {
+
+                                                                        // when user confirms by clicking on yes we drop the table by executing delete table query
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            String Query7 = "Delete  from " + indexInfo.table_name;
+                                                                            Log.d("delete table query", Query7);
+                                                                            ArrayList<Cursor> aldeletet = dbm.getData(Query7);
+                                                                            Cursor tempc = aldeletet.get(1);
+                                                                            tempc.moveToLast();
+                                                                            Log.d("Delete table Mesage", tempc.getString(0));
+                                                                            if (tempc.getString(0).equalsIgnoreCase("Success")) {
+                                                                                tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
+                                                                                tvmessage.setText(indexInfo.table_name + " table content deleted successfully");
+                                                                                indexInfo.isEmpty = true;
+                                                                                refreshTable(0);
+                                                                            } else {
+                                                                                tvmessage.setBackgroundColor(Color.parseColor("#e74c3c"));
+                                                                                tvmessage.setText("Error:" + tempc.getString(0));
+                                                                                spinnertable.setSelection(0);
+                                                                            }
+                                                                        }
+                                                                    })
+                                                            .setNegativeButton("No",
+                                                                    new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            spinnertable.setSelection(0);
+                                                                        }
+                                                                    })
+                                                            .create().show();
+                                                }
+                                            }
+                                        });
+
+                                    }
+
+                                    //when user selects to add row to the table the below code in if block will be executed
+                                    if (spinnertable.getSelectedItem().toString().equals("Add row to this table")) {
+                                        //we create a layout which has textviews with column names of the table and edittexts where
+                                        //user can enter value which will be inserted into the datbase.
+                                        final LinkedList<TextView> addnewrownames = new LinkedList<TextView>();
+                                        final LinkedList<EditText> addnewrowvalues = new LinkedList<EditText>();
+                                        final ScrollView addrowsv = new ScrollView(AndroidDatabaseManager.this);
+                                        Cursor c4 = indexInfo.maincursor;
+                                        if (indexInfo.isEmpty) {
+                                            getcolumnnames();
+                                            for (int i = 0; i < indexInfo.emptytablecolumnnames.size(); i++) {
+                                                String cname = indexInfo.emptytablecolumnnames.get(i);
+                                                TextView tv = new TextView(getApplicationContext());
+                                                tv.setText(cname);
+                                                addnewrownames.add(tv);
+
+                                            }
+                                            for (int i = 0; i < addnewrownames.size(); i++) {
+                                                EditText et = new EditText(getApplicationContext());
+
+                                                addnewrowvalues.add(et);
+                                            }
+
+                                        } else {
+                                            for (int i = 0; i < c4.getColumnCount(); i++) {
+                                                String cname = c4.getColumnName(i);
+                                                TextView tv = new TextView(getApplicationContext());
+                                                tv.setText(cname);
+                                                addnewrownames.add(tv);
+
+                                            }
+                                            for (int i = 0; i < addnewrownames.size(); i++) {
+                                                EditText et = new EditText(getApplicationContext());
+
+                                                addnewrowvalues.add(et);
                                             }
                                         }
-                                    });
+                                        final RelativeLayout addnewlayout = new RelativeLayout(AndroidDatabaseManager.this);
+                                        RelativeLayout.LayoutParams addnewparams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                                        addnewparams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                                        for (int i = 0; i < addnewrownames.size(); i++) {
+                                            TextView tv = addnewrownames.get(i);
+                                            EditText et = addnewrowvalues.get(i);
+                                            int t = i + 400;
+                                            int k = i + 500;
+                                            int lid = i + 600;
+
+                                            tv.setId(t);
+                                            tv.setTextColor(Color.parseColor("#000000"));
+                                            et.setBackgroundColor(Color.parseColor("#F2F2F2"));
+                                            et.setTextColor(Color.parseColor("#000000"));
+                                            et.setId(k);
+                                            final LinearLayout ll = new LinearLayout(AndroidDatabaseManager.this);
+                                            LinearLayout.LayoutParams tvl = new LinearLayout.LayoutParams(0, 100);
+                                            tvl.weight = 1;
+                                            ll.addView(tv, tvl);
+                                            ll.addView(et, tvl);
+                                            ll.setId(lid);
+
+                                            Log.d("Edit Text Value", "" + et.getText().toString());
+
+                                            RelativeLayout.LayoutParams rll = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+                                            rll.addRule(RelativeLayout.BELOW, ll.getId() - 1);
+                                            rll.setMargins(0, 20, 0, 0);
+                                            addnewlayout.addView(ll, rll);
+
+                                        }
+                                        addnewlayout.setBackgroundColor(Color.WHITE);
+                                        addrowsv.addView(addnewlayout);
+                                        Log.d("Button Clicked", "");
+                                        //the above form layout which we have created above will be displayed in an alert dialog
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                if (!isFinishing()) {
+                                                    new AlertDialog.Builder(AndroidDatabaseManager.this)
+                                                            .setTitle("values")
+                                                            .setCancelable(false)
+                                                            .setView(addrowsv)
+                                                            .setPositiveButton("Add",
+                                                                    new DialogInterface.OnClickListener() {
+                                                                        // after entering values if user clicks on add we take the values and run a insert query
+                                                                        public void onClick(DialogInterface dialog, int which) {
+
+                                                                            indexInfo.index = 10;
+                                                                            //tableLayout.removeAllViews();
+                                                                            //trigger select table listener to be triggerd
+                                                                            String Query4 = "Insert into " + indexInfo.table_name + " (";
+                                                                            for (int i = 0; i < addnewrownames.size(); i++) {
+
+                                                                                TextView tv = addnewrownames.get(i);
+                                                                                tv.getText().toString();
+                                                                                if (i == addnewrownames.size() - 1) {
+
+                                                                                    Query4 = Query4 + tv.getText().toString();
+
+                                                                                } else {
+                                                                                    Query4 = Query4 + tv.getText().toString() + ", ";
+                                                                                }
+                                                                            }
+                                                                            Query4 = Query4 + " ) VALUES ( ";
+                                                                            for (int i = 0; i < addnewrownames.size(); i++) {
+                                                                                EditText et = addnewrowvalues.get(i);
+                                                                                et.getText().toString();
+
+                                                                                if (i == addnewrownames.size() - 1) {
+
+                                                                                    Query4 = Query4 + "'" + et.getText().toString() + "' ) ";
+                                                                                } else {
+                                                                                    Query4 = Query4 + "'" + et.getText().toString() + "' , ";
+                                                                                }
+
+
+                                                                            }
+                                                                            //this is the insert query which has been generated
+                                                                            Log.d("Insert Query", Query4);
+                                                                            ArrayList<Cursor> altc = dbm.getData(Query4);
+                                                                            Cursor tempc = altc.get(1);
+                                                                            tempc.moveToLast();
+                                                                            Log.d("Add New Row", tempc.getString(0));
+                                                                            if (tempc.getString(0).equalsIgnoreCase("Success")) {
+                                                                                tvmessage.setBackgroundColor(Color.parseColor("#2ecc71"));
+                                                                                tvmessage.setText("New Row added succesfully to " + indexInfo.table_name);
+                                                                                refreshTable(0);
+                                                                            } else {
+                                                                                tvmessage.setBackgroundColor(Color.parseColor("#e74c3c"));
+                                                                                tvmessage.setText("Error:" + tempc.getString(0));
+                                                                                spinnertable.setSelection(0);
+                                                                            }
+
+                                                                        }
+                                                                    })
+                                                            .setNegativeButton("close",
+                                                                    new DialogInterface.OnClickListener() {
+                                                                        public void onClick(DialogInterface dialog, int which) {
+                                                                            spinnertable.setSelection(0);
+                                                                        }
+                                                                    })
+                                                            .create().show();
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
+
+                                public void onNothingSelected(AdapterView<?> arg0) {
+                                }
+                            }));
+
+                            //display the first row of the table with column names of the table selected by the user
+                            TableRow tableheader = new TableRow(getApplicationContext());
+
+                            tableheader.setBackgroundColor(Color.BLACK);
+                            tableheader.setPadding(0, 2, 0, 2);
+                            for (int k = 0; k < c2.getColumnCount(); k++) {
+                                LinearLayout cell = new LinearLayout(AndroidDatabaseManager.this);
+                                cell.setBackgroundColor(Color.WHITE);
+                                cell.setLayoutParams(tableRowParams);
+                                final TextView tableheadercolums = new TextView(getApplicationContext());
+                                // tableheadercolums.setBackgroundDrawable(gd);
+                                tableheadercolums.setPadding(0, 0, 4, 3);
+                                tableheadercolums.setText("" + c2.getColumnName(k));
+                                tableheadercolums.setTextColor(Color.parseColor("#000000"));
+
+                                //columsView.setLayoutParams(tableRowParams);
+                                cell.addView(tableheadercolums);
+                                tableheader.addView(cell);
+
                             }
+                            tableLayout.addView(tableheader);
+                            c2.moveToFirst();
 
-                            public void onNothingSelected(AdapterView<?> arg0) {
-                            }
-                        }));
+                            //after displaying columnnames in the first row  we display data in the remaining columns
+                            //the below paginatetbale function will display the first 10 tuples of the tables
+                            //the remaining tuples can be viewed by clicking on the next button
+                            paginatetable(c2.getCount());
 
-                        //display the first row of the table with column names of the table selected by the user
-                        TableRow tableheader = new TableRow(getApplicationContext());
+                        } else {
+                            //if the cursor returned from the database is empty we show that table is empty
+                            help.setVisibility(View.GONE);
+                            tableLayout.removeAllViews();
+                            getcolumnnames();
+                            TableRow tableheader2 = new TableRow(getApplicationContext());
+                            tableheader2.setBackgroundColor(Color.BLACK);
+                            tableheader2.setPadding(0, 2, 0, 2);
 
-                        tableheader.setBackgroundColor(Color.BLACK);
-                        tableheader.setPadding(0, 2, 0, 2);
-                        for (int k = 0; k < c2.getColumnCount(); k++) {
                             LinearLayout cell = new LinearLayout(AndroidDatabaseManager.this);
                             cell.setBackgroundColor(Color.WHITE);
                             cell.setLayoutParams(tableRowParams);
                             final TextView tableheadercolums = new TextView(getApplicationContext());
-                            // tableheadercolums.setBackgroundDrawable(gd);
+
                             tableheadercolums.setPadding(0, 0, 4, 3);
-                            tableheadercolums.setText("" + c2.getColumnName(k));
-                            tableheadercolums.setTextColor(Color.parseColor("#000000"));
+                            tableheadercolums.setText("   Table   Is   Empty   ");
+                            tableheadercolums.setTextSize(30);
+                            tableheadercolums.setTextColor(Color.RED);
 
-                            //columsView.setLayoutParams(tableRowParams);
                             cell.addView(tableheadercolums);
-                            tableheader.addView(cell);
+                            tableheader2.addView(cell);
 
+
+                            tableLayout.addView(tableheader2);
+
+                            tv.setText("" + 0);
                         }
-                        tableLayout.addView(tableheader);
-                        c2.moveToFirst();
-
-                        //after displaying columnnames in the first row  we display data in the remaining columns
-                        //the below paginatetbale function will display the first 10 tuples of the tables
-                        //the remaining tuples can be viewed by clicking on the next button
-                        paginatetable(c2.getCount());
-
-                    } else {
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(), "Non ci sono messaggi", Toast.LENGTH_LONG).show();
                         //if the cursor returned from the database is empty we show that table is empty
                         help.setVisibility(View.GONE);
                         tableLayout.removeAllViews();

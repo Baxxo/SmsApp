@@ -51,18 +51,8 @@ public class MainActivity extends AppCompatActivity {
     public static ViewPager mViewPager;
     static EditText n;
     static EditText t;
-    static EditText editOra;
-    static EditText editMin;
-    static EditText editAnno;
-    static EditText editMese;
-    static EditText editGiorno;
     static DatePicker data;
     static TimePicker timepicker;
-    static TextView puntini;
-    static TextView barrette1;
-    static TextView barrette2;
-    static TextView hhmm;
-    static TextView dataS;
     static TextView conta;
     private Calendar calendar;
     private TabLayout tabLayout;
@@ -83,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     private String testo;//testo preso per il messaggio
     private String numero;
     FragmentContatti myFragment = null;
+    FragmentMessaggi myFragment2 = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
@@ -105,7 +96,6 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.INSTALL_SHORTCUT
             }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
         }
-
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -145,13 +135,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 pos = position;
-                if (position == 1) {
-                    fab.setImageResource(R.drawable.ic_search);
-                    if (fab.getVisibility() == View.INVISIBLE) {
-                        animIn();
-                    }
-                }
-
                 if (position == 0) {
                     if (check[0] && check[1]) {
                     } else {
@@ -159,7 +142,22 @@ public class MainActivity extends AppCompatActivity {
                     }
                     fab.setImageResource(R.drawable.ic_dialog_email);
                 }
-
+                if (position == 1) {
+                    fab.setImageResource(R.drawable.ic_search);
+                    if (fab.getVisibility() == View.INVISIBLE) {
+                        animIn();
+                    }else{
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                }
+                if (position == 2) {
+                    fab.setImageResource(R.drawable.ic_assignment);
+                    if (fab.getVisibility() == View.INVISIBLE) {
+                        animIn();
+                    }else{
+                        fab.setVisibility(View.VISIBLE);
+                    }
+                }
             }
 
             @Override
@@ -198,32 +196,6 @@ public class MainActivity extends AppCompatActivity {
                         mese = data.getMonth();
                         giorno = data.getDayOfMonth();
                         Log.i("ora minuto", ora + "-" + minuto);
-                       /* ora = Integer.parseInt(String.valueOf(editOra.getText()));
-                        minuto = Integer.parseInt(String.valueOf(editMin.getText()));
-
-                        if (ora < 0) {
-                            ora = 0;
-                        }
-                        if (ora > 23) {
-                            ora = 23;
-                        }
-                        if (minuto < 0) {
-                            minuto = 0;
-                        }
-                        if (minuto > 59) {
-                            minuto = 59;
-                        }
-
-                        anno = Integer.parseInt(String.valueOf(editAnno.getText()));
-                        mese = Integer.parseInt(String.valueOf(editMese.getText()));
-                        if(mese<0){
-                            mese=1;
-                        }
-                        if(mese>12){
-                            mese=12;
-                        }
-                        giorno = Integer.parseInt(String.valueOf(editGiorno.getText()));
-                        //if()*/
                     }
 
                     //prendo il testo del messaggio e il numero
@@ -253,7 +225,8 @@ public class MainActivity extends AppCompatActivity {
                     text = "Il messaggio verrà inviato alle " + ora + ":" + m + " del " + giorno + "/" + mese + "/" + anno;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
-                } else {
+                }
+                if (pos == 1) {
 
                     if (myFragment.button.getVisibility() == View.VISIBLE) {
                         myFragment.button.setVisibility(View.INVISIBLE);
@@ -264,6 +237,10 @@ public class MainActivity extends AppCompatActivity {
                         myFragment.nomeSearch.setText("");
                     }
 
+                }
+
+                if (pos == 2) {
+                    myFragment2.caricaMessaggi();
                 }
             }
 
@@ -443,6 +420,7 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
+        tabLayout.getTabAt(2).setIcon(R.drawable.ic_assignment);
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -457,19 +435,25 @@ public class MainActivity extends AppCompatActivity {
             if (position == 1) {
                 return myFragment = new FragmentContatti();
             }
+            if (position == 2) {
+                return myFragment2 = new FragmentMessaggi();
+            }
 
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            return 2;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 1) {
                 return getString(R.string.title2);
+            }
+            if (position == 2) {
+                return getString(R.string.title3);
             }
             return getString(R.string.title1);
         }
@@ -523,48 +507,16 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            Calendar calendar = Calendar.getInstance();
 
             n = (EditText) rootView.findViewById(R.id.Numero);
             t = (EditText) rootView.findViewById(R.id.Testo);
             conta = (TextView) rootView.findViewById(R.id.textView3);
             data = (DatePicker) rootView.findViewById(R.id.datePicker);
             timepicker = (TimePicker) rootView.findViewById(R.id.timePicker);
-            editOra = (EditText) rootView.findViewById(R.id.ora);
-            editMin = (EditText) rootView.findViewById(R.id.min);
-            editAnno = (EditText) rootView.findViewById(R.id.anno);
-            editMese = (EditText) rootView.findViewById(R.id.mese);
-            editGiorno = (EditText) rootView.findViewById(R.id.giorno);
-            hhmm = (TextView) rootView.findViewById(R.id.textView4);
-            dataS = (TextView) rootView.findViewById(R.id.textView6);
-            puntini = (TextView) rootView.findViewById(R.id.textView7);
-            barrette1 = (TextView) rootView.findViewById(R.id.textView8);
-            barrette2 = (TextView) rootView.findViewById(R.id.textView9);
             relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
 
             t.addTextChangedListener(contaCaratteri);
             n.addTextChangedListener(contaNumeri);
-            editOra.setText(calendar.get(Calendar.HOUR_OF_DAY) + "");
-            editMin.setText(calendar.get(Calendar.MINUTE) + "");
-            editAnno.setText(calendar.get(Calendar.YEAR) + "");
-            editMese.setText(calendar.get(Calendar.MONTH) + "");
-            editGiorno.setText(calendar.get(Calendar.DAY_OF_MONTH) + "");
-
-            //  if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            relativeLayout.removeView(editOra);
-            relativeLayout.removeView(editMin);
-            relativeLayout.removeView(editAnno);
-            relativeLayout.removeView(editMese);
-            relativeLayout.removeView(editGiorno);
-            relativeLayout.removeView(hhmm);
-            relativeLayout.removeView(dataS);
-            relativeLayout.removeView(puntini);
-            relativeLayout.removeView(barrette1);
-            relativeLayout.removeView(barrette2);
-            //   } else {
-            //       relativeLayout.removeView(timepicker);
-            //       relativeLayout.removeView(data);
-            //   }
 
             return rootView;
         }
