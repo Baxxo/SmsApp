@@ -24,7 +24,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
     private String Testo = "testo";
     private String Data = "data";
     private String Inviato = "inviato";
-    private String DaInviare = "da_inviare";
 
 
     public DatabaseManager(Context context) {
@@ -39,8 +38,7 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 Numero + " TEXT, " +
                 Testo + " TEXT, " +
                 Data + " TEXT, " +
-                Inviato + " BOOLEAN" +
-                DaInviare + " BOOLEAN" + ")";
+                Inviato + " BOOLEAN" + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
 
     }
@@ -128,7 +126,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 mess.setTesto(cursor.getString(3));//testo
                 mess.setData(Long.parseLong(cursor.getString(4)));//data/ora
                 mess.setInviato(Boolean.parseBoolean(cursor.getString(5)));//inivato
-                mess.setDaInviato(Boolean.parseBoolean(cursor.getString(6)));//da inviare
                 // Adding contact to list
                 messaggioList.add(mess);
             } while (cursor.moveToNext());
@@ -156,7 +153,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 mess.setTesto(cursor.getString(3));//testo
                 mess.setData(Long.parseLong(cursor.getString(4)));//data/ora
                 mess.setInviato(Boolean.parseBoolean(cursor.getString(5)));//inivato
-                mess.setDaInviato(Boolean.parseBoolean(cursor.getString(6)));//da inviare
                 // Adding contact to list
                 messaggioList.add(mess);
             } while (cursor.moveToNext());
@@ -194,26 +190,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(Testo, messaggio.getTesto()); // Messaggio Testo
         values.put(Data, messaggio.getData()); // Messaggio Data
         values.put(Inviato, messaggio.getInviato()); // Messaggio Inviato(si o no);
-
-        // updating row
-        return db.update(NameTable, values, Id + " = ?",
-                new String[]{String.valueOf(messaggio.getId())});
-    }
-
-    // Updating single contact
-    public int messaggioNonDaInviare(Messaggio messaggio) {
-        SQLiteDatabase db = this.getWritableDatabase();
-
-        //Log.i("DB Messaggio", messaggio.getId() + " " + messaggio.getNome() + " " + messaggio.getNumero() + " " + messaggio.getTesto() + " " + messaggio.getData() + " " + messaggio.getInviato() + " ");
-
-        ContentValues values = new ContentValues();
-        values.put(Id, messaggio.getId()); // Messaggio Id
-        values.put(Nome, messaggio.getNome()); // Messaggio Nome
-        values.put(Numero, messaggio.getNumero()); // Messaggio Numero
-        values.put(Testo, messaggio.getTesto()); // Messaggio Testo
-        values.put(Data, messaggio.getData()); // Messaggio Data
-        values.put(Inviato, messaggio.getInviato()); // Messaggio Inviato(si o no);
-        values.put(DaInviare, messaggio.getDaInviato()); // Messaggio se inviare(si o no);
 
         // updating row
         return db.update(NameTable, values, Id + " = ?",

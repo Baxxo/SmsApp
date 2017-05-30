@@ -38,7 +38,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,7 +72,6 @@ public class MainActivity extends AppCompatActivity {
     private String testo;//testo preso per il messaggio
     private String numero;
     FragmentContatti myFragment = null;
-    FragmentMessaggi myFragment2 = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
@@ -144,14 +142,6 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (position == 1) {
                     fab.setImageResource(R.drawable.ic_search);
-                    if (fab.getVisibility() == View.INVISIBLE) {
-                        animIn();
-                    }else{
-                        fab.setVisibility(View.VISIBLE);
-                    }
-                }
-                if (position == 2) {
-                    fab.setImageResource(R.drawable.ic_assignment);
                     if (fab.getVisibility() == View.INVISIBLE) {
                         animIn();
                     }else{
@@ -237,10 +227,6 @@ public class MainActivity extends AppCompatActivity {
                         myFragment.nomeSearch.setText("");
                     }
 
-                }
-
-                if (pos == 2) {
-                    myFragment2.caricaMessaggi();
                 }
             }
 
@@ -420,7 +406,6 @@ public class MainActivity extends AppCompatActivity {
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
-        tabLayout.getTabAt(2).setIcon(R.drawable.ic_assignment);
     }
 
     public class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -435,25 +420,19 @@ public class MainActivity extends AppCompatActivity {
             if (position == 1) {
                 return myFragment = new FragmentContatti();
             }
-            if (position == 2) {
-                return myFragment2 = new FragmentMessaggi();
-            }
 
             return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 1) {
                 return getString(R.string.title2);
-            }
-            if (position == 2) {
-                return getString(R.string.title3);
             }
             return getString(R.string.title1);
         }

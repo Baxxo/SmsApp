@@ -11,7 +11,6 @@ public class Messaggio {
     private String testo = "";
     private long data;
     private boolean inviato = false;
-    private boolean da_inviare = true;
 
     public Messaggio(String id, String Nome, String Numero, String Testo, long data, boolean inviato) {
         this.id = id;
@@ -20,16 +19,6 @@ public class Messaggio {
         this.testo = Testo;
         this.data = data;
         this.inviato = inviato;
-    }
-
-    public Messaggio(String id, String Nome, String Numero, String Testo, long data, boolean inviato, boolean da_inviare) {
-        this.id = id;
-        this.nome = Nome;
-        this.numero = Numero;
-        this.testo = Testo;
-        this.data = data;
-        this.inviato = inviato;
-        this.da_inviare = da_inviare;
     }
 
     public Messaggio() {
@@ -83,13 +72,5 @@ public class Messaggio {
 
     public void setInviato(boolean inviato) {
         this.inviato = inviato;
-    }
-
-    public boolean getDaInviato() {
-        return da_inviare;
-    }
-
-    public void setDaInviato(boolean da_inviare) {
-        this.da_inviare = da_inviare;
     }
 }
