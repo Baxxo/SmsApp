@@ -133,7 +133,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     } catch (Exception e) {
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
-                                Toast.makeText(getContext(), "Errore nel caricamneto contatti", Toast.LENGTH_LONG).show();
+                                Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
                             }
                         });
                     }
@@ -142,9 +142,9 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         }
 
         if (getContext().checkCallingOrSelfPermission(permission) == -1) {
-            Toast.makeText(getContext(), "Accetta i permessi", Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), getString(R.string.permessi1), Toast.LENGTH_LONG).show();
             do {
-                Toast.makeText(getContext(), "Aspetto permessi", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), getString(R.string.permessi1), Toast.LENGTH_SHORT).show();
             } while (getContext().checkCallingOrSelfPermission(permission) == -1);
             if (getContext().checkCallingOrSelfPermission(permission) == 0) {
                 new Thread(new Runnable() {
@@ -153,7 +153,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         try {
                             getContact();
                         } catch (Exception e) {
-                            Toast.makeText(getContext(), "Errore nel caricamneto contatti", Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(),  getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
                         }
                         getContact();
                     }
@@ -197,7 +197,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
             }
         } else {
-            mess1.add("Non ci sono contatti");
+            mess1.add(getString(R.string.no_contatti));
 
             list = new ArrayAdapter(rootView.getContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
 
@@ -206,7 +206,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    button.setText("Ricarica Lista");
+                    button.setText(getString(R.string.lista));
                     button.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);
                 }
@@ -361,7 +361,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 numero = parts[1];
 
                                 MainActivity.n.setText(numero);
-                                Toast.makeText(rootView.getContext(), "Numero caricato", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(rootView.getContext(),getString(R.string.numero_caricato), Toast.LENGTH_SHORT).show();
 
                                 new Thread(new Runnable() {
                                     @Override
@@ -430,7 +430,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         });
 
                         progressBar.setVisibility(View.INVISIBLE);
-                        button.setText("Ricarica Lista");
+                        button.setText(getString(R.string.lista));
                         button.setVisibility(View.VISIBLE);
 
                     }

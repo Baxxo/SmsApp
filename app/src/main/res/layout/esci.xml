@@ -24,7 +24,7 @@
         android:layout_marginRight="20dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
-        android:text="Sei sicuro di voler uscire?"
+        android:text="@string/exit"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textStyle="bold" />
 
@@ -45,7 +45,7 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="44dp"
         android:background="@drawable/backbutton"
-        android:text="Sì" />
+        android:text="@string/si" />
 
     <Button
         android:id="@+id/torna"
@@ -55,6 +55,6 @@
         android:layout_alignEnd="@+id/nome"
         android:layout_marginRight="10dp"
         android:background="@drawable/button_esci"
-        android:text="Annulla" />
+        android:text="@string/no" />
 
 </RelativeLayout>

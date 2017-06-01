@@ -56,7 +56,7 @@ public class Sender extends IntentService {
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
 
-        testo = testo + "\n\n(Messaggio inviato con SmsApp!)";
+        testo = testo + "\n\n(" + getString(R.string.def_text) + ")";
 
         database = new DatabaseManager(this);
         mess = database.getNotSentMessages();
@@ -79,8 +79,8 @@ public class Sender extends IntentService {
         //verifico modalità aereo
         if (Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
 
-            text = "Non inviato! Modalità aereo attiva\n" + testo;
-            sub = "Modalità aereo attiva!";
+            text = getString(R.string.plane) + "\n" + testo;
+            sub = getString(R.string.plane_sub);
 
         } else {
 
@@ -90,8 +90,8 @@ public class Sender extends IntentService {
                 ArrayList<String> parts = sms.divideMessage(testo);
                 sms.sendMultipartTextMessage(numero, null, parts, null, null);
 
-                text = "Inviato! \n" + testo;
-                sub = "Inviato!";
+                text = getString(R.string.inviato) + "\n" + testo;
+                sub = getString(R.string.inviato);
 
                 try {
 
@@ -105,8 +105,8 @@ public class Sender extends IntentService {
                 }
 
             } catch (Exception e) {
-                text = "Non inviato! \n" + testo;
-                sub = "Non inviato!";
+                text = getString(R.string.non_inviato) + "\n" + testo;
+                sub = getString(R.string.non_inviato);
             }
 
         }
@@ -126,7 +126,7 @@ public class Sender extends IntentService {
                 .setSmallIcon(R.mipmap.unnamed)
                 .setLargeIcon(defaultPhoto)
                 .setTicker("SmsApp")
-                .setContentTitle("Sms a: " + nomeNumero)
+                .setContentTitle(getString(R.string.sms_a) + nomeNumero)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setLights(Color.CYAN, 1, 10)

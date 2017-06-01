@@ -28,7 +28,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@android:color/white"
-                android:text="Numero:"
+                android:text="@string/numero"
                 android:textAlignment="center"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#ffffff"
@@ -43,7 +43,7 @@
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="right|center_vertical"
                 android:backgroundTint="@android:color/white"
-                android:text="Caratteri: 0 /160"
+                android:text="@string/car"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="#ffffff" />
 
@@ -79,7 +79,7 @@
                 android:layout_gravity="left|center_vertical"
                 android:layout_marginTop="25dp"
                 android:backgroundTint="@android:color/white"
-                android:text="Testo"
+                android:text="@string/testo"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="#ffffff"
                 android:textStyle="bold" />

@@ -4,8 +4,8 @@
         android:enabled="true"
         android:key="example_key"
         android:selectable="false"
-        android:summary="qui puoi impostare la suoneria e la vibrazione"
-        android:title="Suoneria e Vibrazione" />
+        android:summary="@string/sub_settings_notification"
+        android:title="@string/head_settings_notification" />
 
     <!-- A 'parent' preference, which enables/disables child preferences (below)
          when checked/unchecked. -->

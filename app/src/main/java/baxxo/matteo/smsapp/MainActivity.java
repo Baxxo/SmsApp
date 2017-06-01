@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
     static DatePicker data;
     static TimePicker timepicker;
     static TextView conta;
+    static TextView num;
+    static TextView tes;
     private Calendar calendar;
     private TabLayout tabLayout;
     private TabsPagerAdapter tabsPagerAdapter;
@@ -144,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
                     fab.setImageResource(R.drawable.ic_search);
                     if (fab.getVisibility() == View.INVISIBLE) {
                         animIn();
-                    }else{
+                    } else {
                         fab.setVisibility(View.VISIBLE);
                     }
                 }
@@ -185,7 +187,7 @@ public class MainActivity extends AppCompatActivity {
                         anno = data.getYear();
                         mese = data.getMonth();
                         giorno = data.getDayOfMonth();
-                        Log.i("ora minuto", ora + "-" + minuto);
+                        //Log.i("ora minuto", ora + "-" + minuto);
                     }
 
                     //prendo il testo del messaggio e il numero
@@ -212,7 +214,7 @@ public class MainActivity extends AppCompatActivity {
                     if (m.length() == 1) {
                         m = "0" + m;
                     }
-                    text = "Il messaggio verrà inviato alle " + ora + ":" + m + " del " + giorno + "/" + mese + "/" + anno;
+                    text = getString(R.string.snak1) + ora + ":" + m + getString(R.string.snak2) + giorno + "/" + mese + "/" + anno;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                 }
@@ -378,7 +380,7 @@ public class MainActivity extends AppCompatActivity {
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             c = s.length();
-            String t = "Caratteri: " + c + "/160";
+            String t = context.getString(R.string.car1) + c + context.getString(R.string.car2);
             conta.setText(t);
             if (c == 0) {
                 check[0] = false;
@@ -408,9 +410,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
     }
 
-    public class TabsPagerAdapter extends FragmentPagerAdapter {
+    private class TabsPagerAdapter extends FragmentPagerAdapter {
 
-        public TabsPagerAdapter(FragmentManager fm) {
+        private TabsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 
@@ -489,6 +491,8 @@ public class MainActivity extends AppCompatActivity {
 
             n = (EditText) rootView.findViewById(R.id.Numero);
             t = (EditText) rootView.findViewById(R.id.Testo);
+            num = (TextView) rootView.findViewById(R.id.textView);
+            tes = (TextView) rootView.findViewById(R.id.textView2);
             conta = (TextView) rootView.findViewById(R.id.textView3);
             data = (DatePicker) rootView.findViewById(R.id.datePicker);
             timepicker = (TimePicker) rootView.findViewById(R.id.timePicker);

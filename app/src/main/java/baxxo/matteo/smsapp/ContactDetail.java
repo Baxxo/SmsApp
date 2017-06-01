@@ -65,7 +65,7 @@ public class ContactDetail extends AppCompatActivity {
 
         if (messNumero.size() == 0) {
 
-            messNumero.add("Nessun messaggio");
+            messNumero.add(getString(R.string.no_messaggi));
             lv.setEnabled(false);
 
         }
@@ -82,7 +82,7 @@ public class ContactDetail extends AppCompatActivity {
                 res = res.replace("}", "");
 
 
-                Toast.makeText(getApplicationContext(), "Testo e numero caricati", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.testo_numero), Toast.LENGTH_LONG).show();
 
                 MainActivity.n.setText(numero);
                 MainActivity.t.setText(res);
@@ -101,7 +101,7 @@ public class ContactDetail extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), "Numero caricato", Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), getString(R.string.numero_caricato), Toast.LENGTH_LONG).show();
                 MainActivity.n.setText(numero);
                 onBackPressed();
             }

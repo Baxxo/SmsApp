@@ -27,54 +27,54 @@
             android:id="@+id/button7"
             android:layout_width="150dp"
             android:layout_height="50dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
             android:background="@drawable/button_db"
-            android:text="Carica tutti i messaggi"
+            android:text="@string/caricaDb"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="199dp"
-            tools:layout_editor_absoluteY="8dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true" />
+            tools:layout_editor_absoluteY="8dp" />
 
         <Button
             android:id="@+id/button5"
             android:layout_width="150dp"
             android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginEnd="20dp"
             android:background="@drawable/button_db"
-            android:text="Carica Messaggi"
+            android:text="@string/carDb"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
-            android:textStyle="bold"
-            android:layout_marginEnd="20dp"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button4"
             android:layout_width="150dp"
             android:layout_height="50dp"
+            android:layout_alignStart="@+id/button5"
+            android:layout_below="@+id/button5"
             android:layout_marginTop="22dp"
             android:background="@drawable/button_db"
-            android:text="Nuovi messaggi"
+            android:text="@string/nuoviDb"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
-            android:textStyle="bold"
-            android:layout_below="@+id/button5"
-            android:layout_alignStart="@+id/button5" />
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:background="@drawable/button_db"
-            android:text="Elimina Messaggi"
-            android:textAlignment="center"
-            android:textColor="@android:color/background_light"
-            android:textStyle="bold"
             android:layout_alignBaseline="@+id/button4"
             android:layout_alignBottom="@+id/button4"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@drawable/button_db"
+            android:text="@string/eliminaDb"
+            android:textAlignment="center"
+            android:textColor="@android:color/background_light"
+            android:textStyle="bold" />
 
     </RelativeLayout>
 
