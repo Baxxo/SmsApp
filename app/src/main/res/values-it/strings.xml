@@ -46,4 +46,5 @@
     <string name="head_settings_notification">Suoneria e Vibrazione</string>
     <string name="sub_settings_notification">Qui puoi impostare la suoneria e la vibrazione</string>
     <string name="font_fontFamily_medium">sans-serif</string>
+    <string name="menu_messaggi">Messaggi in attesa</string>
 </resources>

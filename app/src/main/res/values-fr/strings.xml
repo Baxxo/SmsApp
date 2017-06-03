@@ -35,7 +35,7 @@
     <string name="pref_title_vibrate">Vibration</string>
     <string name="si">Oui</string>
     <string name="sms_a">Sms:</string>
-    <string name="snak1">" Le message sera envoyé à"</string>
+    <string name="snak1">Le message sera envoyé à</string>
     <string name="snak2">" la "</string>
     <string name="sub_settings_notification">" Ici, vous pouvez régler la sonnerie et les vibrations"</string>
     <string name="testo">Texte</string>
@@ -46,4 +46,5 @@
     <string name="title_activity_database">Database</string>
     <string name="title_activity_service">Service</string>
     <string name="title_activity_settings">Réglages</string>
+    <string name="menu_messaggi">Message en attente</string>
 </resources>

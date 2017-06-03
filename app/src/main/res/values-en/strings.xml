@@ -42,8 +42,9 @@
     <string name="testo_numero">Text and number loaded</string>
     <string name="errore_caricamento">Error while loading contacts</string>
     <string name="no_contatti">There is no contacts</string>
-    <string name="permessi1">Accepts permissions</string>
+    <string name="permessi1">Accept permissions</string>
     <string name="permessi2">Waiting permissions</string>
     <string name="head_settings_notification">Sound and Vibration</string>
     <string name="sub_settings_notification">Here you can set sound and vibration</string>
+    <string name="menu_messaggi">Pending messages</string>
 </resources>

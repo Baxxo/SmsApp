@@ -1,10 +1,13 @@
 package baxxo.matteo.smsapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -130,7 +133,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                   try {
+                    try {
                         getContact();
                     } catch (Exception e) {
                         getActivity().runOnUiThread(new Runnable() {
@@ -155,7 +158,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         try {
                             getContact();
                         } catch (Exception e) {
-                            Toast.makeText(getContext(),  getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
                         }
                         getContact();
                     }
@@ -363,7 +366,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 numero = parts[1];
 
                                 MainActivity.n.setText(numero);
-                                Toast.makeText(rootView.getContext(),getString(R.string.numero_caricato), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(rootView.getContext(), getString(R.string.numero_caricato), Toast.LENGTH_SHORT).show();
 
                                 new Thread(new Runnable() {
                                     @Override

@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">SmsApp</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="car">" Zeichen: 0/160"</string>
-    <string name="car1">"Zeichen: "</string>
+    <string name="car">Zeichen: 0/160</string>
+    <string name="car1">Zeichen:</string>
     <string name="car2">/160</string>
     <string name="carDb">Laden Sie Nachrichten</string>
     <string name="caricaDb">Laden Sie alle Beiträge</string>
@@ -46,4 +46,5 @@
     <string name="title_activity_database">Database</string>
     <string name="title_activity_service">Service</string>
     <string name="title_activity_settings">Einstellungen</string>
+    <string name="menu_messaggi">Ausstehende Nachrichten</string>
 </resources>

@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Parcelable;
@@ -104,7 +105,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        MainActivity.context = getApplicationContext();
+        context = getApplicationContext();
 
         db = new DatabaseManager(getApplicationContext());
 
@@ -145,14 +146,10 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (position == 1) {
 
-
-                    ///ho fatto questo
-                    MainActivity.toolbar.animate().setDuration(150).translationY(0);
+                    toolbar.animate().setDuration(100).translationY(0);
 
                     AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
                     appBarLayout.setExpanded(true, true);
-                    //fino a qui
-
 
                     fab.setImageResource(R.drawable.ic_search);
                     if (fab.getVisibility() == View.INVISIBLE) {
