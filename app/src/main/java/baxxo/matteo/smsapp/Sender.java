@@ -21,6 +21,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Matteo on 20/03/2017.
@@ -70,6 +71,11 @@ public class Sender extends IntentService {
             i++;
         }
         i--;
+
+        if (!mess.get(i).getInviato()) {
+
+            Receiver.completeWakefulIntent(intent);
+        }
 
         //fa aprire l'app quando si clicca sulla notifica
         Intent intent1 = new Intent(this, MainActivity.class);
@@ -121,12 +127,24 @@ public class Sender extends IntentService {
 
         Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.unnamed);
 
+        Calendar c = Calendar.getInstance();
+        String m = String.valueOf(c.get(Calendar.MINUTE));
+        if (m.length() == 1) {
+            m = "0" + m;
+        }
+        String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+        if (h.length() == 1) {
+            h = "0" + h;
+        }
+
+        String time = " (" + h + ":" + m + ")";
+
         builder = new NotificationCompat.Builder(this);
         builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text))
                 .setSmallIcon(R.mipmap.unnamed)
                 .setLargeIcon(defaultPhoto)
                 .setTicker("SmsApp")
-                .setContentTitle(getString(R.string.sms_a) + nomeNumero)
+                .setContentTitle(getString(R.string.sms_a) + " " + nomeNumero + " " + time)
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent)
                 .setLights(Color.CYAN, 1, 10)

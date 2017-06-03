@@ -7,7 +7,6 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Parcelable;
@@ -222,7 +221,11 @@ public class MainActivity extends AppCompatActivity {
                     if (m.length() == 1) {
                         m = "0" + m;
                     }
-                    text = getString(R.string.snak1) + ora + ":" + m + getString(R.string.snak2) + giorno + "/" + mese + "/" + anno;
+                    String oraconzero = String.valueOf(ora);
+                    if (oraconzero.length() == 1) {
+                        oraconzero = "0" + oraconzero;
+                    }
+                    text = getString(R.string.snak1) + oraconzero + ":" + m + getString(R.string.snak2) + giorno + "/" + mese + "/" + anno;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                 }
