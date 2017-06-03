@@ -2,31 +2,31 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/backgroundfrag">
+    android:background="@drawable/back_contatto">
 
     <TextView
         android:id="@+id/textViewScritta"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
         android:text="@string/scritta"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
-        android:textStyle="bold"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="20dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="20dp" />
+        android:textStyle="bold" />
 
     <ListView
         android:id="@+id/lista_messaggi_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_alignEnd="@+id/textViewScritta"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/textViewScritta"
-        android:layout_alignEnd="@+id/textViewScritta"
         android:layout_below="@+id/textViewScritta" />
 
 </RelativeLayout>

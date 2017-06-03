@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity {
                     if (oraconzero.length() == 1) {
                         oraconzero = "0" + oraconzero;
                     }
-                    text = getString(R.string.snak1) + oraconzero + ":" + m + getString(R.string.snak2) + giorno + "/" + mese + "/" + anno;
+                    text = getString(R.string.snak1) + " " + oraconzero + ":" + m + getString(R.string.snak2) + giorno + "/" + mese + "/" + anno;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                 }

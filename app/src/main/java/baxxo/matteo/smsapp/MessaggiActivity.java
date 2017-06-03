@@ -12,6 +12,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MessaggiActivity extends AppCompatActivity {
 
@@ -19,7 +20,7 @@ public class MessaggiActivity extends AppCompatActivity {
     DatabaseManager dbManager;
     ArrayList<String> lista_messaggi = new ArrayList<>();
     ArrayList<Messaggio> messaggi = new ArrayList<>();
-    ArrayAdapter adapter;
+    ArrayAdapter<String> adapter;
     String nome;
     Boolean check = false;
 
@@ -84,19 +85,29 @@ public class MessaggiActivity extends AppCompatActivity {
 
             for (Messaggio messaggio : messaggi) {
                 if (nome.equals(messaggio.getNome())) {
-                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto());
+                    Calendar c = Calendar.getInstance();
+                    c.setTimeInMillis(messaggio.getData());
+                    String m = String.valueOf(c.get(Calendar.MINUTE));
+                    if (m.length() == 1) {
+                        m = "0" + m;
+                    }
+                    String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+                    if (h.length() == 1) {
+                        h = "0" + h;
+                    }
+                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + " (" + h + ":" + m + ")");
                 }
             }
             lista.setEnabled(true);
+
 
         } else {
 
             lista_messaggi.add(getString(R.string.no_messaggi));
             lista.setEnabled(false);
-
         }
 
-        adapter = new ArrayAdapter(getApplicationContext(), R.layout.support_simple_spinner_dropdown_item, lista_messaggi);
+        adapter = new ArrayAdapter(MessaggiActivity.this, R.layout.list_messaggi, lista_messaggi);
         lista.setAdapter(adapter);
     }
 }
