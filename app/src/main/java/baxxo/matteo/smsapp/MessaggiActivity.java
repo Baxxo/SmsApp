@@ -20,7 +20,7 @@ public class MessaggiActivity extends AppCompatActivity {
     DatabaseManager dbManager;
     ArrayList<String> lista_messaggi = new ArrayList<>();
     ArrayList<Messaggio> messaggi = new ArrayList<>();
-    ArrayAdapter<String> adapter;
+    ArrayAdapter adapter;
     String nome;
     Boolean check = false;
 
@@ -95,7 +95,19 @@ public class MessaggiActivity extends AppCompatActivity {
                     if (h.length() == 1) {
                         h = "0" + h;
                     }
-                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + " (" + h + ":" + m + ")");
+                    String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                    if (g.length() == 1) {
+                        g = "0" + g;
+                    }
+                    String me = String.valueOf(c.get(Calendar.MONTH));
+                    if (me.length() == 1) {
+                        me = "0" + me;
+                    }
+                    String a = String.valueOf(c.get(Calendar.YEAR));
+                    if (a.length() == 1) {
+                        a = "0" + a;
+                    }
+                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a+ ")");
                 }
             }
             lista.setEnabled(true);

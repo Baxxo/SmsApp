@@ -19,7 +19,7 @@
     <string name="non_inviato">Non inviato!</string>
     <string name="sms_a">Sms a: </string>
     <string name="snak1">Il messaggio verrà inviato alle</string>
-    <string name="snak2">\" del \"</string>
+    <string name="snak2">del</string>
     <string name="car1">Caratteri: </string>
     <string name="car2">/160</string>
     <string name="app_name">SmsApp</string>

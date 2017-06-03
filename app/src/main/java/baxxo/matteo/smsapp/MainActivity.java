@@ -225,7 +225,19 @@ public class MainActivity extends AppCompatActivity {
                     if (oraconzero.length() == 1) {
                         oraconzero = "0" + oraconzero;
                     }
-                    text = getString(R.string.snak1) + " " + oraconzero + ":" + m + getString(R.string.snak2) + giorno + "/" + mese + "/" + anno;
+                    String g = giorno + "";
+                    if (g.length() == 1) {
+                        g = "0" + g;
+                    }
+                    String me = mese + "";
+                    if (me.length() == 1) {
+                        me = "0" + me;
+                    }
+                    String a = anno + "";
+                    if (a.length() == 1) {
+                        a = "0" + a;
+                    }
+                    text = getString(R.string.snak1) + " " + oraconzero + ":" + m + " " + getString(R.string.snak2) + " " + g + "/" + me + "/" + a;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                 }

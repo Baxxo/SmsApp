@@ -36,7 +36,7 @@
     <string name="si">Ja</string>
     <string name="sms_a">Sms:</string>
     <string name="snak1">Die Nachricht wird gesendet werden</string>
-    <string name="snak2">" der "</string>
+    <string name="snak2">der</string>
     <string name="sub_settings_notification">Hier können Sie den Klingelton und Vibration eingestellt</string>
     <string name="testo">Text</string>
     <string name="testo_numero">Text und Nummer loaded</string>

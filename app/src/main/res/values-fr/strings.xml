@@ -10,7 +10,7 @@
     <string name="def_text">Message envoyé SMSApp!</string>
     <string name="eliminaDb">Supprimer tous les messages</string>
     <string name="errore_caricamento">Contacts de chargement d\'erreur</string>
-    <string name="exit">" Êtes-vous sûr de vouloir quitter?"</string>
+    <string name="exit">Êtes-vous sûr de vouloir quitter?</string>
     <string name="font_fontFamily_medium">sans-serif</string>
     <string name="head_settings_notification">Ring et Vibrer</string>
     <string name="inviato">Posté!</string>
@@ -36,8 +36,8 @@
     <string name="si">Oui</string>
     <string name="sms_a">Sms:</string>
     <string name="snak1">Le message sera envoyé à</string>
-    <string name="snak2">" la "</string>
-    <string name="sub_settings_notification">" Ici, vous pouvez régler la sonnerie et les vibrations"</string>
+    <string name="snak2">la</string>
+    <string name="sub_settings_notification">Ici, vous pouvez régler la sonnerie et les vibrations\"</string>
     <string name="testo">Texte</string>
     <string name="testo_numero">Texte et numéro chargé\"</string>
     <string name="title1">SMS</string>
