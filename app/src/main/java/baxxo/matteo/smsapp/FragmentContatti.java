@@ -10,6 +10,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.provider.ContactsContract;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -74,6 +75,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_contact, container, false);
+
         resultsMap = new HashMap<>();
         listItems = new ArrayList<>();
 
@@ -197,15 +199,15 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
             }
         } else {
+            mess1.clear();
             mess1.add(getString(R.string.no_contatti));
 
             list = new ArrayAdapter(rootView.getContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
 
-            listView.setAdapter(list);
-
             ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
+                    listView.setAdapter(list);
                     button.setText(getString(R.string.lista));
                     button.setVisibility(View.VISIBLE);
                     progressBar.setVisibility(View.INVISIBLE);

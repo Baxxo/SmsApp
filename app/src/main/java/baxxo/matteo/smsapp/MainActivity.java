@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.os.Build;
 import android.os.Parcelable;
 import android.os.Vibrator;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -80,6 +81,7 @@ public class MainActivity extends AppCompatActivity {
     DatabaseManager db;
     static int c = 0;
     int pos;
+    static Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,9 +101,8 @@ public class MainActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         MainActivity.context = getApplicationContext();
 
@@ -143,6 +144,16 @@ public class MainActivity extends AppCompatActivity {
                     fab.setImageResource(R.drawable.ic_dialog_email);
                 }
                 if (position == 1) {
+
+
+                    ///ho fatto questo
+                    MainActivity.toolbar.animate().setDuration(150).translationY(0);
+
+                    AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+                    appBarLayout.setExpanded(true, true);
+                    //fino a qui
+
+
                     fab.setImageResource(R.drawable.ic_search);
                     if (fab.getVisibility() == View.INVISIBLE) {
                         animIn();
