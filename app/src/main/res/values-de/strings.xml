@@ -34,7 +34,7 @@
     <string name="pref_title_ringtone">Name Klingelton</string>
     <string name="pref_title_vibrate">Vibration</string>
     <string name="si">Ja</string>
-    <string name="sms_a">Sms:</string>
+    <string name="sms_a">Sms an:</string>
     <string name="snak1">Die Nachricht wird gesendet werden</string>
     <string name="snak2">der</string>
     <string name="sub_settings_notification">Hier können Sie den Klingelton und Vibration eingestellt</string>
@@ -48,4 +48,5 @@
     <string name="title_activity_settings">Einstellungen</string>
     <string name="menu_messaggi">Ausstehende Nachrichten</string>
     <string name="scritta">Ein Doppelklick auf den Text können Sie geplante Nachrichten beseitigen Senden</string>
+    <string name="ripremi">Drücken Sie wieder zu entfernen</string>
 </resources>

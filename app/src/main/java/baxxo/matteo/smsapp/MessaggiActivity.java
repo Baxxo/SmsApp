@@ -43,8 +43,8 @@ public class MessaggiActivity extends AppCompatActivity {
                 String t = String.valueOf(lista.getItemAtPosition(i));
                 //Log.i("messaggi", t);
 
-                String string = t;
-                String[] parts = string.split(" - ");
+                String s = t;
+                String[] parts = s.split(" - ");
                 String part1 = parts[0];
                 part1.replace(" ", "");
 
@@ -52,7 +52,7 @@ public class MessaggiActivity extends AppCompatActivity {
 
                 if (!check) {
                     check = true;
-                    Toast.makeText(getApplicationContext(), "Ripremi per eliminare", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.ripremi), Toast.LENGTH_LONG).show();
                 } else {
 
                     Intent intent = new Intent(MessaggiActivity.this, Receiver.class);
@@ -107,7 +107,7 @@ public class MessaggiActivity extends AppCompatActivity {
                     if (a.length() == 1) {
                         a = "0" + a;
                     }
-                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a+ ")");
+                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
                 }
             }
             lista.setEnabled(true);

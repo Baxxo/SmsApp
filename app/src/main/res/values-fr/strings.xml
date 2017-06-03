@@ -34,7 +34,7 @@
     <string name="pref_title_ringtone">Nom de sonnerie</string>
     <string name="pref_title_vibrate">Vibration</string>
     <string name="si">Oui</string>
-    <string name="sms_a">Sms:</string>
+    <string name="sms_a">Sms à:</string>
     <string name="snak1">Le message sera envoyé à</string>
     <string name="snak2">la</string>
     <string name="sub_settings_notification">Ici, vous pouvez régler la sonnerie et les vibrations\"</string>
@@ -48,4 +48,5 @@
     <string name="title_activity_settings">Réglages</string>
     <string name="menu_messaggi">Message en attente</string>
     <string name="scritta">Double-cliquez sur le texte sera en mesure d\'éliminer l\'envoi de messages programmés</string>
+    <string name="ripremi">Appuyez à nouveau pour retirer</string>
 </resources>

@@ -47,4 +47,5 @@
     <string name="sub_settings_notification">Qui puoi impostare la suoneria e la vibrazione</string>
     <string name="menu_messaggi">Messaggi in attesa</string>
     <string name="scritta">Cliccando 2 volte sopra ad un messaggio potrai eliminare il suo invio programmato</string>
+    <string name="ripremi">Ripremi per eliminare</string>
 </resources>

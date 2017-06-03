@@ -48,4 +48,5 @@
     <string name="sub_settings_notification">Here you can set sound and vibration</string>
     <string name="menu_messaggi">Pending messages</string>
     <string name="scritta">By double-clicking on the text you will be able to delete your scheduled message send</string>
+    <string name="ripremi">Repeat to delete</string>
 </resources>
