@@ -47,4 +47,5 @@
     <string name="title_activity_service">Service</string>
     <string name="title_activity_settings">Réglages</string>
     <string name="menu_messaggi">Message en attente</string>
+    <string name="scritta">Double-cliquez sur le texte sera en mesure d\'éliminer l\'envoi de messages programmés</string>
 </resources>

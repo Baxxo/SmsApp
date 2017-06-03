@@ -45,7 +45,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="44dp"
         android:background="@drawable/backbutton"
-        android:text="@string/si" />
+        android:text="@string/si"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/torna"
@@ -55,6 +56,7 @@
         android:layout_alignEnd="@+id/nome"
         android:layout_marginRight="10dp"
         android:background="@drawable/button_esci"
-        android:text="@string/no" />
+        android:text="@string/no"
+        android:textStyle="bold" />
 
 </RelativeLayout>

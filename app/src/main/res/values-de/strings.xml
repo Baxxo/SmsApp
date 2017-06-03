@@ -47,4 +47,5 @@
     <string name="title_activity_service">Service</string>
     <string name="title_activity_settings">Einstellungen</string>
     <string name="menu_messaggi">Ausstehende Nachrichten</string>
+    <string name="scritta">Ein Doppelklick auf den Text können Sie geplante Nachrichten beseitigen Senden</string>
 </resources>
