@@ -323,10 +323,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         List<HashMap<String, String>> listItems = new ArrayList<>();
 
                         //Adapter per la listView
-                        adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item,
-                                new String[]{"First Line", "Second Line"},
-                                new int[]{R.id.textView12, R.id.textView13}
-                        );
+                        adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int[]{R.id.textView12, R.id.textView13});
 
                         //Iterator accede alla mappa e accoppia la mappa con l' adapter
                         for (Object o : map.entrySet()) {
