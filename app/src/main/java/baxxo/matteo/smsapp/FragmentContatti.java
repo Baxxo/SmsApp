@@ -71,6 +71,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     Cursor cur;
     ArrayList<String> mess1 = new ArrayList<String>();
     String permission = "android.permission.READ_CONTACTS";
+    static boolean carica = false;
 
     public FragmentContatti() {
 
@@ -171,6 +172,14 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
 
     public void getContact() {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                MainActivity.animOut();
+            }
+        });
+        carica = true;
 
         if (!contatti.isEmpty()) {
             contatti.clear();
@@ -435,6 +444,13 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         button.setText(getString(R.string.lista));
                         button.setVisibility(View.VISIBLE);
 
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MainActivity.animIn();
+                            }
+                        });
+                        carica = false;
                     }
                 }
         );

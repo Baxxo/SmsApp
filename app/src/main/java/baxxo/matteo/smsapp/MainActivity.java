@@ -1,6 +1,7 @@
 package baxxo.matteo.smsapp;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -33,6 +34,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -48,7 +50,7 @@ import static baxxo.matteo.smsapp.R.id.container;
 
 public class MainActivity extends AppCompatActivity {
 
-    public static ViewPager mViewPager;
+    static ViewPager mViewPager;
     static EditText n;
     static EditText t;
     static DatePicker data;
@@ -56,16 +58,14 @@ public class MainActivity extends AppCompatActivity {
     static TextView conta;
     static TextView num;
     static TextView tes;
-    private Calendar calendar;
-    private TabLayout tabLayout;
-    private TabsPagerAdapter tabsPagerAdapter;
     static RelativeLayout relativeLayout;
-    public static FloatingActionButton fab;
-    public static SharedPreferences preferences;
+    static FloatingActionButton fab;
+    static SharedPreferences preferences;
     static Context context;
+    static Toolbar toolbar;
     static boolean[] check = {false, false};
-    int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
-    private int lunghezza;
+    static int c = 0;
+    private TabLayout tabLayout;
     private int anno = 1;
     private int mese = 1;
     private int giorno = 1;
@@ -74,14 +74,13 @@ public class MainActivity extends AppCompatActivity {
     private String text;//testo per snackbar con data e ora
     private String testo;//testo preso per il messaggio
     private String numero;
+    int pos;
+    int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
     FragmentContatti myFragment = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
     DatabaseManager db;
-    static int c = 0;
-    int pos;
-    static Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
+        TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
         mViewPager = (ViewPager) findViewById(container);
         mViewPager.setAdapter(tabsPagerAdapter);
@@ -136,25 +135,37 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPageSelected(int position) {
                 pos = position;
+
                 if (position == 0) {
-                    if (check[0] && check[1]) {
-                    } else {
-                        animOut();
+
+                    if (!check[0] && !check[1]) {
+                        if (fab.getVisibility() == View.VISIBLE) {
+                            animOut();
+                        }
                     }
                     fab.setImageResource(R.drawable.ic_dialog_email);
+
                 }
+
                 if (position == 1) {
+                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    View v = getCurrentFocus();
+                    if (v != null) {
+                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    }
 
                     toolbar.animate().setDuration(100).translationY(0);
 
                     AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
                     appBarLayout.setExpanded(true, true);
 
-                    fab.setImageResource(R.drawable.ic_search);
-                    if (fab.getVisibility() == View.INVISIBLE) {
-                        animIn();
-                    } else {
-                        fab.setVisibility(View.VISIBLE);
+                    if (!FragmentContatti.carica) {
+                        fab.setImageResource(R.drawable.ic_search);
+                        if (fab.getVisibility() == View.INVISIBLE) {
+                            animIn();
+                        } else {
+                            fab.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
@@ -179,16 +190,17 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (pos == 0) {
-                    //se android è >= M allora uso il time e date picker
+
+                    //se android è >= M allora uso getHour e getMinute
+                    //prendo l'ora e tempo
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        //prendo l'ora e tempo
                         ora = timepicker.getHour();
                         minuto = timepicker.getMinute();
                         anno = data.getYear();
                         mese = data.getMonth();
                         giorno = data.getDayOfMonth();
                     } else {
-                        //altrimenti due campi di testo
+
                         ora = timepicker.getCurrentHour();
                         minuto = timepicker.getCurrentMinute();
                         anno = data.getYear();
@@ -279,6 +291,7 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
+        int lunghezza;
         try {
             lunghezza = db.getMessagesCount();
         } catch (Exception e) {
@@ -287,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         lunghezza = lunghezza + 1;
 
 
-        calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, giorno);
         calendar.set(Calendar.HOUR_OF_DAY, ora);
         calendar.set(Calendar.MINUTE, minuto);

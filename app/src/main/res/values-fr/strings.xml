@@ -2,8 +2,8 @@
 <resources>
     <string name="app_name">SmsApp</string>
     <string name="action_settings">Réglages</string>
-    <string name="car">Personnages: 0/160</string>
-    <string name="car1">Personnages:</string>
+    <string name="car">Caractères: 0/160</string>
+    <string name="car1">Caractères:</string>
     <string name="car2">/160</string>
     <string name="carDb">Ajouter Messages</string>
     <string name="caricaDb">Ajouter tous les messages</string>
@@ -49,4 +49,5 @@
     <string name="menu_messaggi">Message en attente</string>
     <string name="scritta">Double-cliquez sur le texte sera en mesure d\'éliminer l\'envoi de messages programmés</string>
     <string name="ripremi">Appuyez à nouveau pour retirer</string>
+    <string name="placeholder">Ecriture nom</string>
 </resources>
