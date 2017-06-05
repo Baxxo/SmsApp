@@ -159,8 +159,9 @@ public class MainActivity extends AppCompatActivity {
                     AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
                     appBarLayout.setExpanded(true, true);
 
+                    fab.setImageResource(R.drawable.ic_search);
+
                     if (!FragmentContatti.carica) {
-                        fab.setImageResource(R.drawable.ic_search);
                         if (fab.getVisibility() == View.INVISIBLE) {
                             animIn();
                         } else {
