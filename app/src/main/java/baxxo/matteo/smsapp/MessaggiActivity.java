@@ -4,7 +4,6 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -41,10 +40,8 @@ public class MessaggiActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 String t = String.valueOf(lista.getItemAtPosition(i));
-                //Log.i("messaggi", t);
 
-                String s = t;
-                String[] parts = s.split(" - ");
+                String[] parts = t.split(" - ");
                 String part1 = parts[0];
                 part1.replace(" ", "");
 

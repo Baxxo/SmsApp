@@ -1,7 +1,7 @@
 package baxxo.matteo.smsapp;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.os.Vibrator;
 import android.support.design.widget.AppBarLayout;
@@ -25,7 +26,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -76,11 +76,13 @@ public class MainActivity extends AppCompatActivity {
     private String numero;
     int pos;
     int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
+    boolean isSearch = false;
     FragmentContatti myFragment = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
     DatabaseManager db;
+    Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,7 +167,11 @@ public class MainActivity extends AppCompatActivity {
                     AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
                     appBarLayout.setExpanded(true, true);
 
-                    fab.setImageResource(R.drawable.ic_search);
+                    if (myFragment.button.getVisibility() == View.VISIBLE) {
+                        fab.setImageResource(R.drawable.ic_search);
+                    } else {
+                        fab.setImageResource(R.drawable.ic_clear);
+                    }
 
                     if (!FragmentContatti.carica) {
                         if (fab.getVisibility() == View.INVISIBLE) {
@@ -215,7 +221,6 @@ public class MainActivity extends AppCompatActivity {
                         anno = data.getYear();
                         mese = data.getMonth();
                         giorno = data.getDayOfMonth();
-                        //Log.i("ora minuto", ora + "-" + minuto);
                     }
 
                     //prendo il testo del messaggio e il numero
@@ -264,14 +269,24 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (pos == 1) {
 
-                    if (myFragment.button.getVisibility() == View.VISIBLE) {
-                        myFragment.button.setVisibility(View.INVISIBLE);
-                        myFragment.nomeSearch.setVisibility(View.VISIBLE);
-                    } else {
-                        myFragment.button.setVisibility(View.VISIBLE);
-                        myFragment.nomeSearch.setVisibility(View.INVISIBLE);
-                        myFragment.nomeSearch.setText("");
-                    }
+                    ObjectAnimator.ofFloat(fab, "rotation", 0f, 360f).setDuration(500).start();
+                    handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (isSearch) {
+                                fab.setImageResource(R.drawable.ic_search);
+                                myFragment.button.setVisibility(View.VISIBLE);
+                                myFragment.nomeSearch.setVisibility(View.INVISIBLE);
+                                isSearch = false;
+                            } else {
+                                fab.setImageResource(R.drawable.ic_clear);
+                                myFragment.button.setVisibility(View.INVISIBLE);
+                                myFragment.nomeSearch.setVisibility(View.VISIBLE);
+                                isSearch = true;
+                            }
+                        }
+                    }, 400);
 
                 }
             }

@@ -45,15 +45,12 @@ public class DatabaseManager extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int i, int i1) {
-        // Drop older table if existed
         db.execSQL("DROP TABLE IF EXISTS " + NameTable);
 
-        // Create tables again
         onCreate(db);
 
     }
 
-    // Adding new contact
     public void aggiungiMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -65,12 +62,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(Data, messaggio.getData()); // Messaggio data/ora
         values.put(Inviato, messaggio.getInviato()); // Messaggio inviato
 
-        // Inserting Row
         db.insert(NameTable, null, values);
-        db.close(); // Closing database connection
+        db.close();
     }
 
-    // Getting single contact
     public Messaggio getMessaggio(int i) {
         SQLiteDatabase db = this.getReadableDatabase();
 
@@ -85,7 +80,6 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 cursor.getString(3),//testo
                 Long.parseLong(cursor.getString(4)),//data/ora
                 Boolean.parseBoolean(cursor.getString(5)));//inviato
-        // return contact
         return mess;
     }
 
@@ -96,27 +90,21 @@ public class DatabaseManager extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
-        int j = 0;
         if (cursor.moveToFirst()) {
             do {
                 result.add(cursor);
-                j++;
             } while (cursor.moveToNext());
         }
         return result;
     }
 
-    // Getting All Contacts
     public ArrayList<Messaggio> getAllMessages() {
         ArrayList<Messaggio> messaggioList = new ArrayList<Messaggio>();
-        // Select All Query
         String selectQuery = "SELECT  * FROM " + NameTable;
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 Messaggio mess = new Messaggio();
@@ -126,24 +114,20 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 mess.setTesto(cursor.getString(3));//testo
                 mess.setData(Long.parseLong(cursor.getString(4)));//data/ora
                 mess.setInviato(Boolean.parseBoolean(cursor.getString(5)));//inivato
-                // Adding contact to list
                 messaggioList.add(mess);
             } while (cursor.moveToNext());
         }
 
-        // return contact list
         return messaggioList;
     }
 
     public ArrayList<Messaggio> getNotSentMessages() {
         ArrayList<Messaggio> messaggioList = new ArrayList<Messaggio>();
-        // Select All Query
         String selectQuery = "SELECT  * FROM " + NameTable + " WHERE inviato = '0';";
 
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
 
-        // looping through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 Messaggio mess = new Messaggio();
@@ -153,16 +137,13 @@ public class DatabaseManager extends SQLiteOpenHelper {
                 mess.setTesto(cursor.getString(3));//testo
                 mess.setData(Long.parseLong(cursor.getString(4)));//data/ora
                 mess.setInviato(Boolean.parseBoolean(cursor.getString(5)));//inivato
-                // Adding contact to list
                 messaggioList.add(mess);
             } while (cursor.moveToNext());
         }
 
-        // return contact list
         return messaggioList;
     }
 
-    // Getting contacts Count
     public int getMessagesCount() {
 
         int l;
@@ -171,17 +152,11 @@ public class DatabaseManager extends SQLiteOpenHelper {
         Cursor cursor = db.rawQuery(countQuery, null);
         l = cursor.getCount();
         cursor.close();
-        //Log.i("Size db", String.valueOf(l));
-
-        // return count
         return l;
     }
 
-    // Updating single contact
     public int updateMessaggio(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
-
-        //Log.i("DB Messaggio", messaggio.getId() + " " + messaggio.getNome() + " " + messaggio.getNumero() + " " + messaggio.getTesto() + " " + messaggio.getData() + " " + messaggio.getInviato() + " ");
 
         ContentValues values = new ContentValues();
         values.put(Id, messaggio.getId()); // Messaggio Id
@@ -191,12 +166,10 @@ public class DatabaseManager extends SQLiteOpenHelper {
         values.put(Data, messaggio.getData()); // Messaggio Data
         values.put(Inviato, messaggio.getInviato()); // Messaggio Inviato(si o no);
 
-        // updating row
         return db.update(NameTable, values, Id + " = ?",
                 new String[]{String.valueOf(messaggio.getId())});
     }
 
-    // Deleting single contact
     public void deleteMessage(Messaggio messaggio) {
         SQLiteDatabase db = this.getWritableDatabase();
         db.delete(NameTable, Id + " = ?",
@@ -204,11 +177,9 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
 
-    // Deleting single contact
     public void deleteAllMessage() {
         SQLiteDatabase db = this.getWritableDatabase();
         db.execSQL("delete from " + NameTable);
-        //Log.i("Db", "Eliminato tutto");
         db.close();
     }
 

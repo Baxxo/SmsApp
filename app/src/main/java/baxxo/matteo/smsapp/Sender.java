@@ -17,7 +17,6 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.widget.Toast;
 
 import java.util.ArrayList;

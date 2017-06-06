@@ -1,22 +1,14 @@
 package baxxo.matteo.smsapp;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.provider.ContactsContract;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -443,6 +435,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         button.setText(getString(R.string.lista));
                         button.setVisibility(View.VISIBLE);
+                        MainActivity.fab.setImageResource(R.drawable.ic_search);
 
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
