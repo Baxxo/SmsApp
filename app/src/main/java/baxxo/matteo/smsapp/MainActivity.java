@@ -138,9 +138,15 @@ public class MainActivity extends AppCompatActivity {
 
                 if (position == 0) {
 
-                    if (!check[0] && !check[1]) {
+                    if (!check[0] || !check[1]) {
                         if (fab.getVisibility() == View.VISIBLE) {
                             animOut();
+                        }
+                        fab.setVisibility(View.INVISIBLE);
+                    }
+                    if (check[0] && check[1]) {
+                        if (fab.getVisibility() == View.INVISIBLE) {
+                            animIn();
                         }
                     }
                     fab.setImageResource(R.drawable.ic_dialog_email);
@@ -164,8 +170,10 @@ public class MainActivity extends AppCompatActivity {
                     if (!FragmentContatti.carica) {
                         if (fab.getVisibility() == View.INVISIBLE) {
                             animIn();
-                        } else {
-                            fab.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (fab.getVisibility() == View.VISIBLE) {
+                            animOut();
                         }
                     }
                 }
