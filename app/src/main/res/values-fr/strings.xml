@@ -50,4 +50,6 @@
     <string name="scritta">Double-cliquez sur le texte sera en mesure d\'éliminer l\'envoi de messages programmés</string>
     <string name="ripremi">Appuyez à nouveau pour retirer</string>
     <string name="placeholder">Ecriture nom</string>
+    <string name="caricata">Liste chargée</string>
+    <string name="verranno_inviati">Vous avez des messages qui seront envoyés!</string>
 </resources>

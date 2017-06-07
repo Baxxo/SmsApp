@@ -50,4 +50,6 @@
     <string name="scritta">Ein Doppelklick auf den Text können Sie geplante Nachrichten beseitigen Senden</string>
     <string name="ripremi">Drücken Sie wieder zu entfernen</string>
     <string name="placeholder">Schreiben name</string>
+    <string name="caricata">Liste geladen</string>
+    <string name="verranno_inviati">Sie haben einige Nachrichten, die gesendet werden!</string>
 </resources>

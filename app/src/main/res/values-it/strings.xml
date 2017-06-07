@@ -50,4 +50,6 @@
     <string name="scritta">Cliccando 2 volte sopra ad un messaggio potrai eliminare il suo invio programmato</string>
     <string name="ripremi">Ripremi per eliminare</string>
     <string name="placeholder">Scrivi nome</string>
+    <string name="caricata">Lista caricata</string>
+    <string name="verranno_inviati">Hai dei messaggi che verranno inviati!</string>
 </resources>

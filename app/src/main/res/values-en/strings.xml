@@ -50,4 +50,6 @@
     <string name="scritta">By double-clicking on the text you will be able to delete your scheduled message send</string>
     <string name="ripremi">Repeat to delete</string>
     <string name="placeholder">Write name</string>
+    <string name="caricata">List loaded</string>
+    <string name="verranno_inviati">You have some messages that will be sent!</string>
 </resources>

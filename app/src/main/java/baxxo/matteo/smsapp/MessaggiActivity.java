@@ -81,30 +81,34 @@ public class MessaggiActivity extends AppCompatActivity {
         if (messaggi.size() > 0) {
 
             for (Messaggio messaggio : messaggi) {
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(messaggio.getData());
+                String m = String.valueOf(c.get(Calendar.MINUTE));
+                if (m.length() == 1) {
+                    m = "0" + m;
+                }
+                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+                if (h.length() == 1) {
+                    h = "0" + h;
+                }
+                String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                if (g.length() == 1) {
+                    g = "0" + g;
+                }
+                String me = String.valueOf(c.get(Calendar.MONTH));
+                if (me.length() == 1) {
+                    me = "0" + me;
+                }
+                String a = String.valueOf(c.get(Calendar.YEAR));
+                if (a.length() == 1) {
+                    a = "0" + a;
+                }
                 if (nome.equals(messaggio.getNome())) {
-                    Calendar c = Calendar.getInstance();
-                    c.setTimeInMillis(messaggio.getData());
-                    String m = String.valueOf(c.get(Calendar.MINUTE));
-                    if (m.length() == 1) {
-                        m = "0" + m;
-                    }
-                    String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
-                    if (h.length() == 1) {
-                        h = "0" + h;
-                    }
-                    String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-                    if (g.length() == 1) {
-                        g = "0" + g;
-                    }
-                    String me = String.valueOf(c.get(Calendar.MONTH));
-                    if (me.length() == 1) {
-                        me = "0" + me;
-                    }
-                    String a = String.valueOf(c.get(Calendar.YEAR));
-                    if (a.length() == 1) {
-                        a = "0" + a;
-                    }
                     lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                }
+                if(nome.equals("tutti_i_messaggi_da_inviare_9821")){
+                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+
                 }
             }
             lista.setEnabled(true);

@@ -1,14 +1,19 @@
 package baxxo.matteo.smsapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -118,11 +123,16 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             }
         });
 
-        button.setVisibility(View.INVISIBLE);
-        progressBar.setVisibility(View.VISIBLE);
-        contatti.clear();
+        if (getContext().checkCallingOrSelfPermission(permission) == -1) {
+            while (getContext().checkCallingOrSelfPermission(permission) == -1) {
+                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
+                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
 
-        if (getContext().checkCallingOrSelfPermission(permission) == 0) {
+                    } else {
+                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, 1);
+                    }
+                }
+            }
             new Thread(new Runnable() {
                 @Override
                 public void run() {
@@ -131,32 +141,31 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     } catch (Exception e) {
                         getActivity().runOnUiThread(new Runnable() {
                             public void run() {
+                                button.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.INVISIBLE);
                                 Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
                             }
                         });
                     }
                 }
             }).start();
-        }
-
-        if (getContext().checkCallingOrSelfPermission(permission) == -1) {
-            Toast.makeText(getContext(), getString(R.string.permessi1), Toast.LENGTH_LONG).show();
-            do {
-                Toast.makeText(getContext(), getString(R.string.permessi1), Toast.LENGTH_SHORT).show();
-            } while (getContext().checkCallingOrSelfPermission(permission) == -1);
-            if (getContext().checkCallingOrSelfPermission(permission) == 0) {
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            getContact();
-                        } catch (Exception e) {
-                            Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
-                        }
+        } else {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
                         getContact();
+                    } catch (Exception e) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            public void run() {
+                                button.setVisibility(View.VISIBLE);
+                                progressBar.setVisibility(View.INVISIBLE);
+                                Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
+                            }
+                        });
                     }
-                }).start();
-            }
+                }
+            }).start();
         }
 
         return rootView;
@@ -168,6 +177,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         getActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                button.setVisibility(View.INVISIBLE);
+                progressBar.setVisibility(View.VISIBLE);
                 MainActivity.animOut();
             }
         });
@@ -436,11 +447,14 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         button.setText(getString(R.string.lista));
                         button.setVisibility(View.VISIBLE);
                         MainActivity.fab.setImageResource(R.drawable.ic_search);
-
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                MainActivity.animIn();
+                                if (MainActivity.pos == 1) {
+                                    MainActivity.animIn();
+                                }
+                                Toast.makeText(getContext(), getString(R.string.caricata), Toast.LENGTH_SHORT).show();
+
                             }
                         });
                         carica = false;

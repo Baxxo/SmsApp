@@ -1,6 +1,8 @@
 package baxxo.matteo.smsapp;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -8,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
@@ -26,14 +29,17 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.view.animation.TranslateAnimation;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -45,6 +51,8 @@ import android.widget.TimePicker;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import static baxxo.matteo.smsapp.R.id.action0;
+import static baxxo.matteo.smsapp.R.id.appbar;
 import static baxxo.matteo.smsapp.R.id.container;
 
 
@@ -65,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     static Toolbar toolbar;
     static boolean[] check = {false, false};
     static int c = 0;
+    static int pos;
     private TabLayout tabLayout;
     private int anno = 1;
     private int mese = 1;
@@ -74,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
     private String text;//testo per snackbar con data e ora
     private String testo;//testo preso per il messaggio
     private String numero;
-    int pos;
-    int ASK_MULTIPLE_PERMISSION_REQUEST_CODE = 1;
     boolean isSearch = false;
     FragmentContatti myFragment = null;
     String nomeNumero;
@@ -83,12 +90,14 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contact;
     DatabaseManager db;
     Handler handler;
+    Button btnMessaggi;
+    AppBarLayout appBarLayout;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
             requestPermissions(new String[]{
                     Manifest.permission.READ_CONTACTS,
                     Manifest.permission.SEND_SMS,
@@ -97,13 +106,16 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.RECEIVE_BOOT_COMPLETED,
                     Manifest.permission.READ_CALENDAR,
                     Manifest.permission.INSTALL_SHORTCUT
-            }, ASK_MULTIPLE_PERMISSION_REQUEST_CODE);
+            }, 1);
         }
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
+        appBarLayout.setExpanded(true, true);
 
         context = getApplicationContext();
 
@@ -164,8 +176,6 @@ public class MainActivity extends AppCompatActivity {
 
                     toolbar.animate().setDuration(100).translationY(0);
 
-                    AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-                    appBarLayout.setExpanded(true, true);
 
                     if (myFragment.button.getVisibility() == View.VISIBLE) {
                         fab.setImageResource(R.drawable.ic_search);
@@ -291,6 +301,36 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+        });
+
+        btnMessaggi = (Button) findViewById(R.id.buttonMessaggi);
+        if (db.getNotSentMessages().size() <= 0) {
+            btnMessaggi.setVisibility(View.GONE);
+        }
+        btnMessaggi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, MessaggiActivity.class);
+                intent.putExtra("Nome", "tutti_i_messaggi_da_inviare_9821");
+                startActivity(intent);
+            }
+        });
+        btnMessaggi.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                btnMessaggi.animate()
+                        .translationY(-view.getHeight())
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                btnMessaggi.setVisibility(View.GONE);
+                            }
+                        });
+                return true;
+            }
         });
 
         Intent intent = new Intent(MainActivity.this, BootReceiver.class);
