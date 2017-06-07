@@ -52,4 +52,5 @@
     <string name="placeholder">Ecriture nom</string>
     <string name="caricata">Liste chargée</string>
     <string name="verranno_inviati">Vous avez des messages qui seront envoyés!</string>
+    <string name="title_activity_messaggi">Sms</string>
 </resources>

@@ -125,48 +125,26 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         if (getContext().checkCallingOrSelfPermission(permission) == -1) {
             while (getContext().checkCallingOrSelfPermission(permission) == -1) {
-                if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CONTACTS) != PackageManager.PERMISSION_GRANTED) {
-                    if (ActivityCompat.shouldShowRequestPermissionRationale(getActivity(), Manifest.permission.READ_CONTACTS)) {
+                Log.i("permessi", "aspetto");
+            }
+        }
 
-                    } else {
-                        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CONTACTS}, 1);
-                    }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    getContact();
+                } catch (Exception e) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        public void run() {
+                            button.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.INVISIBLE);
+                            Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
+                        }
+                    });
                 }
             }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        getContact();
-                    } catch (Exception e) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                button.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }
-            }).start();
-        } else {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    try {
-                        getContact();
-                    } catch (Exception e) {
-                        getActivity().runOnUiThread(new Runnable() {
-                            public void run() {
-                                button.setVisibility(View.VISIBLE);
-                                progressBar.setVisibility(View.INVISIBLE);
-                                Toast.makeText(getContext(), getString(R.string.errore_caricamento), Toast.LENGTH_LONG).show();
-                            }
-                        });
-                    }
-                }
-            }).start();
-        }
+        }).start();
 
         return rootView;
     }
@@ -446,11 +424,11 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         progressBar.setVisibility(View.INVISIBLE);
                         button.setText(getString(R.string.lista));
                         button.setVisibility(View.VISIBLE);
-                        MainActivity.fab.setImageResource(R.drawable.ic_search);
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 if (MainActivity.pos == 1) {
+                                    MainActivity.fab.setImageResource(R.drawable.ic_search);
                                     MainActivity.animIn();
                                 }
                                 Toast.makeText(getContext(), getString(R.string.caricata), Toast.LENGTH_SHORT).show();

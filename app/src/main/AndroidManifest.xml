@@ -51,15 +51,22 @@
             android:name=".DisplayDatabase"
             android:screenOrientation="portrait" />
         <activity android:name=".AndroidDatabaseManager" />
+
         <activity
             android:name=".ContactDetail"
             android:label="@string/title_activity_contact_detail"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings" />
-        <activity android:name=".MessaggiActivity"></activity>
+            android:label="@string/title_activity_settings"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".MessaggiActivity"
+            android:screenOrientation="portrait" />
+
     </application>
 
 </manifest>

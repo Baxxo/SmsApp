@@ -168,29 +168,33 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 if (position == 1) {
+
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     View v = getCurrentFocus();
-                    if (v != null) {
-                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-                    }
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
 
                     toolbar.animate().setDuration(100).translationY(0);
+                    appBarLayout.setExpanded(true, true);
 
 
-                    if (myFragment.button.getVisibility() == View.VISIBLE) {
-                        fab.setImageResource(R.drawable.ic_search);
-                    } else {
-                        fab.setImageResource(R.drawable.ic_clear);
-                    }
-
-                    if (!FragmentContatti.carica) {
-                        if (fab.getVisibility() == View.INVISIBLE) {
-                            animIn();
+                    try {
+                        if (myFragment.button.getVisibility() == View.VISIBLE) {
+                            fab.setImageResource(R.drawable.ic_search);
+                        } else {
+                            fab.setImageResource(R.drawable.ic_clear);
                         }
-                    } else {
-                        if (fab.getVisibility() == View.VISIBLE) {
-                            animOut();
+
+                        if (!FragmentContatti.carica) {
+                            if (fab.getVisibility() == View.INVISIBLE) {
+                                animIn();
+                            }
+                        } else {
+                            if (fab.getVisibility() == View.VISIBLE) {
+                                animOut();
+                            }
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -338,6 +342,7 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent);
     }
 
+
     //fine onCreate-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     //funzione per impostare messaggio----------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -391,6 +396,7 @@ public class MainActivity extends AppCompatActivity {
         m.setInviato(false);
 
         db.aggiungiMessaggio(m);
+        btnMessaggi.setVisibility(View.VISIBLE);
 
     }
 

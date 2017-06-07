@@ -51,8 +51,10 @@
             android:id="@+id/buttonMessaggi"
             android:layout_width="match_parent"
             android:layout_height="45dp"
+            app:layout_scrollFlags="enterAlways|scroll"
             android:background="@drawable/button_messaggi"
             android:paddingLeft="10dp"
+            android:textColor="#FFF"
             android:text="@string/verranno_inviati"
             android:textAlignment="center"
             android:textSize="12dp" />
