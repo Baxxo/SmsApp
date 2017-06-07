@@ -163,6 +163,9 @@ public class MainActivity extends AppCompatActivity {
                             animIn();
                         }
                     }
+
+                    animFade();
+
                     fab.setImageResource(R.drawable.ic_dialog_email);
 
                 }
@@ -176,6 +179,7 @@ public class MainActivity extends AppCompatActivity {
                     toolbar.animate().setDuration(100).translationY(0);
                     appBarLayout.setExpanded(true, true);
 
+                    animFade();
 
                     try {
                         if (myFragment.button.getVisibility() == View.VISIBLE) {
@@ -445,6 +449,11 @@ public class MainActivity extends AppCompatActivity {
         Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
         fab.setAnimation(animFadeOut);
         fab.setVisibility(View.INVISIBLE);
+    }
+
+    static void animFade(){
+        Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+        fab.setAnimation(animIn);
     }
 
     public static void animIn() {
