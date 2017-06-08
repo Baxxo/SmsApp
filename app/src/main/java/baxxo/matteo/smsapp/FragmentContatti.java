@@ -310,10 +310,45 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         }
 
                         //lista di elementi HashMap
-                        List<HashMap<String, String>> listItems = new ArrayList<>();
+                        final List<HashMap<String, String>> listItems = new ArrayList<>();
 
                         //Adapter per la listView
-                        adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int[]{R.id.textView12, R.id.textView13});
+                        adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int[]{R.id.textView12, R.id.textView13}) {
+                            @Override
+                            public View getView(final int position, View convertView, ViewGroup parent) {
+                                View v = super.getView(position, convertView, parent);
+
+                                Button detail = (Button) v.findViewById(R.id.buttonDettagli);
+                                detail.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View view) {
+                                        Object o = listView.getItemAtPosition(position);
+                                        String res = o.toString();
+                                        res = res.replace("{", "");
+                                        res = res.replace("}", "");
+                                        res = res.replace("|", "");
+
+                                        String parts[] = res.split(",");
+
+                                        String dir1 = parts[1];
+                                        String dir2 = parts[0];
+
+                                        parts = dir1.split("=");
+
+                                        nome = parts[1];
+
+                                        parts = dir2.split("=");
+                                        numero = parts[1];
+
+                                        Intent intent = new Intent(rootView.getContext(), ContactDetail.class);
+                                        intent.putExtra("nome", nome);
+                                        intent.putExtra("numero", numero);
+                                        startActivity(intent);
+                                    }
+                                });
+                                return v;
+                            }
+                        };
 
                         //Iterator accede alla mappa e accoppia la mappa con l' adapter
                         for (Object o : map.entrySet()) {
@@ -335,6 +370,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                final int p = position;
                                 Object o = listView.getItemAtPosition(position);
                                 String res = o.toString();
                                 res = res.replace("{", "");

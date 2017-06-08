@@ -1,71 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:background="@drawable/backgroundfrag"
-    android:layout_height="wrap_content">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/button"
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="@drawable/backgroundfrag">
 
-        android:layout_alignEnd="@+id/listView"
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/progressBar"
+            android:layout_alignEnd="@+id/listView"
 
-        android:layout_marginEnd="16dp"
-        android:layout_marginTop="23dp"
-        android:background="@drawable/buttonshape"
-        android:shadowDx="0"
-        android:shadowDy="0"
-        android:shadowRadius="5"
-        android:text="@string/lista"
-        android:textColor="#FFF"
-        android:textSize="15sp" />
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/progressBar"
 
-    <EditText
-        android:id="@+id/nomeSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/listView"
-        android:layout_alignEnd="@+id/button"
-        android:layout_alignStart="@+id/button"
-        android:backgroundTint="@android:color/white"
-        android:ems="10"
-        android:hint="@string/placeholder"
-        android:inputType="textPersonName"
-        android:selectAllOnFocus="true"
-        android:textAlignment="center"
-        android:textColor="#ffffff" />
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="23dp"
+            android:background="@drawable/buttonshape"
+            android:shadowDx="0"
+            android:shadowDy="0"
+            android:shadowRadius="5"
+            android:text="@string/lista"
+            android:textColor="#FFF"
+            android:textSize="15sp" />
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/button"
-        android:layout_marginTop="20dp"
-        android:choiceMode="singleChoice"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="15dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="15dp" />
+        <EditText
+            android:id="@+id/nomeSearch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/listView"
+            android:layout_alignEnd="@+id/button"
+            android:layout_alignStart="@+id/button"
+            android:backgroundTint="@android:color/white"
+            android:ems="10"
+            android:hint="@string/placeholder"
+            android:inputType="textPersonName"
+            android:selectAllOnFocus="true"
+            android:textAlignment="center"
+            android:textColor="#ffffff" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/listView"
-        android:layout_alignLeft="@+id/listView"
-        android:layout_alignRight="@+id/listView"
-        android:layout_alignStart="@+id/listView"
-        android:layout_alignTop="@+id/nomeSearch"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginStart="16dp"
-        android:indeterminate="false" />
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/button"
+            android:layout_marginEnd="15dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:choiceMode="singleChoice" />
 
-</RelativeLayout>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/listView"
+            android:layout_alignLeft="@+id/listView"
+            android:layout_alignRight="@+id/listView"
+            android:layout_alignStart="@+id/listView"
+            android:layout_alignTop="@+id/nomeSearch"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:indeterminate="false" />
+
+    </RelativeLayout>
+</FrameLayout>

@@ -446,8 +446,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     static void animFade(){
-        Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
-        fab.setAnimation(animIn);
+        if(fab.getVisibility()==View.VISIBLE){
+            Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
+            fab.setAnimation(animIn);
+        }
     }
 
     public static void animIn() {
