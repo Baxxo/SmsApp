@@ -56,7 +56,7 @@ public class Sender extends IntentService {
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
 
-        testo = testo + "\n\n(" + getString(R.string.def_text) + ")";
+        testo = testo + "\n\n(" + getString(R.string.def_text) + ")\n" + getString(R.string.def_text_2);
 
         database = new DatabaseManager(this);
         mess = database.getNotSentMessages();

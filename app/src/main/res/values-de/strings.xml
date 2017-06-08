@@ -53,4 +53,6 @@
     <string name="caricata">Liste geladen</string>
     <string name="verranno_inviati">Sie haben einige Nachrichten, die gesendet werden!</string>
     <string name="title_activity_messaggi">Sms</string>
+    <string name="def_text_2">http://smsapp.altervista.org/</string>
+    <string name="no_messaggi_detail">Noch keine Nachrichten eingefügt</string>
 </resources>

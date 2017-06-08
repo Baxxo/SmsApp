@@ -8,6 +8,7 @@
     <string name="carDb">Load Messages</string>
     <string name="caricaDb">Load all messages</string>
     <string name="def_text">Message sent using SmsApp!</string>
+    <string name="def_text_2">http://smsapp.altervista.org/</string>
     <string name="eliminaDb">Delete all Messages</string>
     <string name="exit">Are you sure you want to exit?</string>
     <string name="inviato">Sent!</string>
@@ -38,6 +39,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_messaggi">Sms</string>
     <string name="no_messaggi">No messages</string>
+    <string name="no_messaggi_detail">No messages yet inserted</string>
     <string name="numero_caricato">Number loaded</string>
     <string name="testo_numero">Text and number loaded</string>
     <string name="errore_caricamento">Error while loading contacts</string>
