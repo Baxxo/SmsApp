@@ -1,8 +1,5 @@
 package baxxo.matteo.smsapp;
 
-import android.app.Activity;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.Intent;
@@ -16,7 +13,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -70,7 +66,7 @@ public class ContactDetail extends AppCompatActivity {
 
         if (messNumero.size() == 0) {
 
-            messNumero.add(getString(R.string.no_messaggi));
+            messNumero.add(getString(R.string.no_messaggi_detail));
             lv.setEnabled(false);
 
         }

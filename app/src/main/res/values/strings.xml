@@ -9,7 +9,7 @@
     <string name="caricaDb">Load all messages</string>
     <string name="def_text">Message sent using SmsApp!</string>
     <string name="def_text_2">http://smsapp.altervista.org/</string>
-    <string name="eliminaDb">Delete all Messages</string>
+    <string name="eliminaDb">Error while loading contacts</string>
     <string name="exit">Are you sure you want to exit?</string>
     <string name="inviato">Sent!</string>
     <string name="listDetail">List messages</string>
@@ -19,7 +19,7 @@
     <string name="non_inviato">Not sent!</string>
     <string name="numero">Number:</string>
     <string name="nuoviDb">New messages</string>
-    <string name="plane">not sent! Airplane mode active</string>
+    <string name="plane">Not sent! Airplane mode active</string>
     <string name="plane_sub">Ariplane mode active!</string>
     <string name="pref_header_notifications">Notifications</string>
     <string name="pref_ringtone_silent">Silent</string>
@@ -28,7 +28,7 @@
     <string name="pref_title_vibrate">Vibration</string>
     <string name="si">Yes</string>
     <string name="sms_a">Sms to:</string>
-    <string name="snak1">The message will be send at</string>
+    <string name="snak1">The message will be sent at</string>
     <string name="snak2">of</string>
     <string name="testo">Text</string>
     <string name="title1">SMS</string>
