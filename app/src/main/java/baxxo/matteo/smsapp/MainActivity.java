@@ -285,24 +285,29 @@ public class MainActivity extends AppCompatActivity {
                 }
                 if (pos == 0) {
 
-                    ObjectAnimator.ofFloat(fab, "rotation", 0f, 360f).setDuration(500).start();
-                    handler = new Handler();
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (isSearch) {
-                                fab.setImageResource(R.drawable.ic_search);
-                                myFragment.button.setVisibility(View.VISIBLE);
-                                myFragment.nomeSearch.setVisibility(View.INVISIBLE);
-                                isSearch = false;
-                            } else {
-                                fab.setImageResource(R.drawable.ic_clear);
-                                myFragment.button.setVisibility(View.INVISIBLE);
-                                myFragment.nomeSearch.setVisibility(View.VISIBLE);
-                                isSearch = true;
+                    try {
+                        ObjectAnimator.ofFloat(fab, "rotation", 0f, 360f).setDuration(500).start();
+                        handler = new Handler();
+                        handler.postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (isSearch) {
+                                    fab.setImageResource(R.drawable.ic_search);
+                                    myFragment.nomeSearch.setText("");
+                                    myFragment.button.setVisibility(View.VISIBLE);
+                                    myFragment.nomeSearch.setVisibility(View.INVISIBLE);
+                                    isSearch = false;
+                                } else {
+                                    fab.setImageResource(R.drawable.ic_clear);
+                                    myFragment.button.setVisibility(View.INVISIBLE);
+                                    myFragment.nomeSearch.setVisibility(View.VISIBLE);
+                                    isSearch = true;
+                                }
                             }
-                        }
-                    }, 400);
+                        }, 400);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
             }
