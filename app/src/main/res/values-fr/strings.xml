@@ -27,7 +27,7 @@
     <string name="permessi1">Accepter les autorisations</string>
     <string name="permessi2">Autorisations en attente</string>
     <string name="plane">Non envoyé! Mode Avion actif</string>
-    <string name="plane_sub">Mode Avion actif!</string>
+    <string name="plane_sub">Mode avion actif!</string>
     <string name="pref_header_notifications">Notifications</string>
     <string name="pref_ringtone_silent">Silencieux</string>
     <string name="pref_title_new_message_notifications">Sonnerie</string>

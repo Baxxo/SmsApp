@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -82,6 +83,47 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.listView);
         listView.setTextFilterEnabled(true);
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            private int mLastFirstVisibleItem;
+            private boolean dis = true;
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (mLastFirstVisibleItem < firstVisibleItem) {
+                    //down
+                    if (dis) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MainActivity.animOut();
+                                dis = false;
+                            }
+                        });
+
+                    }
+                }
+                if (mLastFirstVisibleItem > firstVisibleItem) {
+                    //up
+                    if (!dis) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                MainActivity.animIn();
+                                dis=true;
+                            }
+                        });
+
+                    }
+                }
+                mLastFirstVisibleItem = firstVisibleItem;
+
+            }
+        });
 
         nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
         nomeSearch.setVisibility(View.INVISIBLE);

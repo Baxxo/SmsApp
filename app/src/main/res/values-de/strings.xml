@@ -15,7 +15,7 @@
     <string name="head_settings_notification">Ring und vibrieren</string>
     <string name="inviato">Posted!</string>
     <string name="listDetail">Nachrichtenliste</string>
-    <string name="lista">Reload Liste</string>
+    <string name="lista">Aufladen Liste</string>
     <string name="local_service_started">Running</string>
     <string name="no">Stornieren</string>
     <string name="no_contatti">Es gibt Kontakte</string>
@@ -26,8 +26,8 @@
     <string name="nuoviDb">Neue beiträge</string>
     <string name="permessi1">Akzeptieren berechtigungen</string>
     <string name="permessi2">Erlaubt aussehen</string>
-    <string name="plane">Failed! Flugmodus</string>
-    <string name="plane_sub">Flugzeug-Modus aktiv!</string>
+    <string name="plane">Nicht gesendet! Flugzeugmodus aktiv</string>
+    <string name="plane_sub">Flugzeugmodus aktiv!</string>
     <string name="pref_header_notifications">Benachrichtigungen</string>
     <string name="pref_ringtone_silent">Still</string>
     <string name="pref_title_new_message_notifications">Klingelton</string>
@@ -41,7 +41,7 @@
     <string name="testo">Text</string>
     <string name="testo_numero">Text und Nummer loaded</string>
     <string name="title1">SMS</string>
-    <string name="title2">Impressum</string>
+    <string name="title2">Kontakte</string>
     <string name="title_activity_contact_detail">Anzahl</string>
     <string name="title_activity_database">Database</string>
     <string name="title_activity_service">Service</string>

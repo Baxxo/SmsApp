@@ -40,7 +40,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:layout_marginBottom="10dp"
         android:layout_toEndOf="@+id/textView12"
         android:background="@drawable/menu_contact"
         android:focusable="false" />

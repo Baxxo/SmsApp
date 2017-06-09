@@ -20,7 +20,7 @@
     <string name="sms_a">Sms a: </string>
     <string name="snak1">Il messaggio verrà inviato alle</string>
     <string name="snak2">del</string>
-    <string name="car1">Caratteri: </string>
+    <string name="car1">"Caratteri: "</string>
     <string name="car2">/160</string>
     <string name="app_name">SmsApp</string>
     <string name="title1">SMS</string>
@@ -54,5 +54,5 @@
     <string name="verranno_inviati">Hai dei messaggi che verranno inviati!</string>
     <string name="title_activity_messaggi">Sms</string>
     <string name="def_text_2">http://smsapp.altervista.org/</string>
-    <string name="no_messaggi_detail">Nessun messaggio ancora invaito</string>
+    <string name="no_messaggi_detail">Nessun messaggio ancora inviato</string>
 </resources>

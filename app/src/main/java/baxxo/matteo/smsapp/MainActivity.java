@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -43,6 +44,7 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView conta;
     static TextView num;
     static TextView tes;
+    static TextView nMessaggi;
     static RelativeLayout relativeLayout;
     static FloatingActionButton fab;
     static SharedPreferences preferences;
@@ -68,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
     static boolean[] check = {false, false};
     static int c = 0;
     static int pos;
+    static int nm = 1;
     private TabLayout tabLayout;
     private int anno = 1;
     private int mese = 1;
@@ -78,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
     private String testo;//testo preso per il messaggio
     private String numero;
     boolean isSearch = false;
-    FragmentContatti myFragment = null;
+    FragmentContatti myFragment = new FragmentContatti();
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
@@ -415,8 +419,31 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (id == R.id.data) {
-            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-            startActivity(intent);
+            d = new Dialog(this);
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setCancelable(true);
+            d.setContentView(R.layout.dialog);
+            d.show();
+
+            final EditText nome = (EditText) d.findViewById(R.id.editNome);
+            final EditText pass = (EditText) d.findViewById(R.id.editPass);
+
+            Button conf = (Button) d.findViewById(R.id.buttonConferma);
+            conf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String n = String.valueOf(nome.getText());
+                    String p = String.valueOf(pass.getText());
+                    if (n.equals("Matteo")) {
+                        if (p.equals("fufi")) {
+                            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             return true;
         }
         if (id == R.id.settings) {
@@ -445,8 +472,8 @@ public class MainActivity extends AppCompatActivity {
         fab.setVisibility(View.INVISIBLE);
     }
 
-    static void animFade(){
-        if(fab.getVisibility()==View.VISIBLE){
+    static void animFade() {
+        if (fab.getVisibility() == View.VISIBLE) {
             Animation animIn = AnimationUtils.loadAnimation(context, android.R.anim.fade_in);
             fab.setAnimation(animIn);
         }
@@ -460,60 +487,102 @@ public class MainActivity extends AppCompatActivity {
 
     static final TextWatcher contaNumeri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            contaCar(s);
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            if (count == 0) {
-                check[1] = false;
-
-                if (fab.getVisibility() == View.VISIBLE) {
-                    animOut();
-                }
-
-            } else {
-                if (!check[1]) {
-                    check[1] = true;
-
-                    if (check[0]) {
-                        animIn();
-                    }
-                }
-            }
+            contaCar(s);
         }
 
         public void afterTextChanged(Editable s) {
+            contaNum(s.length());
         }
     };
 
     static final TextWatcher contaCaratteri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            contaCar(s);
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            c = s.length();
-            String t = context.getString(R.string.car1) + c + context.getString(R.string.car2);
-            conta.setText(t);
-            if (c == 0) {
-                check[0] = false;
+            contaCar(s);
+        }
 
-                if (fab.getVisibility() == View.VISIBLE) {
-                    animOut();
+        public void afterTextChanged(Editable s) {
+            contaCar(s);
+        }
+    };
+
+    static void contaNum(int count) {
+        if (count == 0) {
+            check[1] = false;
+
+            if (fab.getVisibility() == View.VISIBLE) {
+                animOut();
+            }
+
+        } else {
+            if (!check[1]) {
+                check[1] = true;
+
+                if (check[0]) {
+                    animIn();
                 }
+            }
+        }
+    }
 
-            } else {
-                if (!check[0]) {
-                    check[0] = true;
 
-                    if (check[1]) {
-                        animIn();
-                    }
+    static void contaCar(CharSequence s) {
+        c = s.length();
+
+        if (c == 0) {
+            check[0] = false;
+
+            if (fab.getVisibility() == View.VISIBLE) {
+                animOut();
+            }
+
+        } else {
+            if (!check[0]) {
+                check[0] = true;
+
+                if (check[1]) {
+                    animIn();
                 }
             }
         }
 
-        public void afterTextChanged(Editable s) {
+
+        if (c == 0) {
+            nm = 0;
+        } else {
+            if (c > 160) {
+                if (c > 160) {
+                    c = c - (160 * nm);
+                }
+                while (c > 160) {
+                    c = c - 160;
+                    if (c > 160) {
+                        nm++;
+                    }
+                }
+                nm++;
+
+            } else {
+                nm = c / 160;
+                if (nm <= 0) {
+                    nm = 1;
+                }
+            }
+
         }
-    };
+
+
+        conta.setText(context.getString(R.string.car1) + c + context.getString(R.string.car2));
+        nMessaggi.setText("N. sms: " + nm);
+        nm = 1;
+    }
 
     //swipe----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void setupTabIcons() {
@@ -530,7 +599,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            switch (position){
+            switch (position) {
                 case 0:
                     return myFragment = new FragmentContatti();
                 case 1:
@@ -585,8 +654,6 @@ public class MainActivity extends AppCompatActivity {
     //fragment----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public static class PlaceholderFragment extends Fragment {
 
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
         public PlaceholderFragment() {
 
         }
@@ -603,6 +670,7 @@ public class MainActivity extends AppCompatActivity {
             data = (DatePicker) rootView.findViewById(R.id.datePicker);
             timepicker = (TimePicker) rootView.findViewById(R.id.timePicker);
             relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
+            nMessaggi = (TextView) rootView.findViewById(R.id.textView4);
 
             t.addTextChangedListener(contaCaratteri);
             n.addTextChangedListener(contaNumeri);

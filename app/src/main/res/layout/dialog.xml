@@ -16,13 +16,13 @@
         android:id="@+id/nome"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
-        android:layout_below="@+id/textView10"
-        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
         android:text="Nome"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:layout_below="@+id/textView10"
+        android:layout_alignStart="@+id/view" />
 
     <View
         android:id="@+id/view"
@@ -39,11 +39,11 @@
         android:id="@+id/numero"
         android:layout_width="wrap_content"
         android:layout_height="40dp"
-        android:layout_below="@+id/view"
-        android:layout_centerHorizontal="true"
+        android:layout_alignStart="@+id/nome"
+        android:layout_alignTop="@+id/view"
         android:layout_gravity="center_horizontal"
         android:gravity="center"
-        android:text="Numero"
+        android:text="Password"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#000" />
 
@@ -54,5 +54,37 @@
         android:layout_below="@+id/numero"
         android:layout_centerHorizontal="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <EditText
+        android:id="@+id/editPass"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/view"
+        android:layout_below="@+id/view"
+        android:layout_toEndOf="@+id/numero"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:textAlignment="center" />
+
+    <EditText
+        android:id="@+id/editNome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/editPass"
+        android:layout_alignEnd="@+id/view"
+        android:layout_toEndOf="@+id/nome"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:textAlignment="center" />
+
+    <Button
+        android:id="@+id/buttonConferma"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editPass"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="14dp"
+        android:text="Conferma"
+        android:textAlignment="center" />
 
 </RelativeLayout>
