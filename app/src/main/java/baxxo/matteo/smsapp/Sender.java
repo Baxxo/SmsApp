@@ -1,5 +1,7 @@
 package baxxo.matteo.smsapp;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -17,6 +19,7 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
+import android.view.View;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -106,7 +109,7 @@ public class Sender extends IntentService {
                 } catch (Exception e) {
 
                     Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
-                    // Log.i("Sender", "Errore messagio non diventa true " + i);
+
                 }
 
             } catch (Exception e) {
@@ -116,13 +119,11 @@ public class Sender extends IntentService {
 
         }
 
-        //-----------------------------------------------------------------------------------------------------------------
-
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         Boolean vibrate = preferences.getBoolean("Vibrate", false);
-        //Log.i("VibratePref", String.valueOf(vibrate));
+
         String s = preferences.getString("Sound", "");
-        //Log.i("SoundPref", s);
+
 
         Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.unnamed);
 
@@ -174,21 +175,34 @@ public class Sender extends IntentService {
 
         Notification notification = builder.build();
         NotificationManagerCompat.from(this).notify(Integer.parseInt(id), notification);
-        //-----------------------------------------------------------------------------------------------------------------
-
 
         if (!profilo.equals("Silent")) {
             if (!vibrate == false) {
-                //Log.i("Vibrate1Pref", "true");
                 Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 long[] pattern = new long[8];
                 pattern[1] = 700;
                 pattern[2] = 230;
                 pattern[3] = 700;
                 vibrator.vibrate(pattern, -1);
-            } else {
-                //Log.i("Vibrate1Pref", "false");
             }
+        }
+
+        try {
+            if (database.getNotSentMessages().size() == 0) {
+                MainActivity.btnMessaggi.animate()
+                        .translationY(-(MainActivity.btnMessaggi.getHeight()))
+                        .alpha(0.0f)
+                        .setDuration(300)
+                        .setListener(new AnimatorListenerAdapter() {
+                            @Override
+                            public void onAnimationEnd(Animator animation) {
+                                super.onAnimationEnd(animation);
+                                MainActivity.btnMessaggi.setVisibility(View.GONE);
+                            }
+                        });
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         Receiver.completeWakefulIntent(intent);

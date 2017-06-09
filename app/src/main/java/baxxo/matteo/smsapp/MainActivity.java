@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     static SharedPreferences preferences;
     static Context context;
     static Toolbar toolbar;
+    static Button btnMessaggi;
     static boolean[] check = {false, false};
     static int c = 0;
     static int pos;
@@ -88,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
     ArrayList<Contact> contact;
     DatabaseManager db;
     Handler handler;
-    Button btnMessaggi;
     AppBarLayout appBarLayout;
 
 
@@ -414,8 +414,31 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
-            startActivity(intent);
+            d = new Dialog(this);
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setCancelable(true);
+            d.setContentView(R.layout.dialog);
+            d.show();
+
+            final EditText nome = (EditText) d.findViewById(R.id.editNome);
+            final EditText pass = (EditText) d.findViewById(R.id.editPass);
+
+            Button conf = (Button) d.findViewById(R.id.buttonConferma);
+            conf.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String n = String.valueOf(nome.getText());
+                    String p = String.valueOf(pass.getText());
+                    if (n.equals("Matteo")) {
+                        if (p.equals("fufi")) {
+                            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
+                            startActivity(intent);
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
             return true;
         }
         if (id == R.id.data) {

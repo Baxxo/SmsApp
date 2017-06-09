@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -67,7 +68,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     List<HashMap<String, String>> listItems;
     ArrayAdapter<String> list;
     Cursor cur;
-    ArrayList<String> mess1 = new ArrayList<String>();
+    ArrayList<String> mess1 = new ArrayList<>();
     String permission = "android.permission.READ_CONTACTS";
     static boolean carica = false;
 
@@ -114,7 +115,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                             @Override
                             public void run() {
                                 MainActivity.animIn();
-                                dis=true;
+                                dis = true;
                             }
                         });
 
@@ -177,6 +178,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 try {
                     getContact();
                 } catch (Exception e) {
+                    e.printStackTrace();
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
                             button.setVisibility(View.VISIBLE);
@@ -264,12 +266,13 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         //rimuovo gli spazi
         for (int i = 0; i < contatti.size(); i++) {
-            contatti.get(i).number.replace(" ", "");
-            contatti.get(i).number.replace("\u202A", "");
+            contatti.get(i).number.replaceAll(" ", "");
+            contatti.get(i).number.replaceAll("\u202A", "");
             contatti.get(i).number.replace("+39", "");
-            contatti.get(i).number.replace("\u202A+39", "");
-            contatti.get(i).number.replace("\u202C+39", "");
+            contatti.get(i).number.replaceAll("\u202A+39", "");
+            contatti.get(i).number.replaceAll("\u202C+39", "");
         }
+
 
         //rimuovo +39
         for (int i = 0; i < contatti.size(); i++) {
@@ -294,44 +297,47 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             progressBar.setProgress(p);
         }
 
-        for (int i = 0; i < contatti.size(); i++) {
-            if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
-                contatti.remove(i);
-            }
-        }
-        //Log.i("Contatti", "Sono arrivato");
+        if (contatti.size() > 1) {
 
-        int j = 0;
-
-
-        //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
-        while (j == 0) {
-            j = 0;
-            for (int i = 1; i < contatti.size(); i++) {
-                if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
-                    j++;
-                    contatti.remove(i - 1);
+            for (int i = 0; i < contatti.size(); i++) {
+                if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
+                    contatti.remove(i);
                 }
-                progressBar.setProgress(p);
-
             }
+
+            int j = 0;
+
+
+            //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
+            while (j == 0) {
+                j = 0;
+                for (int i = 1; i < contatti.size(); i++) {
+                    if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                        j++;
+                        contatti.remove(i - 1);
+                    }
+                    progressBar.setProgress(p);
+
+                }
+                for (int i = 1; i < contatti.size(); i++) {
+                    if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                        j++;
+                        contatti.remove(i - 1);
+                        p++;
+                    }
+                    progressBar.setProgress(p);
+
+                }
+            }
+
+
             for (int i = 1; i < contatti.size(); i++) {
-                if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
-                    j++;
-                    contatti.remove(i - 1);
+                if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
+                    contatti.get(i).name = contatti.get(i).name + "|";
                     p++;
                 }
                 progressBar.setProgress(p);
-
             }
-        }
-
-        for (int i = 1; i < contatti.size(); i++) {
-            if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
-                contatti.get(i).name = contatti.get(i).name + "|";
-                p++;
-            }
-            progressBar.setProgress(p);
         }
 
         ((Activity) rootView.getContext()).runOnUiThread(
@@ -516,6 +522,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     }
                 }
         );
+
     }
 
     //funzione per ordinare l' hash map con i contatti(funzione trovata)
