@@ -370,7 +370,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                final int p = position;
                                 Object o = listView.getItemAtPosition(position);
                                 String res = o.toString();
                                 res = res.replace("{", "");
@@ -402,7 +401,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                         ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                MainActivity.mViewPager.setCurrentItem(0);
+                                                MainActivity.mViewPager.setCurrentItem(1);
                                             }
                                         });
                                     }
@@ -463,7 +462,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                if (MainActivity.pos == 1) {
+                                if (MainActivity.pos == 0) {
                                     MainActivity.fab.setImageResource(R.drawable.ic_search);
                                     MainActivity.animIn();
                                 }

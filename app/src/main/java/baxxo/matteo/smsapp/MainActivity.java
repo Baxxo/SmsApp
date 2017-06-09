@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             public void onPageSelected(int position) {
                 pos = position;
 
-                if (position == 0) {
+                if (position == 1) {
 
                     if (!check[0] || !check[1]) {
                         if (fab.getVisibility() == View.VISIBLE) {
@@ -164,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                if (position == 1) {
+                if (position == 0) {
 
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                     View v = getCurrentFocus();
@@ -216,7 +216,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                if (pos == 0) {
+                if (pos == 1) {
 
                     //se android è >= M allora uso getHour e getMinute
                     //prendo l'ora e tempo
@@ -279,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
                 }
-                if (pos == 1) {
+                if (pos == 0) {
 
                     ObjectAnimator.ofFloat(fab, "rotation", 0f, 360f).setDuration(500).start();
                     handler = new Handler();
@@ -517,8 +517,8 @@ public class MainActivity extends AppCompatActivity {
 
     //swipe----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(R.drawable.ic_message);
-        tabLayout.getTabAt(1).setIcon(R.drawable.ic_account_circle);
+        tabLayout.getTabAt(0).setIcon(R.drawable.ic_account_circle);
+        tabLayout.getTabAt(1).setIcon(R.drawable.ic_message);
     }
 
     private class TabsPagerAdapter extends FragmentPagerAdapter {
@@ -530,11 +530,14 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            if (position == 1) {
-                return myFragment = new FragmentContatti();
+            switch (position){
+                case 0:
+                    return myFragment = new FragmentContatti();
+                case 1:
+                    return new PlaceholderFragment();
+                default:
+                    return myFragment = new FragmentContatti();
             }
-
-            return PlaceholderFragment.newInstance(position + 1);
         }
 
         @Override
@@ -545,9 +548,9 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public CharSequence getPageTitle(int position) {
             if (position == 1) {
-                return getString(R.string.title2);
+                return getString(R.string.title1);
             }
-            return getString(R.string.title1);
+            return getString(R.string.title2);
         }
 
     }
@@ -586,14 +589,6 @@ public class MainActivity extends AppCompatActivity {
 
         public PlaceholderFragment() {
 
-        }
-
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
         }
 
         @Override

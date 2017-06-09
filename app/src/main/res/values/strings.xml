@@ -39,7 +39,7 @@
     <string name="title_activity_settings">Settings</string>
     <string name="title_activity_messaggi">Sms</string>
     <string name="no_messaggi">No messages</string>
-    <string name="no_messaggi_detail">No messages yet inserted</string>
+    <string name="no_messaggi_detail">No messages yet posted</string>
     <string name="numero_caricato">Number loaded</string>
     <string name="testo_numero">Text and number loaded</string>
     <string name="errore_caricamento">Error while loading contacts</string>
