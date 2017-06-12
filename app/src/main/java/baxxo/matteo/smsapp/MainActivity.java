@@ -90,10 +90,15 @@ public class MainActivity extends AppCompatActivity {
     DatabaseManager db;
     Handler handler;
     AppBarLayout appBarLayout;
+    Boolean pos0 = false;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{
@@ -107,10 +112,6 @@ public class MainActivity extends AppCompatActivity {
             }, 1);
         }
 
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true, true);
@@ -180,7 +181,8 @@ public class MainActivity extends AppCompatActivity {
                     animFade();
 
                     try {
-                        if (myFragment.button.getVisibility() == View.VISIBLE) {
+                        Log.i("POS", String.valueOf(pos0));
+                        if (pos0) {
                             fab.setImageResource(R.drawable.ic_search);
                         } else {
                             fab.setImageResource(R.drawable.ic_clear);
@@ -221,7 +223,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (pos == 1) {
-
                     //se android è >= M allora uso getHour e getMinute
                     //prendo l'ora e tempo
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -293,14 +294,16 @@ public class MainActivity extends AppCompatActivity {
                             public void run() {
                                 if (isSearch) {
                                     fab.setImageResource(R.drawable.ic_search);
+                                    pos0 = true;
                                     myFragment.nomeSearch.setText("");
-                                    myFragment.button.setVisibility(View.VISIBLE);
-                                    myFragment.nomeSearch.setVisibility(View.INVISIBLE);
+                                    myFragment.setVisibitlyButton(View.VISIBLE);
+                                    myFragment.setVisibitlySearch(View.INVISIBLE);
                                     isSearch = false;
                                 } else {
+                                    pos0 = false;
                                     fab.setImageResource(R.drawable.ic_clear);
-                                    myFragment.button.setVisibility(View.INVISIBLE);
-                                    myFragment.nomeSearch.setVisibility(View.VISIBLE);
+                                    myFragment.setVisibitlyButton(View.INVISIBLE);
+                                    myFragment.setVisibitlySearch(View.VISIBLE);
                                     isSearch = true;
                                 }
                             }

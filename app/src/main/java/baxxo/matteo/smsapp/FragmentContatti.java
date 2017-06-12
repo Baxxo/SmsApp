@@ -1,17 +1,12 @@
 package baxxo.matteo.smsapp;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.content.ContextCompat;
-import android.telephony.PhoneNumberUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -191,6 +186,28 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         }).start();
 
         return rootView;
+    }
+
+    public void setVisibitlyButton(int vis) {
+        try {
+            if (rootView != null) {
+                button = (Button) rootView.findViewById(R.id.button);
+                button.setVisibility(vis);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setVisibitlySearch(int vis) {
+        try {
+            if (rootView != null) {
+                nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
+                nomeSearch.setVisibility(vis);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 
