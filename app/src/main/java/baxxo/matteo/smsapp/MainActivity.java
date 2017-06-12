@@ -563,7 +563,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     static void contaCar(CharSequence s) {
         c = s.length();
 
@@ -611,7 +610,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         conta.setText(context.getString(R.string.car1) + c + context.getString(R.string.car2));
-        nMessaggi.setText("N. sms: " + nm);
+        nMessaggi.setText(context.getString(R.string.n_sms)+ " " + nm);
         nm = 1;
     }
 
