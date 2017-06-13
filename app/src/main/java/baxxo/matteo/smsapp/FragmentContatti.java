@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -43,18 +44,18 @@ import java.util.Map;
 
 public class FragmentContatti extends android.support.v4.app.Fragment {
 
+    static ArrayList<Contact> contatti = new ArrayList<>();
+    static ListView listView;
+    static boolean carica = false;
     Button button;
     EditText nomeSearch;
     LinearLayout.LayoutParams lp;
-    public static ArrayList<Contact> contatti = new ArrayList<>();
-    ArrayList<String> a = new ArrayList<String>();
     ProgressBar progressBar;
     View rootView;
     Dialog d;
     WindowManager.LayoutParams layoutParams;
     TextView tvNome;
     TextView tvNumero;
-    static ListView listView;
     SimpleAdapter adapter;
     String nome;
     String numero;
@@ -65,7 +66,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     Cursor cur;
     ArrayList<String> mess1 = new ArrayList<>();
     String permission = "android.permission.READ_CONTACTS";
-    static boolean carica = false;
 
     public FragmentContatti() {
 
@@ -190,10 +190,9 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public void setVisibitlyButton(int vis) {
         try {
-            if (rootView != null) {
                 button = (Button) rootView.findViewById(R.id.button);
                 button.setVisibility(vis);
-            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -201,10 +200,10 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public void setVisibitlySearch(int vis) {
         try {
-            if (rootView != null) {
                 nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
                 nomeSearch.setVisibility(vis);
-            }
+                nomeSearch.setText("");
+
         } catch (Exception e) {
             e.printStackTrace();
         }

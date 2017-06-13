@@ -4,6 +4,7 @@ import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -12,6 +13,10 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 public class MessaggiActivity extends AppCompatActivity {
 
@@ -19,6 +24,7 @@ public class MessaggiActivity extends AppCompatActivity {
     DatabaseManager dbManager;
     ArrayList<String> lista_messaggi = new ArrayList<>();
     ArrayList<Messaggio> messaggi = new ArrayList<>();
+    ArrayList<String> id = new ArrayList<>();
     ArrayAdapter adapter;
     String nome;
     Boolean check = false;
@@ -39,17 +45,16 @@ public class MessaggiActivity extends AppCompatActivity {
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                String t = String.valueOf(lista.getItemAtPosition(i));
 
-                String[] parts = t.split(" - ");
-                String part1 = parts[0];
-                part1.replace(" ", "");
+                int p = Integer.parseInt(id.get(i));
 
-                int p = Integer.parseInt(part1);
+                Log.i("hashmap", "P: " + p);
 
                 if (!check) {
+
                     check = true;
                     Toast.makeText(getApplicationContext(), getString(R.string.ripremi), Toast.LENGTH_LONG).show();
+
                 } else {
 
                     Intent intent = new Intent(MessaggiActivity.this, Receiver.class);
@@ -63,6 +68,7 @@ public class MessaggiActivity extends AppCompatActivity {
                     dbManager.updateMessaggio(m);
 
                     check = false;
+
                     carica();
 
                 }
@@ -84,35 +90,43 @@ public class MessaggiActivity extends AppCompatActivity {
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(messaggio.getData());
                 String m = String.valueOf(c.get(Calendar.MINUTE));
+                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+                String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                String me = String.valueOf(c.get(Calendar.MONTH));
+                String a = String.valueOf(c.get(Calendar.YEAR));
+
                 if (m.length() == 1) {
                     m = "0" + m;
                 }
-                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
                 if (h.length() == 1) {
                     h = "0" + h;
                 }
-                String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
                 if (g.length() == 1) {
                     g = "0" + g;
                 }
-                String me = String.valueOf(c.get(Calendar.MONTH));
                 if (me.length() == 1) {
                     me = "0" + me;
                 }
-                String a = String.valueOf(c.get(Calendar.YEAR));
                 if (a.length() == 1) {
                     a = "0" + a;
                 }
+
                 if (nome.equals(messaggio.getNome())) {
-                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
-                }
-                if(nome.equals("tutti_i_messaggi_da_inviare_9821")){
-                    lista_messaggi.add(messaggio.getId() + " - " + messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                    id.add(messaggio.getId());
+
+                    lista_messaggi.add(messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
 
                 }
+                if (nome.equals("tutti_i_messaggi_da_inviare_9821")) {
+
+                    id.add(messaggio.getId());
+
+                    lista_messaggi.add(messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                }
+
             }
-            lista.setEnabled(true);
 
+            lista.setEnabled(true);
 
         } else {
 
@@ -122,5 +136,6 @@ public class MessaggiActivity extends AppCompatActivity {
 
         adapter = new ArrayAdapter(MessaggiActivity.this, R.layout.list_messaggi, lista_messaggi);
         lista.setAdapter(adapter);
+
     }
 }

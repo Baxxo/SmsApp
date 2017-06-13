@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     private String testo;//testo preso per il messaggio
     private String numero;
     boolean isSearch = false;
-    FragmentContatti myFragment = new FragmentContatti();
+    FragmentContatti myFragment = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
@@ -181,11 +181,12 @@ public class MainActivity extends AppCompatActivity {
                     animFade();
 
                     try {
-                        Log.i("POS", String.valueOf(pos0));
-                        if (pos0) {
+                        if (!isSearch) {
                             fab.setImageResource(R.drawable.ic_search);
+                            pos0 = true;
                         } else {
                             fab.setImageResource(R.drawable.ic_clear);
+                            pos0 = false;
                         }
 
                         if (!FragmentContatti.carica) {
@@ -292,19 +293,16 @@ public class MainActivity extends AppCompatActivity {
                         handler.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (isSearch) {
-                                    fab.setImageResource(R.drawable.ic_search);
-                                    pos0 = true;
-                                    myFragment.nomeSearch.setText("");
-                                    myFragment.setVisibitlyButton(View.VISIBLE);
-                                    myFragment.setVisibitlySearch(View.INVISIBLE);
-                                    isSearch = false;
-                                } else {
-                                    pos0 = false;
+                                if (!isSearch) {
                                     fab.setImageResource(R.drawable.ic_clear);
                                     myFragment.setVisibitlyButton(View.INVISIBLE);
                                     myFragment.setVisibitlySearch(View.VISIBLE);
                                     isSearch = true;
+                                } else {
+                                    fab.setImageResource(R.drawable.ic_search);
+                                    myFragment.setVisibitlyButton(View.VISIBLE);
+                                    myFragment.setVisibitlySearch(View.INVISIBLE);
+                                    isSearch = false;
                                 }
                             }
                         }, 400);
@@ -321,6 +319,7 @@ public class MainActivity extends AppCompatActivity {
         if (db.getNotSentMessages().size() <= 0) {
             btnMessaggi.setVisibility(View.GONE);
         }
+
         btnMessaggi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -329,6 +328,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
         btnMessaggi.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
@@ -610,7 +610,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         conta.setText(context.getString(R.string.car1) + c + context.getString(R.string.car2));
-        nMessaggi.setText(context.getString(R.string.n_sms)+ " " + nm);
+        nMessaggi.setText(context.getString(R.string.n_sms) + " " + nm);
         nm = 1;
     }
 
@@ -631,7 +631,11 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return myFragment = new FragmentContatti();
+                    if (myFragment == null) {
+                        return myFragment = new FragmentContatti();
+                    } else {
+                        return myFragment;
+                    }
                 case 1:
                     return new PlaceholderFragment();
                 default:
