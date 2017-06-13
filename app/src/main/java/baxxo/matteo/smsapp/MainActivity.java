@@ -6,6 +6,7 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -626,7 +627,6 @@ public class MainActivity extends AppCompatActivity {
             super(fm);
         }
 
-
         @Override
         public Fragment getItem(int position) {
             switch (position) {
@@ -641,6 +641,7 @@ public class MainActivity extends AppCompatActivity {
                 default:
                     return myFragment = new FragmentContatti();
             }
+
         }
 
         @Override
@@ -661,28 +662,34 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onBackPressed() {
-        d = new Dialog(this);
-        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        d.setCancelable(true);
-        d.setContentView(R.layout.esci);
-        d.show();
+        if (pos == 0) {
+            d = new Dialog(this);
+            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            d.setCancelable(true);
+            d.setContentView(R.layout.esci);
+            d.show();
 
-        Button esci = (Button) d.findViewById(R.id.esci1);
-        esci.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.dismiss();
-                android.os.Process.killProcess(android.os.Process.myPid());
-            }
-        });
+            Button esci = (Button) d.findViewById(R.id.esci1);
+            esci.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    d.dismiss();
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                }
+            });
 
-        Button torna = (Button) d.findViewById(R.id.torna);
-        torna.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                d.dismiss();
-            }
-        });
+            Button torna = (Button) d.findViewById(R.id.torna);
+            torna.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    d.dismiss();
+                }
+            });
+        } else {
+
+            mViewPager.setCurrentItem(0);
+
+        }
     }
 
     //fragment----------------------------------------------------------------------------------------------------------------------------------------------------------------------

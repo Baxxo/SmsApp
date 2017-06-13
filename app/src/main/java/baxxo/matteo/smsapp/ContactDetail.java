@@ -88,6 +88,8 @@ public class ContactDetail extends AppCompatActivity {
                 MainActivity.n.setText(numero);
                 MainActivity.t.setText(res);
 
+                MainActivity.mViewPager.setCurrentItem(1);
+
                 onBackPressed();
 
             }
@@ -104,6 +106,8 @@ public class ContactDetail extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(getApplicationContext(), getString(R.string.numero_caricato), Toast.LENGTH_LONG).show();
                 MainActivity.n.setText(numero);
+
+                MainActivity.mViewPager.setCurrentItem(1);
 
                 onBackPressed();
             }
@@ -138,6 +142,7 @@ public class ContactDetail extends AppCompatActivity {
     public Bitmap getPhoto(String phoneNumber) {
         Uri phoneUri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
         Uri photoUri;
+        Bitmap defaultPhoto;
         ContentResolver cr = this.getContentResolver();
         Cursor contact = cr.query(phoneUri,
                 new String[]{ContactsContract.Contacts._ID}, null, null, null);
@@ -147,7 +152,7 @@ public class ContactDetail extends AppCompatActivity {
             photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, userId);
 
         } else {
-            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+            defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
             return defaultPhoto;
         }
         if (photoUri != null) {
@@ -156,10 +161,11 @@ public class ContactDetail extends AppCompatActivity {
                 return BitmapFactory.decodeStream(input);
             }
         } else {
-            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+            defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
             return defaultPhoto;
         }
-        Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+        defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+        contact.close();
         return defaultPhoto;
     }
 }
