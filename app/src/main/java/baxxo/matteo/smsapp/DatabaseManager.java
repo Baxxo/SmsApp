@@ -177,10 +177,4 @@ public class DatabaseManager extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void deleteAllMessage() {
-        SQLiteDatabase db = this.getWritableDatabase();
-        db.execSQL("delete from " + NameTable);
-        db.close();
-    }
-
 }

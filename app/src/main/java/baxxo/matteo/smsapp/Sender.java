@@ -65,7 +65,7 @@ public class Sender extends IntentService {
         mess = database.getNotSentMessages();
         int i = 0;
 
-        //prendo il messaggoi con il giusto id
+        //prendo il messaggio con il giusto id
         for (Messaggio messaggio : mess) {
             if (messaggio.getId().equals(id)) {
                 numMess = i;
@@ -78,11 +78,6 @@ public class Sender extends IntentService {
 
             Receiver.completeWakefulIntent(intent);
         }
-
-        //fa aprire l'app quando si clicca sulla notifica
-        Intent intent1 = new Intent(this, MainActivity.class);
-        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0);
 
         //verifico modalità aereo
         if (Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
@@ -138,6 +133,11 @@ public class Sender extends IntentService {
         }
 
         String time = " (" + h + ":" + m + ")";
+
+        //fa aprire l'app quando si clicca sulla notifica
+        Intent intent1 = new Intent(this, MainActivity.class);
+        intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0);
 
         builder = new NotificationCompat.Builder(this);
         builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text))

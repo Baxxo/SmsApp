@@ -190,9 +190,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public void setVisibitlyButton(int vis) {
         try {
-                button = (Button) rootView.findViewById(R.id.button);
-                button.setVisibility(vis);
-
+            button = (Button) rootView.findViewById(R.id.button);
+            button.setVisibility(vis);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -200,9 +199,9 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     public void setVisibitlySearch(int vis) {
         try {
-                nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
-                nomeSearch.setVisibility(vis);
-                nomeSearch.setText("");
+            nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
+            nomeSearch.setVisibility(vis);
+            nomeSearch.setText("");
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -279,24 +278,16 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 }
         );
 
-
-        //rimuovo gli spazi
-        for (int i = 0; i < contatti.size(); i++) {
-            contatti.get(i).number.replaceAll(" ", "");
-            contatti.get(i).number.replaceAll("\u202A", "");
-            contatti.get(i).number.replace("+39", "");
-            contatti.get(i).number.replaceAll("\u202A+39", "");
-            contatti.get(i).number.replaceAll("\u202C+39", "");
-        }
-
-
         //rimuovo +39
         for (int i = 0; i < contatti.size(); i++) {
-            //Log.i("Contatti", String.valueOf(contatti.get(i).number.substring(0, 3)));
+            String csAppendedCode = contatti.get(i).number.length() > "+39".length() ? contatti.get(i).number.substring(0, "+39".length()) : "";
+            if (csAppendedCode == "+39") {
 
+            }
             if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
                 contatti.get(i).number = contatti.get(i).number.substring(3);
             }
+
             p++;
             progressBar.setProgress(p);
         }
@@ -544,7 +535,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
     //funzione per ordinare l' hash map con i contatti(funzione trovata)
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
-        // Defined Custom Comparator here
         Collections.sort(list, new Comparator() {
             public int compare(Object o1, Object o2) {
                 return ((Comparable) ((Map.Entry) (o1)).getValue())
@@ -552,8 +542,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             }
         });
 
-        // Here I am copying the sorted list in HashMap
-        // using LinkedHashMap to preserve the insertion order
         HashMap sortedHashMap = new LinkedHashMap();
         for (Iterator it = list.iterator(); it.hasNext(); ) {
             Map.Entry entry = (Map.Entry) it.next();

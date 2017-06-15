@@ -123,7 +123,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
 
-
+/*
         if (!preferences.getBoolean("icon", false)) {
 
             SharedPreferences.Editor editor = preferences.edit();
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
             shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(getApplicationContext(), MainActivity.class));
             sendBroadcast(shortcutintent);
 
-        }
+        }*/
 
 
         TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
@@ -422,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+      /*  if (id == R.id.action_settings) {
             d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setCancelable(true);
@@ -477,7 +477,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
             return true;
-        }
+        }*/
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
@@ -662,6 +662,10 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onBackPressed() {
+        Log.i("Size" , String.valueOf(db.getNotSentMessages().size()));
+        if (db.getNotSentMessages().size() <= 0) {
+            btnMessaggi.setVisibility(View.GONE);
+        }
         if (pos == 0) {
             d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
