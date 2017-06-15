@@ -52,6 +52,17 @@
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="#ffffff" />
 
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_above="@+id/Testo"
+                    android:layout_alignStart="@+id/Numero"
+                    android:layout_toStartOf="@+id/textView3"
+                    android:text="N. sms: 0"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/background_light" />
+
                 <EditText
                     android:id="@+id/Testo"
                     android:layout_width="310dp"
@@ -92,9 +103,9 @@
 
                 <DatePicker
                     android:id="@+id/datePicker"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/Testo"
+                    android:layout_below="@+id/timePicker"
                     android:layout_centerHorizontal="true"
                     android:backgroundTint="@android:color/white"
                     android:foregroundTint="#fff" />
@@ -103,22 +114,11 @@
                     android:id="@+id/timePicker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/datePicker"
-                    android:backgroundTint="@android:color/white"
-                    android:layout_marginBottom="10dp"
                     android:layout_alignParentEnd="true"
-                    android:layout_alignParentStart="true" />
-
-                <TextView
-                    android:id="@+id/textView4"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/Testo"
-                    android:layout_alignStart="@+id/Numero"
-                    android:layout_toStartOf="@+id/textView3"
-                    android:text="N. sms: 0"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/background_light" />
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@+id/Testo"
+                    android:layout_marginBottom="10dp"
+                    android:backgroundTint="@android:color/white" />
 
 
             </RelativeLayout>

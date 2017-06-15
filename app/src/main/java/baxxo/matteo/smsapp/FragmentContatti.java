@@ -37,6 +37,8 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Matteo on 11/02/2017.
@@ -278,46 +280,34 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 }
         );
 
-        //rimuovo +39
-        for (int i = 0; i < contatti.size(); i++) {
-            String csAppendedCode = contatti.get(i).number.length() > "+39".length() ? contatti.get(i).number.substring(0, "+39".length()) : "";
-            if (csAppendedCode == "+39") {
-
-            }
-            if (String.valueOf(contatti.get(i).number.substring(0, 3)).equals("+39")) {
-                contatti.get(i).number = contatti.get(i).number.substring(3);
-            }
-
-            p++;
-            progressBar.setProgress(p);
-        }
-
-        //rimuovo numeri di casa
-        for (int i = 0; i < contatti.size(); i++) {
-            if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
-                contatti.remove(i);
-            }
-            if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
-                contatti.remove(i);
-            }
-            p++;
-            progressBar.setProgress(p);
-        }
-
         if (contatti.size() > 1) {
 
-            for (int i = 0; i < contatti.size(); i++) {
-                if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
-                    contatti.remove(i);
-                }
-            }
 
             int j = 0;
 
 
             //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
             while (j == 0) {
+
                 j = 0;
+
+                //rimuovo numeri di casa
+                for (int i = 0; i < contatti.size(); i++) {
+                    if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
+                        contatti.remove(i);
+                        j++;
+                    }
+                    p++;
+                    progressBar.setProgress(p);
+                }
+
+
+                for (int i = 0; i < contatti.size(); i++) {
+                    if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
+                        contatti.remove(i);
+                        j++;
+                    }
+                }
                 for (int i = 1; i < contatti.size(); i++) {
                     if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
                         j++;

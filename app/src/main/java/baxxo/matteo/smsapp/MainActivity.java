@@ -519,11 +519,11 @@ public class MainActivity extends AppCompatActivity {
 
     static final TextWatcher contaNumeri = new TextWatcher() {
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            contaCar(s);
+            contaNum(s.length());
         }
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
-            contaCar(s);
+            contaNum(s.length());
         }
 
         public void afterTextChanged(Editable s) {
