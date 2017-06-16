@@ -1,6 +1,4 @@
-package baxxo.matteo.smsapp;//add your package name here example: package com.example.dbm;
-
-//all required import files
+package baxxo.matteo.smsapp;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
