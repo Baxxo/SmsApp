@@ -424,7 +424,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-
+/*
         if (id == R.id.action_settings) {
           /*  d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -442,18 +442,18 @@ public class MainActivity extends AppCompatActivity {
                     String n = String.valueOf(nome.getText());
                     String p = String.valueOf(pass.getText());
                     if (n.equals("Matteo")) {
-                        if (p.equals("fufi")) {*/
+                        if (p.equals("fufi")) {
             Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
-            startActivity(intent);/*
+            startActivity(intent);
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
 
                 }
-            });*/
+            });
             return true;
         }
-        if (id == R.id.data) {/*
+        if (id == R.id.data) {
             d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setCancelable(true);
@@ -470,17 +470,17 @@ public class MainActivity extends AppCompatActivity {
                     String n = String.valueOf(nome.getText());
                     String p = String.valueOf(pass.getText());
                     if (n.equals("Matteo")) {
-                        if (p.equals("fufi")) {*/
+                        if (p.equals("fufi")) {
             Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-            startActivity(intent);/*
+            startActivity(intent);
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });*/
+            });
             return true;
-        }
+        }*/
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
