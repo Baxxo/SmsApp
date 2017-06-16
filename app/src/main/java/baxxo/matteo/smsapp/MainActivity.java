@@ -225,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (pos == 1) {
+
                     //se android è >= M allora uso getHour e getMinute
                     //prendo l'ora e tempo
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -384,6 +385,8 @@ public class MainActivity extends AppCompatActivity {
         calendar.set(Calendar.DAY_OF_MONTH, giorno);
         calendar.set(Calendar.HOUR_OF_DAY, ora);
         calendar.set(Calendar.MINUTE, minuto);
+        calendar.set(Calendar.MONTH, mese);
+        calendar.set(Calendar.YEAR, anno);
 
         Intent intent = new Intent(this, Receiver.class);
         intent.putExtra("Numero", numero);
@@ -422,8 +425,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-      /*  if (id == R.id.action_settings) {
-            d = new Dialog(this);
+        if (id == R.id.action_settings) {
+          /*  d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setCancelable(true);
             d.setContentView(R.layout.dialog);
@@ -439,18 +442,18 @@ public class MainActivity extends AppCompatActivity {
                     String n = String.valueOf(nome.getText());
                     String p = String.valueOf(pass.getText());
                     if (n.equals("Matteo")) {
-                        if (p.equals("fufi")) {
-                            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
-                            startActivity(intent);
+                        if (p.equals("fufi")) {*/
+            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
+            startActivity(intent);/*
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
-                    }
+
                 }
-            });
+            });*/
             return true;
         }
-        if (id == R.id.data) {
+        if (id == R.id.data) {/*
             d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setCancelable(true);
@@ -467,17 +470,17 @@ public class MainActivity extends AppCompatActivity {
                     String n = String.valueOf(nome.getText());
                     String p = String.valueOf(pass.getText());
                     if (n.equals("Matteo")) {
-                        if (p.equals("fufi")) {
-                            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-                            startActivity(intent);
+                        if (p.equals("fufi")) {*/
+            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
+            startActivity(intent);/*
                         }
                     } else {
                         Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
                     }
                 }
-            });
+            });*/
             return true;
-        }*/
+        }
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
@@ -662,7 +665,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void onBackPressed() {
-        Log.i("Size" , String.valueOf(db.getNotSentMessages().size()));
+        Log.i("Size", String.valueOf(db.getNotSentMessages().size()));
         if (db.getNotSentMessages().size() <= 0) {
             btnMessaggi.setVisibility(View.GONE);
         }

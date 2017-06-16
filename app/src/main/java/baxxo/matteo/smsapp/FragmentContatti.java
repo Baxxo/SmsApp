@@ -40,10 +40,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Matteo on 11/02/2017.
- */
-
 public class FragmentContatti extends android.support.v4.app.Fragment {
 
     static ArrayList<Contact> contatti = new ArrayList<>();
@@ -293,20 +289,25 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
                 //rimuovo numeri di casa
                 for (int i = 0; i < contatti.size(); i++) {
-                    if (String.valueOf(contatti.get(i).number.charAt(0)).equals("0")) {
-                        contatti.remove(i);
-                        j++;
+                    Log.i("id_messaggi", contatti.get(i).name + " " + contatti.get(i).number);
+                    int l = contatti.get(i).number.indexOf('0');
+                    Log.i("id_messaggi", String.valueOf(l));
+                    if (contatti.get(i).number.indexOf('+') == 0) {
+                        if (l <= 4 && l != -1) {
+                            contatti.remove(i);
+                            j++;
+                            i--;
+                        }
+                    } else {
+                        if (l < 2  && l != -1) {
+                            contatti.remove(i);
+                            j++;
+                            i--;
+                        }
                     }
+
                     p++;
                     progressBar.setProgress(p);
-                }
-
-
-                for (int i = 0; i < contatti.size(); i++) {
-                    if (contatti.get(i).number.length() == 11 && !String.valueOf(contatti.get(i).number.charAt(0)).equals("+")) {
-                        contatti.remove(i);
-                        j++;
-                    }
                 }
                 for (int i = 1; i < contatti.size(); i++) {
                     if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {

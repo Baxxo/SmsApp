@@ -98,6 +98,9 @@ public class MessaggiActivity extends AppCompatActivity {
                 String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
                 String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
                 String me = String.valueOf(c.get(Calendar.MONTH));
+                int mese = Integer.valueOf(me);
+                mese++;
+                me = String.valueOf(mese);
                 String a = String.valueOf(c.get(Calendar.YEAR));
 
                 if (m.length() == 1) {
