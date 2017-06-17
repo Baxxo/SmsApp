@@ -275,10 +275,13 @@ public class MainActivity extends AppCompatActivity {
                     if (g.length() == 1) {
                         g = "0" + g;
                     }
+                    mese++;
                     String me = mese + "";
+                    mese--;
                     if (me.length() == 1) {
                         me = "0" + me;
                     }
+
                     String a = anno + "";
                     if (a.length() == 1) {
                         a = "0" + a;
