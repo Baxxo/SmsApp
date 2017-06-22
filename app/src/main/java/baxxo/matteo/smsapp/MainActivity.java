@@ -321,8 +321,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnMessaggi = (Button) findViewById(R.id.buttonMessaggi);
+        Log.i("Sizedb", "Sizedb: " + String.valueOf(db.getNotSentMessages().size()));
         if (db.getNotSentMessages().size() <= 0) {
-            btnMessaggi.setVisibility(View.GONE);
+            btnMessaggi.setVisibility(View.INVISIBLE);
         }
 
         btnMessaggi.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +346,7 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onAnimationEnd(Animator animation) {
                                 super.onAnimationEnd(animation);
-                                btnMessaggi.setVisibility(View.GONE);
+                                btnMessaggi.setVisibility(View.INVISIBLE);
                             }
                         });
                 return true;
@@ -414,7 +415,6 @@ public class MainActivity extends AppCompatActivity {
 
         db.aggiungiMessaggio(m);
         btnMessaggi.setVisibility(View.VISIBLE);
-
     }
 
     @Override
@@ -427,9 +427,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-/*
-        if (id == R.id.action_settings) {
-          /*  d = new Dialog(this);
+
+      /*  if (id == R.id.action_settings) {
+
+            d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
             d.setCancelable(true);
             d.setContentView(R.layout.dialog);
@@ -438,7 +439,7 @@ public class MainActivity extends AppCompatActivity {
             final EditText nome = (EditText) d.findViewById(R.id.editNome);
             final EditText pass = (EditText) d.findViewById(R.id.editPass);
 
-            Button conf = (Button) d.findViewById(R.id.buttonConferma);
+           Button conf = (Button) d.findViewById(R.id.buttonConferma);
             conf.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -446,16 +447,20 @@ public class MainActivity extends AppCompatActivity {
                     String p = String.valueOf(pass.getText());
                     if (n.equals("Matteo")) {
                         if (p.equals("fufi")) {
-            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
-            startActivity(intent);
-                        }
+                            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
+                            startActivity(intent);
+                       }
                     } else {
                         Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
 
+                    }
                 }
             });
+            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
+            startActivity(intent);
             return true;
         }
+        ;
         if (id == R.id.data) {
             d = new Dialog(this);
             d.requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -466,22 +471,24 @@ public class MainActivity extends AppCompatActivity {
             final EditText nome = (EditText) d.findViewById(R.id.editNome);
             final EditText pass = (EditText) d.findViewById(R.id.editPass);
 
-            Button conf = (Button) d.findViewById(R.id.buttonConferma);
+           Button conf = (Button) d.findViewById(R.id.buttonConferma);
             conf.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String n = String.valueOf(nome.getText());
-                    String p = String.valueOf(pass.getText());
-                    if (n.equals("Matteo")) {
+                   String p = String.valueOf(pass.getText());
+                   if (n.equals("Matteo")) {
                         if (p.equals("fufi")) {
-            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-            startActivity(intent);
-                        }
+                            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
+                            startActivity(intent);
+                     }
                     } else {
                         Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
                     }
                 }
             });
+            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
+            startActivity(intent);
             return true;
         }*/
         if (id == R.id.settings) {

@@ -102,6 +102,7 @@ public class Sender extends IntentService {
 
                         text = getString(R.string.inviato) + "\n" + testo;
                         sub = getString(R.string.inviato);
+                        i--;
 
                         try {
 
