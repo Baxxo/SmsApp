@@ -321,9 +321,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         btnMessaggi = (Button) findViewById(R.id.buttonMessaggi);
-        Log.i("Sizedb", "Sizedb: " + String.valueOf(db.getNotSentMessages().size()));
         if (db.getNotSentMessages().size() <= 0) {
-            btnMessaggi.setVisibility(View.INVISIBLE);
+            Log.i("Sizedb", "Sizedb: " + String.valueOf(db.getNotSentMessages().size()));
+            btnMessaggi.setVisibility(View.GONE);
         }
 
         btnMessaggi.setOnClickListener(new View.OnClickListener() {
