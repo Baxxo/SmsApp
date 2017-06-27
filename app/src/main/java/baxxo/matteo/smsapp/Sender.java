@@ -66,10 +66,13 @@ public class Sender extends IntentService {
         //prendo il messaggio con il giusto id
         for (Messaggio messaggio : mess) {
             if (messaggio.getId().equals(id)) {
-                numMess = i;
+                numMess = Integer.parseInt(id);
+            } else {
+                i++;
             }
-            i++;
         }
+
+        Log.i("IDMessaggio", "numero: " + numero + " nome: " + nomeNumero + " testo: " + testo + " ID: " + i + " id: " + id + " size: " + mess.size());
 
 
         if (mess.size() <= 0) {
@@ -78,144 +81,133 @@ public class Sender extends IntentService {
 
         } else {
 
-            if (!mess.get(numMess).getInviato() && numMess > 0) {
+            //verifico modalità aereo
+            if (Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
 
-                Log.i("id_messaggio", String.valueOf(numMess));
-
-                Receiver.completeWakefulIntent(intent);
+                text = getString(R.string.plane) + "\n" + testo;
+                sub = getString(R.string.plane_sub);
 
             } else {
 
-                //verifico modalità aereo
-                if (Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
+                try {
 
-                    text = getString(R.string.plane) + "\n" + testo;
-                    sub = getString(R.string.plane_sub);
+                    sms = SmsManager.getDefault();
+                    ArrayList<String> parts = sms.divideMessage(testo);
+                    sms.sendMultipartTextMessage(numero, null, parts, null, null);
 
-                } else {
+                    text = getString(R.string.inviato) + "\n" + testo;
+                    sub = getString(R.string.inviato);
 
                     try {
 
-                        sms = SmsManager.getDefault();
-                        ArrayList<String> parts = sms.divideMessage(testo);
-                        sms.sendMultipartTextMessage(numero, null, parts, null, null);
-
-                        text = getString(R.string.inviato) + "\n" + testo;
-                        sub = getString(R.string.inviato);
-                        i--;
-
-                        try {
-
-                            mess.get(i).setInviato(true);
-                            database.updateMessaggio(mess.get(i));
-
-                        } catch (Exception e) {
-
-                            Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
-
-                        }
+                        mess.get(i).setInviato(true);
+                        database.updateMessaggio(mess.get(i));
 
                     } catch (Exception e) {
-                        text = getString(R.string.non_inviato) + "\n" + testo;
-                        sub = getString(R.string.non_inviato);
+
+                        Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
+
                     }
 
-                }
-
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                Boolean vibrate = preferences.getBoolean("Vibrate", false);
-
-                String s = preferences.getString("Sound", "");
-
-
-                Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.unnamed);
-
-                Calendar c = Calendar.getInstance();
-                String m = String.valueOf(c.get(Calendar.MINUTE));
-                if (m.length() == 1) {
-                    m = "0" + m;
-                }
-                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
-                if (h.length() == 1) {
-                    h = "0" + h;
-                }
-
-                String time = " (" + h + ":" + m + ")";
-
-                //fa aprire l'app quando si clicca sulla notifica
-                Intent intent1 = new Intent(this, MainActivity.class);
-                intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0);
-
-                builder = new NotificationCompat.Builder(this);
-                builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text))
-                        .setSmallIcon(R.mipmap.unnamed)
-                        .setLargeIcon(defaultPhoto)
-                        .setTicker("SmsApp")
-                        .setContentTitle(getString(R.string.sms_a) + " " + nomeNumero + " " + time)
-                        .setAutoCancel(true)
-                        .setContentIntent(pendingIntent)
-                        .setLights(Color.CYAN, 1, 10)
-                        .setSubText(sub)
-                        .setContentText(text);
-
-                AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
-                switch (am.getRingerMode()) {
-                    case AudioManager.RINGER_MODE_SILENT:
-                        profilo = "Silent";
-                        break;
-                    case AudioManager.RINGER_MODE_VIBRATE:
-                        profilo = "Vibrate";
-                        break;
-                    case AudioManager.RINGER_MODE_NORMAL:
-                        profilo = "Normal";
-                        break;
-                }
-
-                if (!s.equals("") && profilo.equals("Normal")) {
-                    sound = Uri.parse(s);
-                    builder.setSound(sound);
-
-                }
-
-                builder.build();
-
-                Notification notification = builder.build();
-                NotificationManagerCompat.from(this).notify(Integer.parseInt(id), notification);
-
-                if (!profilo.equals("Silent")) {
-                    if (vibrate) {
-                        Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                        long[] pattern = new long[8];
-                        pattern[1] = 700;
-                        pattern[2] = 230;
-                        pattern[3] = 700;
-                        vibrator.vibrate(pattern, -1);
-                    }
-                }
-
-                try {
-                    if (database.getNotSentMessages().size() == 0) {
-                        MainActivity.btnMessaggi.animate()
-                                .translationY(-(MainActivity.btnMessaggi.getHeight()))
-                                .alpha(0.0f)
-                                .setDuration(300)
-                                .setListener(new AnimatorListenerAdapter() {
-                                    @Override
-                                    public void onAnimationEnd(Animator animation) {
-                                        super.onAnimationEnd(animation);
-                                        MainActivity.btnMessaggi.setVisibility(View.GONE);
-                                    }
-                                });
-                    }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    text = getString(R.string.non_inviato) + "\n" + testo;
+                    sub = getString(R.string.non_inviato);
                 }
-
-                Receiver.completeWakefulIntent(intent);
 
             }
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+            Boolean vibrate = preferences.getBoolean("Vibrate", false);
+
+            String s = preferences.getString("Sound", "");
+
+
+            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.unnamed);
+
+            Calendar c = Calendar.getInstance();
+            String m = String.valueOf(c.get(Calendar.MINUTE));
+            if (m.length() == 1) {
+                m = "0" + m;
+            }
+            String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+            if (h.length() == 1) {
+                h = "0" + h;
+            }
+
+            String time = " (" + h + ":" + m + ")";
+
+            //fa aprire l'app quando si clicca sulla notifica
+            Intent intent1 = new Intent(this, MainActivity.class);
+            intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0);
+
+            builder = new NotificationCompat.Builder(this);
+            builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text))
+                    .setSmallIcon(R.mipmap.unnamed)
+                    .setLargeIcon(defaultPhoto)
+                    .setTicker("SmsApp")
+                    .setContentTitle(getString(R.string.sms_a) + " " + nomeNumero + " " + time)
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setLights(Color.CYAN, 1, 10)
+                    .setSubText(sub)
+                    .setContentText(text);
+
+            AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
+            switch (am.getRingerMode()) {
+                case AudioManager.RINGER_MODE_SILENT:
+                    profilo = "Silent";
+                    break;
+                case AudioManager.RINGER_MODE_VIBRATE:
+                    profilo = "Vibrate";
+                    break;
+                case AudioManager.RINGER_MODE_NORMAL:
+                    profilo = "Normal";
+                    break;
+            }
+
+            if (!s.equals("") && profilo.equals("Normal")) {
+                sound = Uri.parse(s);
+                builder.setSound(sound);
+
+            }
+
+            builder.build();
+
+            Notification notification = builder.build();
+            NotificationManagerCompat.from(this).notify(Integer.parseInt(id), notification);
+
+            if (!profilo.equals("Silent")) {
+                if (vibrate) {
+                    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+                    long[] pattern = new long[8];
+                    pattern[1] = 700;
+                    pattern[2] = 230;
+                    pattern[3] = 700;
+                    vibrator.vibrate(pattern, -1);
+                }
+            }
+
+            try {
+                if (database.getNotSentMessages().size() == 0) {
+                    MainActivity.btnMessaggi.animate()
+                            .translationY(-(MainActivity.btnMessaggi.getHeight()))
+                            .alpha(0.0f)
+                            .setDuration(300)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    MainActivity.btnMessaggi.setVisibility(View.GONE);
+                                }
+                            });
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Receiver.completeWakefulIntent(intent);
 
         }
 

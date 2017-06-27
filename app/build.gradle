@@ -8,8 +8,8 @@ android {
         applicationId "baxxo.matteo.smsapp"
         minSdkVersion 21
         targetSdkVersion 23
-        versionCode 8
-        versionName "1.07"
+        versionCode 9
+        versionName "1.08"
     }
     buildTypes {
         release {
