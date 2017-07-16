@@ -161,7 +161,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         if (getContext().checkCallingOrSelfPermission(permission) == -1) {
             while (getContext().checkCallingOrSelfPermission(permission) == -1) {
-                Log.i("permessi", "aspetto");
             }
         }
 

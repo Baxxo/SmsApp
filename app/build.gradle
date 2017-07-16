@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "baxxo.matteo.smsapp"
-        minSdkVersion 21
+        minSdkVersion 14
         targetSdkVersion 23
-        versionCode 9
-        versionName "1.08"
+        versionCode 11
+        versionName "2"
     }
     buildTypes {
         release {

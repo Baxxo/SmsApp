@@ -83,9 +83,11 @@ public class Sender extends IntentService {
 
             //verifico modalità aereo
             if (Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
-
+/*
                 text = getString(R.string.plane) + "\n" + testo;
-                sub = getString(R.string.plane_sub);
+                sub = getString(R.string.plane_sub);*/
+
+
 
             } else {
 

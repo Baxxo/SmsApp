@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -431,63 +432,11 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-/*
-            d = new Dialog(this);
-            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            d.setCancelable(true);
-            d.setContentView(R.layout.dialog);
-            d.show();
-
-            final EditText nome = (EditText) d.findViewById(R.id.editNome);
-            final EditText pass = (EditText) d.findViewById(R.id.editPass);
-
-           Button conf = (Button) d.findViewById(R.id.buttonConferma);
-            conf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String n = String.valueOf(nome.getText());
-                    String p = String.valueOf(pass.getText());
-                    if (n.equals("Matteo")) {
-                        if (p.equals("fufi")) {
-                            Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
-                            startActivity(intent);
-                       }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
-
-                    }
-                }
-            });*/
             Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
             startActivity(intent);
             return true;
         }
-        if (id == R.id.data) {/*
-            d = new Dialog(this);
-            d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-            d.setCancelable(true);
-            d.setContentView(R.layout.dialog);
-            d.show();
-
-            final EditText nome = (EditText) d.findViewById(R.id.editNome);
-            final EditText pass = (EditText) d.findViewById(R.id.editPass);
-
-           Button conf = (Button) d.findViewById(R.id.buttonConferma);
-            conf.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String n = String.valueOf(nome.getText());
-                   String p = String.valueOf(pass.getText());
-                   if (n.equals("Matteo")) {
-                        if (p.equals("fufi")) {
-                            Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
-                            startActivity(intent);
-                     }
-                    } else {
-                        Toast.makeText(getApplicationContext(), "Errore", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });*/
+        if (id == R.id.data) {
             Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
             startActivity(intent);
             return true;
