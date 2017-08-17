@@ -35,7 +35,8 @@
             android:textColor="@android:color/background_light"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="199dp"
-            tools:layout_editor_absoluteY="8dp" />
+            tools:layout_editor_absoluteY="8dp"
+            android:layout_alignParentLeft="true" />
 
         <Button
             android:id="@+id/button5"
@@ -48,7 +49,9 @@
             android:text="@string/carDb"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp" />
 
         <Button
             android:id="@+id/button4"
@@ -61,7 +64,8 @@
             android:text="@string/nuoviDb"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignLeft="@+id/button5" />
 
         <Button
             android:id="@+id/button2"
@@ -74,7 +78,8 @@
             android:text="@string/eliminaDb"
             android:textAlignment="center"
             android:textColor="@android:color/background_light"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:layout_alignParentLeft="true" />
 
     </RelativeLayout>
 

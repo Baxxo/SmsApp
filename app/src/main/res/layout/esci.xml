@@ -34,7 +34,8 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/esci1"
         android:layout_toEndOf="@+id/textView10"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_toRightOf="@+id/textView10" />
 
     <Button
         android:id="@+id/esci1"
@@ -46,7 +47,8 @@
         android:layout_marginTop="44dp"
         android:background="@drawable/backbutton"
         android:text="@string/si"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignLeft="@+id/nome" />
 
     <Button
         android:id="@+id/torna"
@@ -57,6 +59,7 @@
         android:layout_marginRight="10dp"
         android:background="@drawable/button_esci"
         android:text="@string/no"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignRight="@+id/nome" />
 
 </RelativeLayout>

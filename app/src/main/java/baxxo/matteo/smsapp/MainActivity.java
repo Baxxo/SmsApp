@@ -6,7 +6,6 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
@@ -14,9 +13,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.os.Build;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.os.Vibrator;
-import android.provider.Settings;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -30,7 +27,6 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,7 +42,6 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     static TextView num;
     static TextView tes;
     static TextView nMessaggi;
+    static TextView consigli;
     static RelativeLayout relativeLayout;
     static FloatingActionButton fab;
     static SharedPreferences preferences;
@@ -81,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
     private int giorno = 1;
     private int ora = 1;
     private int minuto = 1;
-    private String text;//testo per snackbar con data e ora
-    private String testo;//testo preso per il messaggio
+    private String text;
+    private String testo;
     private String numero;
     boolean isSearch = false;
     FragmentContatti myFragment = null;
@@ -93,7 +89,12 @@ public class MainActivity extends AppCompatActivity {
     Handler handler;
     AppBarLayout appBarLayout;
     Boolean pos0 = false;
-
+    static String numu;
+    static String both;
+    static String txt;
+    static int counttxt;
+    static int countnum;
+    static InputMethodManager keyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
             }, 1);
         }
 
+        numu = getString(R.string.main3) + " " + getString(R.string.number);
+        txt = getString(R.string.main3) + " " + getString(R.string.text);
+        both = getString(R.string.main3) + " " + getString(R.string.number) + " " + getString(R.string.and) + " " + getString(R.string.text);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true, true);
@@ -124,23 +128,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getApplicationContext().getSharedPreferences("SmsApp", Context.MODE_PRIVATE);
 
-/*
-        if (!preferences.getBoolean("icon", false)) {
-
-            SharedPreferences.Editor editor = preferences.edit();
-            editor.putBoolean("icon", true);
-            editor.apply();
-
-            Intent shortcutintent = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
-            shortcutintent.putExtra("duplicate", false);
-            shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.app_name));
-            Parcelable icon = Intent.ShortcutIconResource.fromContext(getApplicationContext(), R.mipmap.unnamed);
-            shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, icon);
-            shortcutintent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, new Intent(getApplicationContext(), MainActivity.class));
-            sendBroadcast(shortcutintent);
-
-        }*/
-
+        keyboard = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 
         TabsPagerAdapter tabsPagerAdapter = new TabsPagerAdapter(getSupportFragmentManager());
 
@@ -153,13 +141,26 @@ public class MainActivity extends AppCompatActivity {
 
                 if (position == 1) {
 
+                    keyboard();
+
                     if (!check[0] || !check[1]) {
+                        consigli.setVisibility(View.VISIBLE);
+                        if (!check[1]) {
+                            consigli.setText(getString(R.string.main3) + " " + getString(R.string.number));
+                        }
+                        if (!check[0]) {
+                            consigli.setText(getString(R.string.main3) + " " + getString(R.string.text));
+                        }
+                        if (!check[0] && !check[1]) {
+                            consigli.setText(getString(R.string.main3) + " " + getString(R.string.number) + " " + getString(R.string.and) + " " + getString(R.string.text));
+                        }
                         if (fab.getVisibility() == View.VISIBLE) {
                             animOut();
                         }
                         fab.setVisibility(View.INVISIBLE);
                     }
                     if (check[0] && check[1]) {
+                        consigli.setVisibility(View.INVISIBLE);
                         if (fab.getVisibility() == View.INVISIBLE) {
                             animIn();
                         }
@@ -227,8 +228,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (pos == 1) {
 
-                    //se android è >= M allora uso getHour e getMinute
-                    //prendo l'ora e tempo
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         ora = timepicker.getHour();
                         minuto = timepicker.getMinute();
@@ -236,7 +235,6 @@ public class MainActivity extends AppCompatActivity {
                         mese = data.getMonth();
                         giorno = data.getDayOfMonth();
                     } else {
-
                         ora = timepicker.getCurrentHour();
                         minuto = timepicker.getCurrentMinute();
                         anno = data.getYear();
@@ -244,7 +242,6 @@ public class MainActivity extends AppCompatActivity {
                         giorno = data.getDayOfMonth();
                     }
 
-                    //prendo il testo del messaggio e il numero
                     testo = String.valueOf(t.getText());
                     numero = String.valueOf(n.getText());
 
@@ -323,7 +320,6 @@ public class MainActivity extends AppCompatActivity {
 
         btnMessaggi = (Button) findViewById(R.id.buttonMessaggi);
         if (db.getNotSentMessages().size() <= 0) {
-            Log.i("Sizedb", "Sizedb: " + String.valueOf(db.getNotSentMessages().size()));
             btnMessaggi.setVisibility(View.GONE);
         }
 
@@ -359,15 +355,41 @@ public class MainActivity extends AppCompatActivity {
         sendBroadcast(intent);
     }
 
+    private static void keyboard() {
+        if (countnum == 0) {
+            n.requestFocus();
+            n.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    keyboard.showSoftInput(n, 0);
+                }
+            }, 200);
+        } else {
+            if (counttxt == 0) {
+                t.requestFocus();
+                t.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        keyboard.showSoftInput(t, 0);
+                    }
+                }, 200);
+            } else {
+                t.requestFocus();
+                t.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        keyboard.hideSoftInputFromWindow(t.getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                    }
+                }, 200);
+            }
+        }
 
-    //fine onCreate-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+    }
 
-    //funzione per impostare messaggio----------------------------------------------------------------------------------------------------------------------------------------------------------------
     public void alarm() {
 
         nomeNumero = numero;
 
-        //prendo il nome del destinatario
         if (!FragmentContatti.contatti.isEmpty()) {
             contact = FragmentContatti.contatti;
             for (int i = 0; i < contact.size(); i++) {
@@ -384,8 +406,6 @@ public class MainActivity extends AppCompatActivity {
             lunghezza = 0;
         }
         lunghezza = lunghezza + 1;
-
-        Log.i("IDMessaggio", "Lunghezza: " + lunghezza);
 
 
         Calendar calendar = Calendar.getInstance();
@@ -405,8 +425,6 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-
-        //nuovo messaggio nel database
 
         Messaggio m = new Messaggio();
         m.setId(String.valueOf(lunghezza));
@@ -431,7 +449,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+        /*if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
             startActivity(intent);
             return true;
@@ -440,7 +458,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
             startActivity(intent);
             return true;
-        }
+        }*/
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
@@ -451,15 +469,11 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    //fine onCreate-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         System.out.println("destroy");
     }
-
-    //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 
     public static void animOut() {
         Animation animFadeOut = AnimationUtils.loadAnimation(context, R.anim.slide_down_animation);
@@ -487,6 +501,7 @@ public class MainActivity extends AppCompatActivity {
 
         public void onTextChanged(CharSequence s, int start, int before, int count) {
             contaNum(s.length());
+
         }
 
         public void afterTextChanged(Editable s) {
@@ -509,8 +524,14 @@ public class MainActivity extends AppCompatActivity {
     };
 
     static void contaNum(int count) {
+        countnum = count;
         if (count == 0) {
             check[1] = false;
+            consigli.setVisibility(View.VISIBLE);
+
+            if (!check[0]) {
+                consigli.setText(both);
+            }
 
             if (fab.getVisibility() == View.VISIBLE) {
                 animOut();
@@ -519,9 +540,10 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (!check[1]) {
                 check[1] = true;
-
+                consigli.setText(txt);
                 if (check[0]) {
                     animIn();
+                    consigli.setVisibility(View.GONE);
                 }
             }
         }
@@ -529,9 +551,26 @@ public class MainActivity extends AppCompatActivity {
 
     static void contaCar(CharSequence s) {
         c = s.length();
+        counttxt = c;
+
+        conta.setText(context.getString(R.string.car1) + " " + c + context.getString(R.string.car2));
+        nMessaggi.setText(context.getString(R.string.n_sms) + " " + nm);
+        nm = 1;
+
 
         if (c == 0) {
             check[0] = false;
+            consigli.setVisibility(View.VISIBLE);
+            t.requestFocus();
+            t.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    keyboard.showSoftInput(t, 0);
+                }
+            }, 200);
+            if (!check[1]) {
+                consigli.setText(both);
+            }
 
             if (fab.getVisibility() == View.VISIBLE) {
                 animOut();
@@ -540,9 +579,11 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (!check[0]) {
                 check[0] = true;
+                consigli.setText(numu);
 
                 if (check[1]) {
                     animIn();
+                    consigli.setVisibility(View.GONE);
                 }
             }
         }
@@ -572,13 +613,8 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-
-        conta.setText(context.getString(R.string.car1) + c + context.getString(R.string.car2));
-        nMessaggi.setText(context.getString(R.string.n_sms) + " " + nm);
-        nm = 1;
     }
 
-    //swipe----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     private void setupTabIcons() {
         tabLayout.getTabAt(0).setIcon(R.drawable.ic_account_circle);
         tabLayout.getTabAt(1).setIcon(R.drawable.ic_message);
@@ -621,11 +657,9 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-    //----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
 
     public void onBackPressed() {
-        Log.i("Size", String.valueOf(db.getNotSentMessages().size()));
+
         if (db.getNotSentMessages().size() <= 0) {
             btnMessaggi.setVisibility(View.GONE);
         }
@@ -659,7 +693,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //fragment----------------------------------------------------------------------------------------------------------------------------------------------------------------------
     public static class PlaceholderFragment extends Fragment {
 
         public PlaceholderFragment() {
@@ -679,6 +712,8 @@ public class MainActivity extends AppCompatActivity {
             timepicker = (TimePicker) rootView.findViewById(R.id.timePicker);
             relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
             nMessaggi = (TextView) rootView.findViewById(R.id.textView4);
+            consigli = (TextView) rootView.findViewById(R.id.textView14);
+            consigli.setText(getString(R.string.main3) + getString(R.string.number) + getString(R.string.and) + getString(R.string.text));
 
             t.addTextChangedListener(contaCaratteri);
             n.addTextChangedListener(contaNumeri);

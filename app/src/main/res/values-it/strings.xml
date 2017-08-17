@@ -20,7 +20,7 @@
     <string name="sms_a">Sms a: </string>
     <string name="snak1">Il messaggio verrà inviato alle</string>
     <string name="snak2">del</string>
-    <string name="car1">"Caratteri: "</string>
+    <string name="car1">Caratteri:</string>
     <string name="car2">/160</string>
     <string name="app_name">SmsApp</string>
     <string name="title1">SMS</string>
@@ -56,4 +56,14 @@
     <string name="def_text_2">http://smsapp.altervista.org/</string>
     <string name="no_messaggi_detail">Nessun messaggio ancora inviato</string>
     <string name="n_sms">N. sms:</string>
+    <string name="testo_caricato">Testo caricato</string>
+    <string name="copia_testo">Copia testo</string>
+    <string name="copia_numero">Copia numero</string>
+    <string name="copia_testo_numero">Copia numero e testo</string>
+    <string name="and">e </string>
+    <string name="main1">Scegli l\'ora in cui deve essere inviato il messaggio</string>
+    <string name="main2">E la data</string>
+    <string name="main3">Se vuoi inviare il messaggio subito devi solo inserire </string>
+    <string name="number">il numero</string>
+    <string name="text">il testo</string>
 </resources>

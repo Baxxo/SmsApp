@@ -18,7 +18,9 @@
         android:text="@string/scritta"
         android:textAlignment="center"
         android:textColor="@android:color/background_light"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentLeft="true" />
 
     <ListView
         android:id="@+id/lista_messaggi_activity"
@@ -27,6 +29,8 @@
         android:layout_alignEnd="@+id/textViewScritta"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/textViewScritta"
-        android:layout_below="@+id/textViewScritta" />
+        android:layout_below="@+id/textViewScritta"
+        android:layout_alignRight="@+id/textViewScritta"
+        android:layout_alignLeft="@+id/textViewScritta" />
 
 </RelativeLayout>

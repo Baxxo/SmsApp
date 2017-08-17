@@ -56,4 +56,14 @@
     <string name="def_text_2">http://smsapp.altervista.org/</string>
     <string name="no_messaggi_detail">Aucun message n\'a encore été inséré</string>
     <string name="n_sms">N. sms:</string>
+    <string name="testo_caricato">Texte chargé</string>
+    <string name="copia_testo">Copier le texte</string>
+    <string name="copia_testo_numero">Copier le numéro et le texte</string>
+    <string name="copia_numero">Copier le numéro</string>
+    <string name="and">et </string>
+    <string name="main1">Choose the hour when the message have to be sent</string>
+    <string name="main3">Si vous souhaitez envoyer le message, insérez-le </string>
+    <string name="main2">Et la date</string>
+    <string name="number">le numéro</string>
+    <string name="text">le texte</string>
 </resources>

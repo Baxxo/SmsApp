@@ -1,54 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/textViewMessaggiModify"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/textView13"
+        android:layout_alignEnd="@+id/textViewMessaggiModify2"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/textViewMessaggiModify2"
         android:layout_weight="0.05"
         android:text="Medium Text"
-        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#fff"
-        android:textStyle="bold|italic"
-        android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/textView13" />
+        android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/textViewMessaggiModify2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/buttonDettagli"
+        android:layout_alignBottom="@+id/buttonModify"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/textView12"
+        android:layout_below="@+id/textViewMessaggiModify"
         android:layout_marginEnd="40dp"
+        android:layout_marginRight="40dp"
         android:layout_weight="0.06"
         android:gravity="right"
         android:paddingRight="10dp"
-        android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="#fff"
-        android:textStyle="bold"
-        android:layout_marginRight="40dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true" />
+        android:textStyle="bold" />
 
     <Button
-        android:id="@+id/buttonDettagli"
+        android:id="@+id/buttonModify"
         android:layout_width="wrap_content"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView12"
-        android:layout_toRightOf="@+id/textView12"
-        android:background="@drawable/menu_contact"
-        android:focusable="false" />
+        android:layout_toEndOf="@+id/textViewMessaggiModify"
+        android:layout_toRightOf="@+id/textViewMessaggiModify"
+        android:background="@drawable/ic_modify"
+        android:focusable="false"
+        android:paddingBottom="20dp"
+        android:paddingEnd="20dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingStart="20dp"
+        android:paddingTop="20dp" />
 
 </RelativeLayout>

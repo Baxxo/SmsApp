@@ -55,4 +55,15 @@
     <string name="caricata">List loaded</string>
     <string name="verranno_inviati">You have some messages that will be sent!</string>
     <string name="n_sms">N. sms:</string>
+    <string name="main1">Choose the hour when the message have to be sent</string>
+    <string name="main2">And the date</string>
+    <string name="main3">If you want to send the message now just insert </string>
+    <string name="testo_caricato">Text loaded</string>
+    <string name="number">the number</string>
+    <string name="and">and </string>
+    <string name="text">the text</string>
+    <string name="copia_numero">Copy number</string>
+    <string name="copia_testo">Copy text</string>
+    <string name="copia_testo_numero">Copy numebr and text</string>
+    <string name="title_activity_modify">ModifyActivity</string>
 </resources>

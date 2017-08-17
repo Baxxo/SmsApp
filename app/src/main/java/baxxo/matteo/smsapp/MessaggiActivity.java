@@ -1,33 +1,40 @@
 package baxxo.matteo.smsapp;
 
+import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.SimpleAdapter;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MessaggiActivity extends AppCompatActivity {
 
-    ListView lista;
-    DatabaseManager dbManager;
-    ArrayList<String> lista_messaggi = new ArrayList<>();
-    ArrayList<Messaggio> messaggi = new ArrayList<>();
-    ArrayList<String> id = new ArrayList<>();
-    ArrayAdapter adapter;
     String nome;
+    ListView lista;
+    boolean b = true;
     Boolean check = false;
+    SimpleAdapter adapter;
+    DatabaseManager dbManager;
+    ArrayList<String> id = new ArrayList<>();
+    ArrayList<Messaggio> messaggi = new ArrayList<>();
+    List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+    Map<String, String> datum = new HashMap<String, String>(2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +54,6 @@ public class MessaggiActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                 int p = Integer.parseInt(id.get(i));
-
-                Log.i("hashmap", "P: " + p);
 
                 if (!check) {
 
@@ -73,7 +78,6 @@ public class MessaggiActivity extends AppCompatActivity {
 
                 }
 
-                Log.i("Size", String.valueOf(dbManager.getNotSentMessages().size()));
                 if (dbManager.getNotSentMessages().size() <= 0) {
                     MainActivity.btnMessaggi.setVisibility(View.GONE);
                 }
@@ -84,14 +88,17 @@ public class MessaggiActivity extends AppCompatActivity {
     }
 
     private void carica() {
+
         messaggi.clear();
-        lista_messaggi.clear();
+        datum.clear();
+        data.clear();
 
         messaggi = dbManager.getNotSentMessages();
 
         if (messaggi.size() > 0) {
 
             for (Messaggio messaggio : messaggi) {
+
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(messaggio.getData());
                 String m = String.valueOf(c.get(Calendar.MINUTE));
@@ -119,30 +126,81 @@ public class MessaggiActivity extends AppCompatActivity {
                     a = "0" + a;
                 }
 
+                if (String.valueOf(messaggio.getNome().charAt(messaggio.getNome().length() - 1)).equals("|")) {
+                    messaggio.setNome(String.valueOf(messaggio.getNome().substring(0, messaggio.getNome().length() - 1)));
+                }
+
                 if (nome.equals(messaggio.getNome())) {
                     id.add(messaggio.getId());
 
-                    lista_messaggi.add(messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                    datum.put("First Line", messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                    data.add(datum);
 
                 }
-                if (nome.equals("tutti_i_messaggi_da_inviare_9821")) {
 
+                if (nome.equals("tutti_i_messaggi_da_inviare_9821")) {
                     id.add(messaggio.getId());
 
-                    lista_messaggi.add(messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                    datum.put("First Line", messaggio.getNome() + ": " + messaggio.getTesto() + "\n(" + h + ":" + m + " - " + g + "/" + me + "/" + a + ")");
+                    data.add(datum);
                 }
 
             }
 
             lista.setEnabled(true);
+            b = true;
 
         } else {
 
-            lista_messaggi.add(getString(R.string.no_messaggi));
+            datum.put("First Line", getString(R.string.no_messaggi));
+            data.add(datum);
             lista.setEnabled(false);
+            b = false;
+
         }
 
-        adapter = new ArrayAdapter(MessaggiActivity.this, R.layout.list_messaggi, lista_messaggi);
+        adapter = new SimpleAdapter(getApplicationContext(), data, R.layout.list_messaggio_modify, new String[]{"First Line"}, new int[]{R.id.textViewMessaggiModify}) {
+            @Override
+            public View getView(final int position, View convertView, ViewGroup parent) {
+                View v = super.getView(position, convertView, parent);
+
+                Button modify = (Button) v.findViewById(R.id.buttonModify);
+                if (!b) {
+                    modify.setVisibility(View.GONE);
+                }
+                modify.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                        Object o = lista.getItemAtPosition(position);
+                        String res = o.toString();
+
+                        res = res.replace("{", "");
+                        res = res.replace("}", "");
+                        res = res.replace("=", "");
+                        res = res.replace("\n", "");
+                        res = res.replace("First Line", "");
+                        String parts[] = res.split("\\(");
+
+                        String dir1 = parts[0];
+
+                        parts = dir1.split(":");
+
+                        String n = parts[0];
+                        String t = parts[1];
+
+                        Intent i = new Intent(MessaggiActivity.this, ModifyActivity.class);
+                        i.putExtra("date", messaggi.get(position).getData());
+                        i.putExtra("t", t);
+                        i.putExtra("m", messaggi.get(position).getNumero());
+                        startActivity(i);
+
+                    }
+                });
+                return v;
+            }
+        };
+
         lista.setAdapter(adapter);
 
     }

@@ -3,19 +3,19 @@ package baxxo.matteo.smsapp;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -32,13 +32,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class FragmentContatti extends android.support.v4.app.Fragment {
 
@@ -89,7 +86,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
                 if (mLastFirstVisibleItem < firstVisibleItem) {
-                    //down
                     if (dis) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -102,7 +98,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     }
                 }
                 if (mLastFirstVisibleItem > firstVisibleItem) {
-                    //up
                     if (!dis) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -198,6 +193,25 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         try {
             nomeSearch = (EditText) rootView.findViewById(R.id.nomeSearch);
             nomeSearch.setVisibility(vis);
+            if (vis == View.VISIBLE) {
+                nomeSearch.requestFocus();
+                nomeSearch.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        keyboard.showSoftInput(nomeSearch, 0);
+                    }
+                }, 200);
+            } else {
+                nomeSearch.requestFocus();
+                nomeSearch.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        InputMethodManager keyboard = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        keyboard.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(), 0);
+                    }
+                }, 200);
+            }
             nomeSearch.setText("");
 
         } catch (Exception e) {
@@ -226,45 +240,49 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
 
-        final Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        progressBar.setMax(cur.getCount() * 2);
-        if (cur.getCount() > 0) {
-            while (cur.moveToNext()) {
-                String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
-                String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-                if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
-                    while (phones.moveToNext()) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        phoneNumber = phoneNumber.replaceAll("\\s+", "");
-                        phoneNumber = phoneNumber.replaceAll("-", "");
-                        contatti.add(new Contact(name, phoneNumber));
-                        p++;
-                        progressBar.setProgress(p);
+        final Cursor cur;
+        cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+        progressBar.setMax(cur.getCount() * 5);
+        try {
+            if (cur.getCount() > 0) {
+                while (cur.moveToNext()) {
+                    String id = cur.getString(cur.getColumnIndex(ContactsContract.Contacts._ID));
+                    String name = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+                    if (Integer.parseInt(cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                        Cursor phones = getContext().getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id, null, null);
+                        while (phones.moveToNext()) {
+                            String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                            phoneNumber = phoneNumber.replaceAll("\\s+", "");
+                            phoneNumber = phoneNumber.replaceAll("-", "");
+                            contatti.add(new Contact(name, phoneNumber));
+                            p++;
+                            progressBar.setProgress(p);
 
+                        }
+                        phones.close();
                     }
-                    phones.close();
-                }
 
+                }
+            } else {
+                mess1.clear();
+                mess1.add(getString(R.string.no_contatti));
+
+                list = new ArrayAdapter(rootView.getContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
+
+                ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listView.setAdapter(list);
+                        button.setText(getString(R.string.lista));
+                        button.setVisibility(View.VISIBLE);
+                        progressBar.setVisibility(View.INVISIBLE);
+                    }
+                });
             }
-        } else {
-            mess1.clear();
-            mess1.add(getString(R.string.no_contatti));
-
-            list = new ArrayAdapter(rootView.getContext(), R.layout.support_simple_spinner_dropdown_item, mess1);
-
-            ((Activity) rootView.getContext()).runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    listView.setAdapter(list);
-                    button.setText(getString(R.string.lista));
-                    button.setVisibility(View.VISIBLE);
-                    progressBar.setVisibility(View.INVISIBLE);
-                }
-            });
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
 
-        //ordino per nome
         Collections.sort(contatti, new Comparator<Contact>() {
                     @Override
                     public int compare(Contact c1, Contact c2) {
@@ -275,89 +293,67 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                 }
         );
 
-        if (contatti.size() > 1) {
+        try {
+            if (contatti.size() > 1) {
 
+                int j = 0;
 
-            int j = 0;
+                while (j == 0) {
 
+                    j = 0;
 
-            //se j = 0 allora non ci sono contatti uguali altrimenti continuo l'eliminazione
-            while (j == 0) {
+                    try {
+                        for (int i = 1; i < contatti.size(); i++) {
+                            if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                                j++;
+                                contatti.remove(i - 1);
+                            }
+                            p++;
+                            progressBar.setProgress(p);
 
-                j = 0;
-
-                //rimuovo numeri di casa
-                for (int i = 0; i < contatti.size(); i++) {
-                    Log.i("id_messaggi", contatti.get(i).name + " " + contatti.get(i).number);
-                    int l = contatti.get(i).number.indexOf('0');
-                    Log.i("id_messaggi", String.valueOf(l));
-                    if (contatti.get(i).number.indexOf('+') == 0) {
-                        if (l <= 4 && l != -1) {
-                            contatti.remove(i);
-                            j++;
-                            i--;
                         }
-                    } else {
-                        if (l < 2  && l != -1) {
-                            contatti.remove(i);
-                            j++;
-                            i--;
+                        for (int i = 1; i < contatti.size(); i++) {
+                            if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
+                                j++;
+                                contatti.remove(i - 1);
+                            }
+                            p++;
+                            progressBar.setProgress(p);
+
                         }
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
+                }
 
+                for (int i = 1; i < contatti.size(); i++) {
+                    if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
+                        contatti.get(i).name = contatti.get(i).name + "|";
+                    }
                     p++;
                     progressBar.setProgress(p);
                 }
-                for (int i = 1; i < contatti.size(); i++) {
-                    if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
-                        j++;
-                        contatti.remove(i - 1);
-                    }
-                    progressBar.setProgress(p);
-
-                }
-                for (int i = 1; i < contatti.size(); i++) {
-                    if (contatti.get(i).number.equals(contatti.get(i - 1).number)) {
-                        j++;
-                        contatti.remove(i - 1);
-                        p++;
-                    }
-                    progressBar.setProgress(p);
-
-                }
             }
-
-
-            for (int i = 1; i < contatti.size(); i++) {
-                if (contatti.get(i).name.equals(contatti.get(i - 1).name)) {
-                    contatti.get(i).name = contatti.get(i).name + "|";
-                    p++;
-                }
-                progressBar.setProgress(p);
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         ((Activity) rootView.getContext()).runOnUiThread(
                 new Runnable() {
                     @Override
                     public void run() {
-                        //hash map con nomi e numeri
                         final HashMap<String, String> nomeNumero = new HashMap<>();
 
-                        //map con valori ordinati
                         HashMap map = sortByValues(nomeNumero);
 
-                        //inserisco i contatti
                         for (int i = 0; i < contatti.size(); i++) {
                             map.put(contatti.get(i).name, contatti.get(i).number);
                             p++;
                             progressBar.setProgress(p);
                         }
 
-                        //lista di elementi HashMap
                         final List<HashMap<String, String>> listItems = new ArrayList<>();
 
-                        //Adapter per la listView
                         adapter = new SimpleAdapter(rootView.getContext(), listItems, R.layout.list_item, new String[]{"First Line", "Second Line"}, new int[]{R.id.textView12, R.id.textView13}) {
                             @Override
                             public View getView(final int position, View convertView, ViewGroup parent) {
@@ -395,7 +391,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                             }
                         };
 
-                        //Iterator accede alla mappa e accoppia la mappa con l' adapter
                         for (Object o : map.entrySet()) {
                             HashMap<String, String> resultsMap = new HashMap<>();
                             Map.Entry pair = (Map.Entry) o;
@@ -408,7 +403,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                             listItems.add(resultsMap);
                         }
 
-                        //mostro i valori nella listView
                         listView.setAdapter(adapter);
                         progressBar.setProgress(cur.getCount() * 7);
 
@@ -522,7 +516,6 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
     }
 
-    //funzione per ordinare l' hash map con i contatti(funzione trovata)
     private static HashMap sortByValues(HashMap map) {
         List list = new LinkedList(map.entrySet());
         Collections.sort(list, new Comparator() {
@@ -533,8 +526,8 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
         });
 
         HashMap sortedHashMap = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext(); ) {
-            Map.Entry entry = (Map.Entry) it.next();
+        for (Object aList : list) {
+            Map.Entry entry = (Map.Entry) aList;
             sortedHashMap.put(entry.getKey(), entry.getValue());
         }
         return sortedHashMap;
