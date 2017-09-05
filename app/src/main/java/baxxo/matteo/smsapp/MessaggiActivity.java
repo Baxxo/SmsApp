@@ -79,7 +79,7 @@ public class MessaggiActivity extends AppCompatActivity {
                 }
 
                 if (dbManager.getNotSentMessages().size() <= 0) {
-                    MainActivity.btnMessaggi.setVisibility(View.GONE);
+                    MainActivity.remove();
                 }
 
             }

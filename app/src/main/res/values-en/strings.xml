@@ -66,4 +66,5 @@
     <string name="main3">If you want to sent the messagge now just insert </string>
     <string name="number">the number</string>
     <string name="text">the text</string>
+    <string name="sim_err">Sim error!</string>
 </resources>

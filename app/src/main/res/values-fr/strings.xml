@@ -66,4 +66,5 @@
     <string name="main2">Et la date</string>
     <string name="number">le numéro</string>
     <string name="text">le texte</string>
+    <string name="sim_err">Sim error!</string>
 </resources>

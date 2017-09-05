@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backgroundfrag"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="baxxo.matteo.smsapp.ModifyActivity"
+    tools:showIn="@layout/activity_modify">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="643dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/textView7"
+                android:layout_alignParentTop="true"
+                android:layout_alignStart="@+id/textView7"
+                android:layout_marginTop="30dp"
+                android:text="@string/title_activity_contact_detail"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editNumero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/textView15"
+                android:layout_alignBottom="@+id/textView15"
+                android:layout_alignEnd="@+id/editMess"
+                android:layout_alignRight="@+id/editMess"
+                android:backgroundTint="@android:color/white"
+                android:ems="10"
+                android:inputType="phone"
+                android:textColor="@android:color/background_light" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/editMess"
+                android:layout_alignStart="@+id/editMess"
+                android:layout_below="@+id/editNumero"
+                android:layout_marginTop="20dp"
+                android:text="@string/testo"
+                android:textAlignment="center"
+                android:textColor="@android:color/background_light"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/editMess"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textView7"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="10dp"
+                android:backgroundTint="@android:color/white"
+                android:ems="20"
+                android:inputType="textPersonName"
+                android:textColor="@android:color/background_light" />
+
+            <Button
+                android:id="@+id/buttonDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/backb"
+                android:text="Date"
+                android:layout_below="@+id/editMess"
+                android:layout_toRightOf="@+id/textView7"
+                android:layout_toEndOf="@+id/textView7"
+                android:layout_marginLeft="12dp"
+                android:layout_marginStart="12dp" />
+
+            <Button
+                android:id="@+id/buttonTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/backb"
+                android:text="Time"
+                android:layout_alignParentBottom="true"
+                android:layout_alignRight="@+id/editMess"
+                android:layout_alignEnd="@+id/editMess"
+                android:layout_marginRight="46dp"
+                android:layout_marginEnd="46dp" />
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</android.support.constraint.ConstraintLayout>

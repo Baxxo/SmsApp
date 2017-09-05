@@ -1,8 +1,6 @@
 package baxxo.matteo.smsapp;
 
 import android.Manifest;
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
 import android.app.AlarmManager;
 import android.app.Dialog;
@@ -27,6 +25,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -60,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
     static TextView num;
     static TextView tes;
     static TextView nMessaggi;
-    static TextView consigli;
     static RelativeLayout relativeLayout;
     static FloatingActionButton fab;
     static SharedPreferences preferences;
@@ -71,6 +69,12 @@ public class MainActivity extends AppCompatActivity {
     static int c = 0;
     static int pos;
     static int nm = 1;
+    static int counttxt;
+    static int countnum;
+    static InputMethodManager keyboard;
+    static View rootView;
+    private static boolean is = true;
+
     private TabLayout tabLayout;
     private int anno = 1;
     private int mese = 1;
@@ -81,20 +85,15 @@ public class MainActivity extends AppCompatActivity {
     private String testo;
     private String numero;
     boolean isSearch = false;
+    static AppBarLayout appBarLayout;
+
     FragmentContatti myFragment = null;
     String nomeNumero;
     Dialog d;
     ArrayList<Contact> contact;
-    DatabaseManager db;
+    static DatabaseManager db;
     Handler handler;
-    AppBarLayout appBarLayout;
     Boolean pos0 = false;
-    static String numu;
-    static String both;
-    static String txt;
-    static int counttxt;
-    static int countnum;
-    static InputMethodManager keyboard;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -114,10 +113,6 @@ public class MainActivity extends AppCompatActivity {
                     Manifest.permission.INSTALL_SHORTCUT
             }, 1);
         }
-
-        numu = getString(R.string.main3) + " " + getString(R.string.number);
-        txt = getString(R.string.main3) + " " + getString(R.string.text);
-        both = getString(R.string.main3) + " " + getString(R.string.number) + " " + getString(R.string.and) + " " + getString(R.string.text);
 
         appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true, true);
@@ -144,23 +139,12 @@ public class MainActivity extends AppCompatActivity {
                     keyboard();
 
                     if (!check[0] || !check[1]) {
-                        consigli.setVisibility(View.VISIBLE);
-                        if (!check[1]) {
-                            consigli.setText(getString(R.string.main3) + " " + getString(R.string.number));
-                        }
-                        if (!check[0]) {
-                            consigli.setText(getString(R.string.main3) + " " + getString(R.string.text));
-                        }
-                        if (!check[0] && !check[1]) {
-                            consigli.setText(getString(R.string.main3) + " " + getString(R.string.number) + " " + getString(R.string.and) + " " + getString(R.string.text));
-                        }
                         if (fab.getVisibility() == View.VISIBLE) {
                             animOut();
                         }
                         fab.setVisibility(View.INVISIBLE);
                     }
                     if (check[0] && check[1]) {
-                        consigli.setVisibility(View.INVISIBLE);
                         if (fab.getVisibility() == View.INVISIBLE) {
                             animIn();
                         }
@@ -213,6 +197,31 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            }
+        });
+
+        btnMessaggi = (Button) findViewById(R.id.buttonMessaggi);
+
+        if (db.getNotSentMessages().size() > 0) {
+            add();
+        }
+
+        btnMessaggi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(rootView.getContext(), MessaggiActivity.class);
+                intent.putExtra("Nome", "tutti_i_messaggi_da_inviare_9821");
+                startActivity(intent);
+            }
+        });
+
+        btnMessaggi.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+
+                remove();
+
+                return true;
             }
         });
 
@@ -318,38 +327,6 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
-        btnMessaggi = (Button) findViewById(R.id.buttonMessaggi);
-        if (db.getNotSentMessages().size() <= 0) {
-            btnMessaggi.setVisibility(View.GONE);
-        }
-
-        btnMessaggi.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, MessaggiActivity.class);
-                intent.putExtra("Nome", "tutti_i_messaggi_da_inviare_9821");
-                startActivity(intent);
-            }
-        });
-
-        btnMessaggi.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                btnMessaggi.animate()
-                        .translationY(-view.getHeight())
-                        .alpha(0.0f)
-                        .setDuration(300)
-                        .setListener(new AnimatorListenerAdapter() {
-                            @Override
-                            public void onAnimationEnd(Animator animation) {
-                                super.onAnimationEnd(animation);
-                                btnMessaggi.setVisibility(View.GONE);
-                            }
-                        });
-                return true;
-            }
-        });
-
         Intent intent = new Intent(MainActivity.this, BootReceiver.class);
 
         sendBroadcast(intent);
@@ -435,7 +412,7 @@ public class MainActivity extends AppCompatActivity {
         m.setInviato(false);
 
         db.aggiungiMessaggio(m);
-        btnMessaggi.setVisibility(View.VISIBLE);
+        add();
     }
 
     @Override
@@ -449,7 +426,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        /*if (id == R.id.action_settings) {
+        if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
             startActivity(intent);
             return true;
@@ -458,7 +435,8 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
             startActivity(intent);
             return true;
-        }*/
+        }
+
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(intent);
@@ -527,10 +505,8 @@ public class MainActivity extends AppCompatActivity {
         countnum = count;
         if (count == 0) {
             check[1] = false;
-            consigli.setVisibility(View.VISIBLE);
 
             if (!check[0]) {
-                consigli.setText(both);
             }
 
             if (fab.getVisibility() == View.VISIBLE) {
@@ -540,10 +516,8 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (!check[1]) {
                 check[1] = true;
-                consigli.setText(txt);
                 if (check[0]) {
                     animIn();
-                    consigli.setVisibility(View.GONE);
                 }
             }
         }
@@ -560,7 +534,6 @@ public class MainActivity extends AppCompatActivity {
 
         if (c == 0) {
             check[0] = false;
-            consigli.setVisibility(View.VISIBLE);
             t.requestFocus();
             t.postDelayed(new Runnable() {
                 @Override
@@ -569,7 +542,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, 200);
             if (!check[1]) {
-                consigli.setText(both);
             }
 
             if (fab.getVisibility() == View.VISIBLE) {
@@ -579,11 +551,9 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (!check[0]) {
                 check[0] = true;
-                consigli.setText(numu);
 
                 if (check[1]) {
                     animIn();
-                    consigli.setVisibility(View.GONE);
                 }
             }
         }
@@ -661,7 +631,7 @@ public class MainActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (db.getNotSentMessages().size() <= 0) {
-            btnMessaggi.setVisibility(View.GONE);
+            remove();
         }
         if (pos == 0) {
             d = new Dialog(this);
@@ -701,7 +671,7 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             n = (EditText) rootView.findViewById(R.id.Numero);
             t = (EditText) rootView.findViewById(R.id.Testo);
@@ -712,13 +682,26 @@ public class MainActivity extends AppCompatActivity {
             timepicker = (TimePicker) rootView.findViewById(R.id.timePicker);
             relativeLayout = (RelativeLayout) rootView.findViewById(R.id.relative);
             nMessaggi = (TextView) rootView.findViewById(R.id.textView4);
-            consigli = (TextView) rootView.findViewById(R.id.textView14);
-            consigli.setText(getString(R.string.main3) + getString(R.string.number) + getString(R.string.and) + getString(R.string.text));
 
             t.addTextChangedListener(contaCaratteri);
             n.addTextChangedListener(contaNumeri);
 
             return rootView;
         }
+    }
+
+    static void remove() {
+        t.requestFocus();
+        t.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                keyboard.showSoftInput(t, 0);
+            }
+        }, 200);
+        btnMessaggi.setVisibility(View.GONE);
+    }
+
+    static void add() {
+        btnMessaggi.setVisibility(View.VISIBLE);
     }
 }

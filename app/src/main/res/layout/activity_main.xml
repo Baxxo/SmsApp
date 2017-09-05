@@ -34,17 +34,18 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
+            android:layout_height="wrap_content"
             app:layout_scrollFlags="enterAlways|scroll"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/app_name" />
 
         <Button
             android:id="@+id/buttonMessaggi"
-            android:layout_width="match_parent"
-            android:layout_height="45dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:background="@drawable/button_messaggi"
             android:paddingLeft="10dp"
+            android:visibility="gone"
             android:text="@string/verranno_inviati"
             android:textAlignment="center"
             android:textColor="#FFF"

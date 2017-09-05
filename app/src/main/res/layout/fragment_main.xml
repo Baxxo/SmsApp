@@ -30,26 +30,11 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/textView14"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerHorizontal="true"
-                    android:padding="2dp"
-                    android:text="@string/main3"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
                     android:id="@+id/textView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/textView14"
                     android:backgroundTint="@android:color/white"
                     android:text="@string/numero"
                     android:textAlignment="center"
@@ -104,7 +89,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
-                    android:layout_below="@+id/textView14"
                     android:layout_gravity="right|top"
                     android:backgroundTint="@android:color/white"
                     android:ems="10"
@@ -126,58 +110,20 @@
                     android:textColor="#ffffff"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/Testo"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:padding="2dp"
-                    android:text="@string/main1"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/timePicker"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginTop="5dp"
-                    android:padding="5dp"
-                    android:text="@string/main2"
-                    android:textAlignment="center"
-                    android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="#ffffff"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
-
                 <TimePicker
                     android:id="@+id/timePicker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_below="@+id/textView8"
+                    android:layout_below="@+id/Testo"
                     android:backgroundTint="@android:color/white" />
 
                 <DatePicker
                     android:id="@+id/datePicker"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/textView9"
+                    android:layout_below="@+id/timePicker"
                     android:layout_centerHorizontal="true"
                     android:backgroundTint="@android:color/white"
                     android:foregroundTint="#fff" />

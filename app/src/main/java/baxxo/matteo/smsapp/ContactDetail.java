@@ -47,6 +47,7 @@ public class ContactDetail extends AppCompatActivity {
     String res;
     DatabaseManager db;
     List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+    static Dialog d;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,7 +141,7 @@ public class ContactDetail extends AppCompatActivity {
 
                 res = part[0];
 
-                Dialog d = new Dialog(ContactDetail.this);
+                d = new Dialog(ContactDetail.this);
                 d.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 d.setCancelable(true);
                 d.setContentView(R.layout.info_messaggio);
@@ -224,6 +225,7 @@ public class ContactDetail extends AppCompatActivity {
         });
 
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

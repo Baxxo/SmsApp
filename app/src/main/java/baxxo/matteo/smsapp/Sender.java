@@ -1,12 +1,13 @@
 package baxxo.matteo.smsapp;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
+import android.app.Activity;
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,10 +16,10 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Vibrator;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v7.app.NotificationCompat;
 import android.telephony.SmsManager;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -44,6 +45,9 @@ public class Sender extends IntentService {
     int numMess;
     ArrayList<Messaggio> mess;
     Uri sound;
+    boolean air = false;
+    int i = 0;
+
 
     public Sender() {
         super("Sender");
@@ -57,13 +61,15 @@ public class Sender extends IntentService {
         nomeNumero = intent.getStringExtra("Nome");
         id = intent.getStringExtra("Id");
 
+        if (String.valueOf(nomeNumero.charAt(nomeNumero.length() - 1)).equals("|")) {
+            nomeNumero = String.valueOf(nomeNumero.substring(0, nomeNumero.length() - 1));
+        }
+
         testo = testo + "\n\n(" + getString(R.string.def_text) + ")\n" + getString(R.string.def_text_2);
 
         database = new DatabaseManager(this);
         mess = database.getNotSentMessages();
-        int i = 0;
 
-        //prendo il messaggio con il giusto id
         for (Messaggio messaggio : mess) {
             if (messaggio.getId().equals(id)) {
                 numMess = Integer.parseInt(id);
@@ -72,30 +78,65 @@ public class Sender extends IntentService {
             }
         }
 
-        Log.i("IDMessaggio", "numero: " + numero + " nome: " + nomeNumero + " testo: " + testo + " ID: " + i + " id: " + id + " size: " + mess.size());
-
-
         if (mess.size() <= 0) {
-            Log.i("id_messaggio", "dentro");
+
             Receiver.completeWakefulIntent(intent);
 
         } else {
 
-            //verifico modalità aereo
-            if (Settings.System.getInt(getApplicationContext().getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) == 1) {
-/*
-                text = getString(R.string.plane) + "\n" + testo;
-                sub = getString(R.string.plane_sub);*/
+            if (isSimExists()) {
 
-
-
-            } else {
+                air = false;
 
                 try {
 
+                    String SENT = "SMS_SENT";
+
+                    PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
+
+                    registerReceiver(new BroadcastReceiver() {
+                        @Override
+                        public void onReceive(Context arg0, Intent arg1) {
+                            int resultCode = getResultCode();
+                            switch (resultCode) {
+                                case Activity.RESULT_OK:
+
+                                    break;
+
+                                case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                                    Toast.makeText(getApplicationContext(), "Generic failure", Toast.LENGTH_LONG).show();
+
+                                    text = getString(R.string.non_inviato) + "\n" + testo;
+                                    sub = getString(R.string.non_inviato);
+
+                                    break;
+                                case SmsManager.RESULT_ERROR_NO_SERVICE:
+                                    Toast.makeText(getApplicationContext(), "No service", Toast.LENGTH_LONG).show();
+
+                                    text = getString(R.string.non_inviato) + "\n" + testo;
+                                    sub = getString(R.string.non_inviato);
+
+                                    break;
+                                case SmsManager.RESULT_ERROR_NULL_PDU:
+                                    Toast.makeText(getApplicationContext(), "Null PDU", Toast.LENGTH_LONG).show();
+
+                                    text = getString(R.string.non_inviato) + "\n" + testo;
+                                    sub = getString(R.string.non_inviato);
+
+                                    break;
+                                case SmsManager.RESULT_ERROR_RADIO_OFF:
+
+                                    Toast.makeText(getApplicationContext(), "Radio off", Toast.LENGTH_LONG).show();
+
+                                    text = getString(R.string.plane) + "\n" + testo;
+                                    sub = getString(R.string.plane_sub);
+
+                                    break;
+                            }
+                        }
+                    }, new IntentFilter(SENT));
+
                     sms = SmsManager.getDefault();
-                    ArrayList<String> parts = sms.divideMessage(testo);
-                    sms.sendMultipartTextMessage(numero, null, parts, null, null);
 
                     text = getString(R.string.inviato) + "\n" + testo;
                     sub = getString(R.string.inviato);
@@ -111,12 +152,29 @@ public class Sender extends IntentService {
 
                     }
 
+                    ArrayList<String> parts = sms.divideMessage(testo);
+
+                    ArrayList<PendingIntent> pend = new ArrayList<>();
+
+                    for (int l = 0; l < parts.size(); l++) {
+                        pend.add(sentPI);
+                    }
+
+                    sms.sendMultipartTextMessage(numero, null, parts, pend, null);
+
+
                 } catch (Exception e) {
                     text = getString(R.string.non_inviato) + "\n" + testo;
                     sub = getString(R.string.non_inviato);
                 }
 
+            } else {
+
+                text = getString(R.string.sim_err) + "\n" + testo;
+                sub = getString(R.string.sim_err);
+
             }
+
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
             Boolean vibrate = preferences.getBoolean("Vibrate", false);
@@ -124,7 +182,7 @@ public class Sender extends IntentService {
             String s = preferences.getString("Sound", "");
 
 
-            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.unnamed);
+            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.icon);
 
             Calendar c = Calendar.getInstance();
             String m = String.valueOf(c.get(Calendar.MINUTE));
@@ -138,14 +196,14 @@ public class Sender extends IntentService {
 
             String time = " (" + h + ":" + m + ")";
 
-            //fa aprire l'app quando si clicca sulla notifica
             Intent intent1 = new Intent(this, MainActivity.class);
             intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             pendingIntent = PendingIntent.getActivity(this, 0, intent1, 0);
 
+
             builder = new NotificationCompat.Builder(this);
             builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text))
-                    .setSmallIcon(R.mipmap.unnamed)
+                    .setSmallIcon(R.mipmap.icon)
                     .setLargeIcon(defaultPhoto)
                     .setTicker("SmsApp")
                     .setContentTitle(getString(R.string.sms_a) + " " + nomeNumero + " " + time)
@@ -192,18 +250,10 @@ public class Sender extends IntentService {
             }
 
             try {
-                if (database.getNotSentMessages().size() == 0) {
-                    MainActivity.btnMessaggi.animate()
-                            .translationY(-(MainActivity.btnMessaggi.getHeight()))
-                            .alpha(0.0f)
-                            .setDuration(300)
-                            .setListener(new AnimatorListenerAdapter() {
-                                @Override
-                                public void onAnimationEnd(Animator animation) {
-                                    super.onAnimationEnd(animation);
-                                    MainActivity.btnMessaggi.setVisibility(View.GONE);
-                                }
-                            });
+                if (database.getNotSentMessages().size() <= 0) {
+
+                    MainActivity.remove();
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -213,6 +263,34 @@ public class Sender extends IntentService {
 
         }
 
+    }
+
+    public boolean isSimExists() {
+        TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        int SIM_STATE = telephonyManager.getSimState();
+
+        if (SIM_STATE == TelephonyManager.SIM_STATE_READY)
+            return true;
+        else {
+            switch (SIM_STATE) {
+                case TelephonyManager.SIM_STATE_ABSENT:
+                    Log.i("smsapp1", "SIM_STATE_ABSENT");
+                    break;
+                case TelephonyManager.SIM_STATE_NETWORK_LOCKED:
+                    Log.i("smsapp1", "SIM_STATE_NETWORK_LOCKED");
+                    break;
+                case TelephonyManager.SIM_STATE_PIN_REQUIRED:
+                    Log.i("smsapp1", "SIM_STATE_PIN_REQUIRED");
+                    break;
+                case TelephonyManager.SIM_STATE_PUK_REQUIRED:
+                    Log.i("smsapp1", "SIM_STATE_PUK_REQUIRED");
+                    break;
+                case TelephonyManager.SIM_STATE_UNKNOWN:
+                    Log.i("smsapp1", "SIM_STATE_UNKNOWN");
+                    break;
+            }
+            return false;
+        }
     }
 
     @Override
