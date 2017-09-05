@@ -48,6 +48,7 @@ public class Sender extends IntentService {
     boolean air = false;
     int i = 0;
     boolean esito = true;
+    PendingIntent sentPI;
 
 
     public Sender() {
@@ -93,7 +94,7 @@ public class Sender extends IntentService {
 
                     String SENT = "SMS_SENT";
 
-                    PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
+                    sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
 
                     text = getString(R.string.inviato) + "\n" + testo;
                     sub = getString(R.string.inviato);
@@ -114,9 +115,8 @@ public class Sender extends IntentService {
 
                                     esito = false;
 
-                                    Toast.makeText(getApplicationContext(), "Generic failure", Toast.LENGTH_LONG).show();
-
                                     break;
+
                                 case SmsManager.RESULT_ERROR_NO_SERVICE:
 
                                     text = getString(R.string.non_inviato) + "\n" + testo;
@@ -124,9 +124,8 @@ public class Sender extends IntentService {
 
                                     esito = false;
 
-                                    Toast.makeText(getApplicationContext(), "No service", Toast.LENGTH_LONG).show();
-
                                     break;
+
                                 case SmsManager.RESULT_ERROR_NULL_PDU:
 
                                     text = getString(R.string.non_inviato) + "\n" + testo;
@@ -134,9 +133,8 @@ public class Sender extends IntentService {
 
                                     esito = false;
 
-                                    Toast.makeText(getApplicationContext(), "Null PDU", Toast.LENGTH_LONG).show();
-
                                     break;
+
                                 case SmsManager.RESULT_ERROR_RADIO_OFF:
 
 
@@ -145,36 +143,10 @@ public class Sender extends IntentService {
 
                                     esito = false;
 
-                                    Toast.makeText(getApplicationContext(), "Radio off", Toast.LENGTH_LONG).show();
-
                                     break;
                             }
                         }
                     }, new IntentFilter(SENT));
-
-                    sms = SmsManager.getDefault();
-
-                    try {
-
-                        mess.get(i).setInviato(true);
-                        database.updateMessaggio(mess.get(i));
-
-                    } catch (Exception e) {
-
-                        Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
-
-                    }
-
-                    ArrayList<String> parts = sms.divideMessage(testo);
-
-                    ArrayList<PendingIntent> pend = new ArrayList<>();
-
-                    for (int l = 0; l < parts.size(); l++) {
-                        pend.add(sentPI);
-                    }
-
-                    sms.sendMultipartTextMessage(numero, null, parts, pend, null);
-
 
                 } catch (Exception e) {
                     text = getString(R.string.non_inviato) + "\n" + testo;
@@ -189,6 +161,29 @@ public class Sender extends IntentService {
                 esito = false;
 
             }
+
+            sms = SmsManager.getDefault();
+
+            try {
+
+                mess.get(i).setInviato(true);
+                database.updateMessaggio(mess.get(i));
+
+            } catch (Exception e) {
+
+                Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
+
+            }
+
+            ArrayList<String> parts = sms.divideMessage(testo);
+
+            ArrayList<PendingIntent> pend = new ArrayList<>();
+
+            for (int l = 0; l < parts.size(); l++) {
+                pend.add(sentPI);
+            }
+
+            sms.sendMultipartTextMessage(numero, null, parts, pend, null);
 
 
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
