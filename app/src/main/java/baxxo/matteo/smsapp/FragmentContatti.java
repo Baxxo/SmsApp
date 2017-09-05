@@ -242,7 +242,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
 
         final Cursor cur;
         cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-        progressBar.setMax(cur.getCount() * 5);
+        progressBar.setMax(cur.getCount()*2);
         try {
             if (cur.getCount() > 0) {
                 while (cur.moveToNext()) {

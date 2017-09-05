@@ -17,11 +17,13 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -46,7 +48,7 @@ public class ContactDetail extends AppCompatActivity {
     ListView lv;
     String res;
     DatabaseManager db;
-    List<Map<String, String>> data = new ArrayList<Map<String, String>>();
+    List<Map<String, String>> data = new ArrayList<>();
     static Dialog d;
 
     @Override
@@ -69,7 +71,10 @@ public class ContactDetail extends AppCompatActivity {
         mess = db.getAllMessages();
 
         lv = (ListView) findViewById(R.id.list_mess);
-        Map<String, String> datum = new HashMap<String, String>(2);
+        Map<String, String> datum = new HashMap<>(2);
+
+        datum.clear();
+        data.clear();
 
         for (Messaggio m : mess) {
 
@@ -77,6 +82,7 @@ public class ContactDetail extends AppCompatActivity {
 
                 messNumero.add(m.getTesto());
                 messEsatti.add(m);
+
                 Calendar c = Calendar.getInstance();
                 c.setTimeInMillis(m.getData());
 
@@ -106,28 +112,34 @@ public class ContactDetail extends AppCompatActivity {
                     a = "0" + a;
                 }
 
-                datum.put("First Line", m.getTesto() + "\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
-                data.add(datum);
+                //datum.put("First Line", m.getTesto() + "\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
+
+                //data.add(datum);
+
+                messNumero.add(m.getTesto());
 
             }
 
         }
 
+        for (int i = 0; i < data.size(); i++) {
+            Log.i("smsapp1", String.valueOf(data.get(i)));
+        }
+
         if (messNumero.size() == 0) {
 
-            messNumero.add(getString(R.string.no_messaggi_detail));
-            datum.put("First Line", messNumero.get(0));
+            datum.put("First Line", getString(R.string.no_messaggi_detail));
             data.add(datum);
             lv.setEnabled(false);
 
         }
 
-        SimpleAdapter list = new SimpleAdapter(this, data, R.layout.list_messaggi, new String[]{"First Line"}, new int[]{R.id.textViewMessaggi});
+        //SimpleAdapter list = new SimpleAdapter(this, data, R.layout.list_messaggi, new String[]{"First Line"}, new int[]{R.id.textViewMessaggi});
+
+        ArrayAdapter<String> list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, messNumero);
         lv.setAdapter(list);
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-
-        {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -146,9 +158,38 @@ public class ContactDetail extends AppCompatActivity {
                 d.setCancelable(true);
                 d.setContentView(R.layout.info_messaggio);
 
+                Calendar c = Calendar.getInstance();
+                c.setTimeInMillis(messEsatti.get(i).getData());
+
+                String min = String.valueOf(c.get(Calendar.MINUTE));
+                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+                String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                String me = String.valueOf(c.get(Calendar.MONTH));
+
+                int mese = Integer.valueOf(me);
+                mese++;
+                me = String.valueOf(mese);
+                String a = String.valueOf(c.get(Calendar.YEAR));
+
+                if (min.length() == 1) {
+                    min = "0" + min;
+                }
+                if (h.length() == 1) {
+                    h = "0" + h;
+                }
+                if (g.length() == 1) {
+                    g = "0" + g;
+                }
+                if (me.length() == 1) {
+                    me = "0" + me;
+                }
+                if (a.length() == 1) {
+                    a = "0" + a;
+                }
+
                 TextView testo = (TextView) d.findViewById(R.id.textView6);
 
-                testo.setText(res);
+                testo.setText(res + "\n\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
 
                 Button num = (Button) d.findViewById(R.id.button3);
                 num.setOnClickListener(new View.OnClickListener() {
