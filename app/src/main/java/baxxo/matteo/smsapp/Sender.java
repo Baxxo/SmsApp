@@ -47,6 +47,7 @@ public class Sender extends IntentService {
     Uri sound;
     boolean air = false;
     int i = 0;
+    boolean esito = true;
 
 
     public Sender() {
@@ -94,6 +95,9 @@ public class Sender extends IntentService {
 
                     PendingIntent sentPI = PendingIntent.getBroadcast(this, 0, new Intent(SENT), 0);
 
+                    text = getString(R.string.inviato) + "\n" + testo;
+                    sub = getString(R.string.inviato);
+
                     registerReceiver(new BroadcastReceiver() {
                         @Override
                         public void onReceive(Context arg0, Intent arg1) {
@@ -104,32 +108,44 @@ public class Sender extends IntentService {
                                     break;
 
                                 case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
-                                    Toast.makeText(getApplicationContext(), "Generic failure", Toast.LENGTH_LONG).show();
 
                                     text = getString(R.string.non_inviato) + "\n" + testo;
                                     sub = getString(R.string.non_inviato);
+
+                                    esito = false;
+
+                                    Toast.makeText(getApplicationContext(), "Generic failure", Toast.LENGTH_LONG).show();
 
                                     break;
                                 case SmsManager.RESULT_ERROR_NO_SERVICE:
-                                    Toast.makeText(getApplicationContext(), "No service", Toast.LENGTH_LONG).show();
 
                                     text = getString(R.string.non_inviato) + "\n" + testo;
                                     sub = getString(R.string.non_inviato);
+
+                                    esito = false;
+
+                                    Toast.makeText(getApplicationContext(), "No service", Toast.LENGTH_LONG).show();
 
                                     break;
                                 case SmsManager.RESULT_ERROR_NULL_PDU:
-                                    Toast.makeText(getApplicationContext(), "Null PDU", Toast.LENGTH_LONG).show();
 
                                     text = getString(R.string.non_inviato) + "\n" + testo;
                                     sub = getString(R.string.non_inviato);
+
+                                    esito = false;
+
+                                    Toast.makeText(getApplicationContext(), "Null PDU", Toast.LENGTH_LONG).show();
 
                                     break;
                                 case SmsManager.RESULT_ERROR_RADIO_OFF:
 
-                                    Toast.makeText(getApplicationContext(), "Radio off", Toast.LENGTH_LONG).show();
 
                                     text = getString(R.string.plane) + "\n" + testo;
                                     sub = getString(R.string.plane_sub);
+
+                                    esito = false;
+
+                                    Toast.makeText(getApplicationContext(), "Radio off", Toast.LENGTH_LONG).show();
 
                                     break;
                             }
@@ -137,9 +153,6 @@ public class Sender extends IntentService {
                     }, new IntentFilter(SENT));
 
                     sms = SmsManager.getDefault();
-
-                    text = getString(R.string.inviato) + "\n" + testo;
-                    sub = getString(R.string.inviato);
 
                     try {
 
@@ -166,12 +179,14 @@ public class Sender extends IntentService {
                 } catch (Exception e) {
                     text = getString(R.string.non_inviato) + "\n" + testo;
                     sub = getString(R.string.non_inviato);
+                    esito = false;
                 }
 
             } else {
 
                 text = getString(R.string.sim_err) + "\n" + testo;
                 sub = getString(R.string.sim_err);
+                esito = false;
 
             }
 
@@ -180,9 +195,6 @@ public class Sender extends IntentService {
             Boolean vibrate = preferences.getBoolean("Vibrate", false);
 
             String s = preferences.getString("Sound", "");
-
-
-            Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.icon);
 
             Calendar c = Calendar.getInstance();
             String m = String.valueOf(c.get(Calendar.MINUTE));
@@ -203,8 +215,6 @@ public class Sender extends IntentService {
 
             builder = new NotificationCompat.Builder(this);
             builder.setStyle(new android.support.v4.app.NotificationCompat.BigTextStyle().bigText(text))
-                    .setSmallIcon(R.mipmap.icon)
-                    .setLargeIcon(defaultPhoto)
                     .setTicker("SmsApp")
                     .setContentTitle(getString(R.string.sms_a) + " " + nomeNumero + " " + time)
                     .setAutoCancel(true)
@@ -212,6 +222,17 @@ public class Sender extends IntentService {
                     .setLights(Color.CYAN, 1, 10)
                     .setSubText(sub)
                     .setContentText(text);
+
+
+            if (esito) {
+                Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.green3);
+                builder.setSmallIcon(R.mipmap.green3)
+                        .setLargeIcon(defaultPhoto);
+            } else {
+                Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.red3);
+                builder.setSmallIcon(R.mipmap.red3)
+                        .setLargeIcon(defaultPhoto);
+            }
 
             AudioManager am = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
