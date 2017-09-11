@@ -164,17 +164,6 @@ public class Sender extends IntentService {
 
             sms = SmsManager.getDefault();
 
-            try {
-
-                mess.get(i).setInviato(true);
-                database.updateMessaggio(mess.get(i));
-
-            } catch (Exception e) {
-
-                Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
-
-            }
-
             ArrayList<String> parts = sms.divideMessage(testo);
 
             ArrayList<PendingIntent> pend = new ArrayList<>();
@@ -223,6 +212,12 @@ public class Sender extends IntentService {
                 Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.green3);
                 builder.setSmallIcon(R.mipmap.green3)
                         .setLargeIcon(defaultPhoto);
+                try {
+                    mess.get(i).setInviato(true);
+                    database.updateMessaggio(mess.get(i));
+                } catch (Exception e) {
+                    Toast.makeText(getApplicationContext(), "Errore nel database", Toast.LENGTH_LONG).show();
+                }
             } else {
                 Bitmap defaultPhoto = BitmapFactory.decodeResource(getResources(), R.mipmap.red3);
                 builder.setSmallIcon(R.mipmap.red3)

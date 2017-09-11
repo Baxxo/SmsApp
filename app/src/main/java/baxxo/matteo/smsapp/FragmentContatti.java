@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -279,6 +280,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                     }
                 });
             }
+
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }

@@ -26,16 +26,12 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class ContactDetail extends AppCompatActivity {
 
@@ -48,7 +44,6 @@ public class ContactDetail extends AppCompatActivity {
     ListView lv;
     String res;
     DatabaseManager db;
-    List<Map<String, String>> data = new ArrayList<>();
     static Dialog d;
 
     @Override
@@ -71,175 +66,172 @@ public class ContactDetail extends AppCompatActivity {
         mess = db.getAllMessages();
 
         lv = (ListView) findViewById(R.id.list_mess);
-        Map<String, String> datum = new HashMap<>(2);
 
-        datum.clear();
-        data.clear();
-
-        for (Messaggio m : mess) {
-
-            if (m.getNumero().equals(numero)) {
-
-                messNumero.add(m.getTesto());
-                messEsatti.add(m);
-
-                Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(m.getData());
-
-                String min = String.valueOf(c.get(Calendar.MINUTE));
-                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
-                String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-                String me = String.valueOf(c.get(Calendar.MONTH));
-
-                int mese = Integer.valueOf(me);
-                mese++;
-                me = String.valueOf(mese);
-                String a = String.valueOf(c.get(Calendar.YEAR));
-
-                if (min.length() == 1) {
-                    min = "0" + min;
-                }
-                if (h.length() == 1) {
-                    h = "0" + h;
-                }
-                if (g.length() == 1) {
-                    g = "0" + g;
-                }
-                if (me.length() == 1) {
-                    me = "0" + me;
-                }
-                if (a.length() == 1) {
-                    a = "0" + a;
-                }
-
-                //datum.put("First Line", m.getTesto() + "\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
-
-                //data.add(datum);
-
-                messNumero.add(m.getTesto());
-
-            }
-
-        }
-
-        for (int i = 0; i < data.size(); i++) {
-            Log.i("smsapp1", String.valueOf(data.get(i)));
-        }
-
-        if (messNumero.size() == 0) {
-
-            datum.put("First Line", getString(R.string.no_messaggi_detail));
-            data.add(datum);
-            lv.setEnabled(false);
-
-        }
-
-        //SimpleAdapter list = new SimpleAdapter(this, data, R.layout.list_messaggi, new String[]{"First Line"}, new int[]{R.id.textViewMessaggi});
-
-        ArrayAdapter<String> list = new ArrayAdapter<String>(this, R.layout.support_simple_spinner_dropdown_item, messNumero);
-        lv.setAdapter(list);
-
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        runOnUiThread(new Runnable() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void run() {
 
-                Object o = lv.getItemAtPosition(i);
-                res = o.toString();
-                res = res.replace("{", "");
-                res = res.replace("}", "");
-                res = res.replace("First Line=", "");
+                for (Messaggio m : mess) {
 
-                String[] part = res.split("\\n");
+                    if (m.getNumero().equals(numero)) {
 
-                res = part[0];
+                        messEsatti.add(m);
 
-                d = new Dialog(ContactDetail.this);
-                d.requestWindowFeature(Window.FEATURE_NO_TITLE);
-                d.setCancelable(true);
-                d.setContentView(R.layout.info_messaggio);
-
-                Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(messEsatti.get(i).getData());
-
-                String min = String.valueOf(c.get(Calendar.MINUTE));
-                String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
-                String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
-                String me = String.valueOf(c.get(Calendar.MONTH));
-
-                int mese = Integer.valueOf(me);
-                mese++;
-                me = String.valueOf(mese);
-                String a = String.valueOf(c.get(Calendar.YEAR));
-
-                if (min.length() == 1) {
-                    min = "0" + min;
-                }
-                if (h.length() == 1) {
-                    h = "0" + h;
-                }
-                if (g.length() == 1) {
-                    g = "0" + g;
-                }
-                if (me.length() == 1) {
-                    me = "0" + me;
-                }
-                if (a.length() == 1) {
-                    a = "0" + a;
+                    }
                 }
 
-                TextView testo = (TextView) d.findViewById(R.id.textView6);
+                if (messEsatti.size() == 0) {
+                    messNumero.add(getString(R.string.no_messaggi_detail));
+                    lv.setEnabled(false);
 
-                testo.setText(res + "\n\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
+                } else {
 
-                Button num = (Button) d.findViewById(R.id.button3);
-                num.setOnClickListener(new View.OnClickListener() {
+                    for (Messaggio m : messEsatti) {
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTimeInMillis(m.getData());
+
+                        String min = String.valueOf(c.get(Calendar.MINUTE));
+                        String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+                        String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                        String me = String.valueOf(c.get(Calendar.MONTH));
+
+                        int mese = Integer.valueOf(me);
+                        mese++;
+                        me = String.valueOf(mese);
+                        String a = String.valueOf(c.get(Calendar.YEAR));
+
+                        if (min.length() == 1) {
+                            min = "0" + min;
+                        }
+                        if (h.length() == 1) {
+                            h = "0" + h;
+                        }
+                        if (g.length() == 1) {
+                            g = "0" + g;
+                        }
+                        if (me.length() == 1) {
+                            me = "0" + me;
+                        }
+                        if (a.length() == 1) {
+                            a = "0" + a;
+                        }
+
+                        messNumero.add(m.getTesto() + "\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
+
+                    }
+
+                }
+
+                Log.i("Size", String.valueOf(messNumero.size()));
+
+                ArrayAdapter<String> list = new ArrayAdapter<>(getApplicationContext(), R.layout.list_messaggi, messNumero);
+
+                lv.setAdapter(list);
+
+                lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public void onClick(View view) {
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                        Toast.makeText(getApplicationContext(), getString(R.string.numero_caricato), Toast.LENGTH_LONG).show();
+                        Object o = lv.getItemAtPosition(i);
+                        res = o.toString();
+                        res = res.replace("{", "");
+                        res = res.replace("}", "");
+                        res = res.replace("First Line=", "");
 
-                        MainActivity.n.setText(numero);
+                        String[] part = res.split("\\n");
 
-                        MainActivity.mViewPager.setCurrentItem(1);
+                        res = part[0];
 
-                        onBackPressed();
+                        d = new Dialog(ContactDetail.this);
+                        d.requestWindowFeature(Window.FEATURE_NO_TITLE);
+                        d.setCancelable(true);
+                        d.setContentView(R.layout.info_messaggio);
+
+                        Calendar c = Calendar.getInstance();
+                        c.setTimeInMillis(messEsatti.get(i).getData());
+
+                        String min = String.valueOf(c.get(Calendar.MINUTE));
+                        String h = String.valueOf(c.get(Calendar.HOUR_OF_DAY));
+                        String g = String.valueOf(c.get(Calendar.DAY_OF_MONTH));
+                        String me = String.valueOf(c.get(Calendar.MONTH));
+
+                        int mese = Integer.valueOf(me);
+                        mese++;
+                        me = String.valueOf(mese);
+                        String a = String.valueOf(c.get(Calendar.YEAR));
+
+                        if (min.length() == 1) {
+                            min = "0" + min;
+                        }
+                        if (h.length() == 1) {
+                            h = "0" + h;
+                        }
+                        if (g.length() == 1) {
+                            g = "0" + g;
+                        }
+                        if (me.length() == 1) {
+                            me = "0" + me;
+                        }
+                        if (a.length() == 1) {
+                            a = "0" + a;
+                        }
+
+                        TextView testo = (TextView) d.findViewById(R.id.textView6);
+
+                        testo.setText(res + "\n\n(" + h + ":" + min + " - " + g + "/" + me + "/" + a + ")");
+
+                        Button num = (Button) d.findViewById(R.id.button3);
+                        num.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Toast.makeText(getApplicationContext(), getString(R.string.numero_caricato), Toast.LENGTH_LONG).show();
+
+                                MainActivity.n.setText(numero);
+
+                                MainActivity.mViewPager.setCurrentItem(1);
+
+                                onBackPressed();
+
+                            }
+                        });
+                        Button text = (Button) d.findViewById(R.id.button9);
+                        text.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Toast.makeText(getApplicationContext(), getString(R.string.testo_caricato), Toast.LENGTH_LONG).show();
+
+                                MainActivity.t.setText(res);
+
+                                MainActivity.mViewPager.setCurrentItem(1);
+
+                                onBackPressed();
+
+                            }
+                        });
+                        Button numText = (Button) d.findViewById(R.id.button10);
+                        numText.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+
+                                Toast.makeText(getApplicationContext(), getString(R.string.testo_numero), Toast.LENGTH_LONG).show();
+
+                                MainActivity.n.setText(numero);
+                                MainActivity.t.setText(res);
+
+                                MainActivity.mViewPager.setCurrentItem(1);
+
+                                onBackPressed();
+
+                            }
+                        });
+
+                        d.show();
 
                     }
                 });
-                Button text = (Button) d.findViewById(R.id.button9);
-                text.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Toast.makeText(getApplicationContext(), getString(R.string.testo_caricato), Toast.LENGTH_LONG).show();
-
-                        MainActivity.t.setText(res);
-
-                        MainActivity.mViewPager.setCurrentItem(1);
-
-                        onBackPressed();
-
-                    }
-                });
-                Button numText = (Button) d.findViewById(R.id.button10);
-                numText.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        Toast.makeText(getApplicationContext(), getString(R.string.testo_numero), Toast.LENGTH_LONG).show();
-
-                        MainActivity.n.setText(numero);
-                        MainActivity.t.setText(res);
-
-                        MainActivity.mViewPager.setCurrentItem(1);
-
-                        onBackPressed();
-
-                    }
-                });
-
-                d.show();
-
             }
         });
 
