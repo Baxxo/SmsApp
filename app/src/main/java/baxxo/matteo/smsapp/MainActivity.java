@@ -293,6 +293,7 @@ public class MainActivity extends AppCompatActivity {
                     if (a.length() == 1) {
                         a = "0" + a;
                     }
+
                     text = getString(R.string.snak1) + " " + oraconzero + ":" + m + " " + getString(R.string.snak2) + " " + g + "/" + me + "/" + a;
                     Snackbar.make(view, text, Snackbar.LENGTH_SHORT).setAction("Action", null).show();
 
@@ -426,7 +427,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
-        if (id == R.id.action_settings) {
+      /*  if (id == R.id.action_settings) {
             Intent intent = new Intent(MainActivity.this, DisplayDatabase.class);
             startActivity(intent);
             return true;
@@ -435,7 +436,7 @@ public class MainActivity extends AppCompatActivity {
             Intent intent = new Intent(MainActivity.this, AndroidDatabaseManager.class);
             startActivity(intent);
             return true;
-        }
+        }*/
 
         if (id == R.id.settings) {
             Intent intent = new Intent(MainActivity.this, SettingsActivity.class);

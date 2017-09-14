@@ -67,4 +67,5 @@
     <string name="copia_testo_numero">Copy numebr and text</string>
     <string name="title_activity_modify">ModifyActivity</string>
     <string name="sim_err">Sim error!</string>
+    <string name="title_activity_detail">Detail</string>
 </resources>

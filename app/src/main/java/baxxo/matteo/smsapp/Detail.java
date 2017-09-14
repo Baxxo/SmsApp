@@ -11,13 +11,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.ContactsContract;
-import android.support.design.widget.AppBarLayout;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,6 +21,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,15 +30,15 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-public class ContactDetail extends AppCompatActivity {
+public class Detail extends AppCompatActivity {
 
     String nome;
     String numero;
-    AppBarLayout appBar;
     ArrayList<Messaggio> mess;
     ArrayList<Messaggio> messEsatti = new ArrayList<>();
     ArrayList<String> messNumero = new ArrayList<>();
     ListView lv;
+    TextView nomnum;
     String res;
     DatabaseManager db;
     static Dialog d;
@@ -49,24 +46,20 @@ public class ContactDetail extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contact_detail);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_contatto);
-        toolbar.setTitle(nome);
-        toolbar.setSubtitle(numero);
-        setSupportActionBar(toolbar);
-
-        appBar = (AppBarLayout) findViewById(R.id.app_bar);
+        setContentView(R.layout.activity_detail);
 
         nome = getIntent().getStringExtra("nome");
         numero = getIntent().getStringExtra("numero");
-
-
 
         db = new DatabaseManager(getApplicationContext());
 
         mess = db.getAllMessages();
 
-        lv = (ListView) findViewById(R.id.list_mess);
+        lv = (ListView) findViewById(R.id.listaProva);
+
+        nomnum = (TextView) findViewById(R.id.textView8);
+
+        nomnum.setText(nome + "\n\n" + numero);
 
         runOnUiThread(new Runnable() {
             @Override
@@ -124,7 +117,7 @@ public class ContactDetail extends AppCompatActivity {
 
                 }
 
-                Log.i("Size", String.valueOf(messNumero.size()));
+                //Log.i("Size", String.valueOf(messNumero.size()));
 
                 ArrayAdapter<String> list = new ArrayAdapter<>(getApplicationContext(), R.layout.list_messaggi, messNumero);
 
@@ -144,7 +137,7 @@ public class ContactDetail extends AppCompatActivity {
 
                         res = part[0];
 
-                        d = new Dialog(ContactDetail.this);
+                        d = new Dialog(Detail.this);
                         d.requestWindowFeature(Window.FEATURE_NO_TITLE);
                         d.setCancelable(true);
                         d.setContentView(R.layout.info_messaggio);
@@ -239,24 +232,12 @@ public class ContactDetail extends AppCompatActivity {
         Bitmap myBitmap = getPhoto(numero);
 
         Drawable drawable = new BitmapDrawable(getResources(), myBitmap);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            appBar.setBackground(drawable);
+
+        ImageView img = (ImageView) findViewById(R.id.circleView);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            img.setImageDrawable(drawable);
         }
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabContatto);
-        fab.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getApplicationContext(), getString(R.string.numero_caricato), Toast.LENGTH_LONG).show();
-                MainActivity.n.setText(numero);
-
-                MainActivity.mViewPager.setCurrentItem(1);
-
-                onBackPressed();
-            }
-        });
 
     }
 
@@ -272,7 +253,7 @@ public class ContactDetail extends AppCompatActivity {
         int id = item.getItemId();
 
         if (id == R.id.action_settings) {
-            Intent intent = new Intent(ContactDetail.this, MessaggiActivity.class);
+            Intent intent = new Intent(Detail.this, MessaggiActivity.class);
             intent.putExtra("Nome", nome);
             startActivity(intent);
             return true;
@@ -298,7 +279,7 @@ public class ContactDetail extends AppCompatActivity {
             photoUri = ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, userId);
 
         } else {
-            defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+            defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.ic_account_circle_white_48dp);
             return defaultPhoto;
         }
         if (photoUri != null) {
@@ -307,10 +288,10 @@ public class ContactDetail extends AppCompatActivity {
                 return BitmapFactory.decodeStream(input);
             }
         } else {
-            defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+            defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.ic_account_circle_white_48dp);
             return defaultPhoto;
         }
-        defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.default_wallpaper);
+        defaultPhoto = BitmapFactory.decodeResource(getResources(), R.drawable.ic_account_circle_white_48dp);
         contact.close();
         return defaultPhoto;
     }

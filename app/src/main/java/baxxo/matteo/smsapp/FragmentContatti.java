@@ -383,7 +383,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                         parts = dir2.split("=");
                                         numero = parts[1];
 
-                                        Intent intent = new Intent(rootView.getContext(), ContactDetail.class);
+                                        Intent intent = new Intent(rootView.getContext(), Detail.class);
                                         intent.putExtra("nome", nome);
                                         intent.putExtra("numero", numero);
                                         startActivity(intent);
@@ -472,7 +472,7 @@ public class FragmentContatti extends android.support.v4.app.Fragment {
                                 parts = dir2.split("=");
                                 numero = parts[1];
 
-                                Intent intent = new Intent(rootView.getContext(), ContactDetail.class);
+                                Intent intent = new Intent(rootView.getContext(), Detail.class);
                                 intent.putExtra("nome", nome);
                                 intent.putExtra("numero", numero);
                                 startActivity(intent);
